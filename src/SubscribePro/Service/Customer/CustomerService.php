@@ -98,7 +98,7 @@ class CustomerService extends AbstractService
         }
 
         $collection = $this->createCollection();
-        if ($response && !isset($response['customers'])) {
+        if ($response && isset($response['customers'])) {
             $collection->importData($response['customers']);
         }
         return $collection;
