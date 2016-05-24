@@ -89,7 +89,7 @@ class Customer extends DataObject
      */
     public function getLastName()
     {
-        return $this->getData(self::FIRST_NAME);
+        return $this->getData(self::LAST_NAME);
     }
 
     /**
