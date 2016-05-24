@@ -1,0 +1,176 @@
+<?php
+
+namespace SubscribePro;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Exception\TransferException;
+use Monolog\Logger;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Formatter\LineFormatter;
+use Psr\Log\LogLevel;
+
+class Http
+{
+    /**
+     * Default log file name
+     */
+    const DEFAULT_LOG_FILE_NAME = 'log/subscribepro.log';
+
+    /**
+     * Default log line format
+     */
+    const DEFAULT_LOG_LINE_FORMAT = "[%datetime%] %channel%.%level_name%: %message%\n";
+
+    /**
+     * Default log message format
+     */
+    const DEFAULT_LOG_MESSAGE_FORMAT = "{method} - {uri}\nRequest body: {req_body}\n{code} {phrase}\nResponse body: {res_body}\n{error}\n";
+
+    /**
+     * @var string
+     */
+    protected $baseUrl = 'https://api.subscribepro.com';
+
+    /**
+     * @var \SubscribePro\App
+     */
+    protected $app;
+
+    /**
+     * @var \GuzzleHttp\Client
+     */
+    protected $client;
+
+    /**
+     * @var \GuzzleHttp\HandlerStack
+     */
+    protected $handlerStack;
+
+    /**
+     * @param App $app
+     */
+    public function __construct($app)
+    {
+        $this->app = $app;
+        $this->handlerStack = HandlerStack::create();
+    }
+
+    protected function initClient()
+    {
+        $this->client = new Client([
+            'base_uri' => $this->baseUrl,
+            'handler'  => $this->handlerStack,
+            RequestOptions::AUTH => [$this->app->getClientId(), $this->app->getClientSecret()]
+        ]);
+    }
+
+    /**
+     * @return \GuzzleHttp\HandlerStack
+     */
+    public function getHandlerStack()
+    {
+        return $this->handlerStack;
+    }
+
+    /**
+     * @param string|null $fileName
+     * @param string|null $lineFormat
+     * @param string|null $messageFormat
+     * @return \SubscribePro\Http
+     */
+    public function initDefaultLogger($fileName = null, $lineFormat = null, $messageFormat = null)
+    {
+        $fileName = $fileName ?: static::DEFAULT_LOG_FILE_NAME;
+        $lineFormat = $lineFormat ?: static::DEFAULT_LOG_LINE_FORMAT;
+        $messageFormat = $messageFormat ?: static::DEFAULT_LOG_MESSAGE_FORMAT;
+
+        $logHandler = new RotatingFileHandler($fileName);
+        $logHandler->setFormatter(new LineFormatter($lineFormat, null, true));
+
+        return $this->addLogger(new Logger('Logger', [$logHandler]), new MessageFormatter($messageFormat));
+    }
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \GuzzleHttp\MessageFormatter $messageFormatter
+     * @param string $logLevel
+     * @return $this
+     */
+    public function addLogger($logger, $messageFormatter, $logLevel = LogLevel::INFO)
+    {
+        $this->handlerStack->push(Middleware::log($logger, $messageFormatter, $logLevel));
+        return $this;
+    }
+
+    /**
+     * @param bool $force
+     * @return \GuzzleHttp\Client
+     */
+    public function getClient($force = false)
+    {
+        if (null === $this->client || $force) {
+            $this->initClient();
+        }
+        return $this->client;
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    protected function buildUrl($url)
+    {
+        return '/services/' . ltrim($url, '/');
+    }
+
+    /**
+     * @param string $uri
+     * @param array $params
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function get($uri, $params = [])
+    {
+        try {
+            $options = empty($params) ? [] : ['query' => $params];
+            $response = $this->getClient()->get($this->buildUrl($uri), $options);
+        } catch (TransferException $e) {
+            return false; /* TODO Probably we should throw Exception */
+        }
+
+        return $this->processResponse($response);
+    }
+
+    /**
+     * @param string $uri
+     * @param array $postData
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function post($uri, $postData = [])
+    {
+        try {
+            $options = empty($postData) ? [] : ['json' => $postData];
+            $response = $this->getClient()->post($this->buildUrl($uri), $options);
+        } catch (TransferException $e) {
+            return false; /* TODO Probably we should throw Exception */
+        }
+
+        return $this->processResponse($response);
+    }
+
+    /**
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return bool|mixed
+     */
+    protected function processResponse($response)
+    {
+        if ($response->getStatusCode() == 200) {
+            $body = $response->getBody();
+            return json_decode($body, true);
+        }
+        return false; /* TODO Probably we should throw Exception */
+    }
+}
