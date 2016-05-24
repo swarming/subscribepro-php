@@ -12,17 +12,7 @@ class DataFactory
     /**
      * @var string
      */
-    protected $itemType;
-
-    /**
-     * @var string
-     */
     protected $collectionClass;
-
-    /**
-     * @var string
-     */
-    protected $collectionType;
 
     /**
      * @param string $itemClass
@@ -36,10 +26,14 @@ class DataFactory
         $collectionClass = '\SubscribePro\Service\DataCollection',
         $collectionType = '\SubscribePro\Service\DataCollection'
     ) {
+        if (!is_a($itemClass, $itemType, true)) {
+            throw new \InvalidArgumentException("{$itemClass} must be an instance of {$itemType}.");
+        }
+        if (!is_a($collectionClass, $collectionType, true)) {
+            throw new \InvalidArgumentException("{$collectionClass} must be an instance of {$collectionType}.");
+        }
         $this->itemClass = $itemClass;
-        $this->itemType = $itemType;
         $this->collectionClass = $collectionClass;
-        $this->collectionType = $collectionType;
     }
 
     /**
@@ -48,11 +42,7 @@ class DataFactory
      */
     public function createItem(array $data = [])
     {
-        $item = new $this->itemClass($data);
-        if (!$item instanceof $this->itemType) {
-            throw new \InvalidArgumentException(get_class($item) . " must be an instance of {$this->itemType}.");
-        }
-        return $item;
+        return new $this->itemClass($data);
     }
 
     /**
@@ -61,10 +51,6 @@ class DataFactory
      */
     public function createCollection(array $data = [])
     {
-        $collection = new $this->collectionClass($this, $data);
-        if (!$collection instanceof $this->collectionType) {
-            throw new \InvalidArgumentException(get_class($collection) . " must be an instance of {$this->collectionType}.");
-        }
-        return $collection;
+        return new $this->collectionClass($this, $data);
     }
 }

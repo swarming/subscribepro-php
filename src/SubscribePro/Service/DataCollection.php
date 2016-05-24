@@ -76,7 +76,7 @@ class DataCollection
     /**
      * @return bool
      */
-    public function isAllValid()
+    public function isValid()
     {
         foreach ($this->items as $item) {
             if (!$item->isValid()) {

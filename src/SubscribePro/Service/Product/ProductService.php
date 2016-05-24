@@ -104,7 +104,7 @@ class ProductService extends AbstractService
      */
     public function saveCollection($collection, $changedOnly = true)
     {
-        if (!$collection->isAllValid()) {
+        if (!$collection->isValid()) {
             throw new \Exception('Not all required fields are set in one or more items.');
         }
 
