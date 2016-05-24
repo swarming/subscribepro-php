@@ -49,7 +49,14 @@ class DataObject
     public function initData(array $data = [])
     {
         $this->data = $data;
-        $this->originData = $data;
+        if (isset($data[$this->idField]) && !empty($data[$this->idField])) {
+            $this->originData = $data;
+            $this->changes = [];
+        } else {
+            $this->changes = $data;
+            $this->originData = [];
+        }
+
         return $this;
     }
 
@@ -67,7 +74,11 @@ class DataObject
      */
     public function setId($id)
     {
-        return $this->setData($this->idField, $id);
+        $this->setData($this->idField, $id);
+        $this->originData = [];
+        $this->changes = $this->data;
+        
+        return $this;
     }
 
     /**

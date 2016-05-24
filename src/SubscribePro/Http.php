@@ -7,7 +7,6 @@ use GuzzleHttp\RequestOptions;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Exception\TransferException;
 use Monolog\Logger;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Formatter\LineFormatter;
@@ -134,12 +133,9 @@ class Http
      */
     public function get($uri, $params = [])
     {
-        try {
-            $options = empty($params) ? [] : ['query' => $params];
-            $response = $this->getClient()->get($this->buildUrl($uri), $options);
-        } catch (TransferException $e) {
-            return false; /* TODO Probably we should throw Exception */
-        }
+        $options = empty($params) ? [] : ['query' => $params];
+        $options['http_errors'] = false;
+        $response = $this->getClient()->get($this->buildUrl($uri), $options);
 
         return $this->processResponse($response);
     }
@@ -151,12 +147,9 @@ class Http
      */
     public function post($uri, $postData = [])
     {
-        try {
-            $options = empty($postData) ? [] : ['json' => $postData];
-            $response = $this->getClient()->post($this->buildUrl($uri), $options);
-        } catch (TransferException $e) {
-            return false; /* TODO Probably we should throw Exception */
-        }
+        $options = empty($postData) ? [] : ['json' => $postData];
+        $options['http_errors'] = false;
+        $response = $this->getClient()->post($this->buildUrl($uri), $options);
 
         return $this->processResponse($response);
     }
@@ -171,6 +164,10 @@ class Http
             $body = $response->getBody();
             return json_decode($body, true);
         }
+        if ($response->getStatusCode() == 404) {
+            return [];
+        }
+
         return false; /* TODO Probably we should throw Exception */
     }
 }
