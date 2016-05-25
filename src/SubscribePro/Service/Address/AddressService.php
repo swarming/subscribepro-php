@@ -22,49 +22,37 @@ class AddressService extends AbstractService
 
     /**
      * @param int $spId
-     * @return \SubscribePro\Service\Address\Address
+     * @return \SubscribePro\Service\Address\AddressInterface
+     * @throws \RuntimeException
      */
     public function loadItem($spId)
     {
         $response = $this->httpClient->get("/v2/addresses/{$spId}.json");
-        if (!$response) {
-            return false;
-        }
 
-        $itemData = isset($response['address']) ? $response['address'] : [];
+        $itemData = !empty($response['address']) ? $response['address'] : [];
         $item = $this->createItem($itemData);
 
         return $item;
     }
 
     /**
-     * @param \SubscribePro\Service\Address\Address $item
-     * @param bool $changedOnly
-     * @return bool|Address
-     * @throws \Exception
+     * @param \SubscribePro\Service\Address\AddressInterface $item
+     * @return \SubscribePro\Service\Address\AddressInterface
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    public function saveItem($item, $changedOnly = true)
+    public function saveItem($item)
     {
-        if (!$item->isValid()) {
-            throw new \Exception('Not all required fields are set.');
-        }
+        $response = $this->httpClient->post($this->getFormUri($item), ['address' => $item->getFormData()]);
 
-        $response = $this->httpClient->post(
-            $this->getFormUri($item),
-            ['address' => $item->getFormData($changedOnly)]
-        );
-        if (!$response) {
-            return false;
-        }
-
-        $itemData = isset($response['address']) ? $response['address'] : [];
-        $item->initData($itemData);
+        $itemData = !empty($response['address']) ? $response['address'] : [];
+        $item->importData($itemData);
 
         return $item;
     }
 
     /**
-     * @param \SubscribePro\Service\Address\Address $item
+     * @param \SubscribePro\Service\Address\AddressInterface $item
      * @return string
      */
     protected function getFormUri($item)
@@ -74,17 +62,15 @@ class AddressService extends AbstractService
 
     /**
      * @param int|null $customerId
-     * @return false|Address[]
+     * @return \SubscribePro\Service\Address\AddressInterface[]
+     * @throws \RuntimeException
      */
-    public function loadCollection($customerId = null)
+    public function loadList($customerId = null)
     {
         $params = $customerId ? ['customer_id' => $customerId] : [];
         $response = $this->httpClient->get('/v2/addresses.json', $params);
-        if (!$response) {
-            return false;
-        }
 
-        $responseData = isset($response['addresses']) && is_array($response['addresses']) ? $response['addresses'] : [];  
-        return $this->createCollection($responseData);
+        $responseData = !empty($response['addresses']) ? $response['addresses'] : [];
+        return $this->buildList($responseData);
     }
 }

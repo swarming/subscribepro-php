@@ -6,23 +6,6 @@ use SubscribePro\Service\DataObject;
 
 class Address extends DataObject implements AddressInterface
 {
-    const ID = 'id';
-    const CUSTOMER_ID = 'customer_id';
-    const MAGENTO_ADDRESS_ID = 'magento_address_id';
-    const COMPANY = 'company';
-    const STREET1 = 'street1';
-    const STREET2 = 'street2';
-    const CITY = 'city';
-    const REGION = 'region';
-    const POSTCODE = 'postcode';
-    const PHONE = 'phone';
-    const COUNTRY = 'country';
-    const FIRST_NAME = 'first_name';
-    const MIDDLE_NAME = 'middle_name';
-    const LAST_NAME = 'last_name';
-    const CREATED = 'created';
-    const UPDATED = 'updated';
-
     /**
      * @var string
      */
@@ -31,38 +14,39 @@ class Address extends DataObject implements AddressInterface
     /**
      * @var array
      */
-    protected $nonUpdatableFields = [
-        self::ID,
-        self::CUSTOMER_ID,
-        self::CREATED,
-        self::UPDATED
+    protected $creatingFields = [
+        self::CUSTOMER_ID => true,
+        self::MAGENTO_ADDRESS_ID => false,
+        self::FIRST_NAME => true,
+        self::MIDDLE_NAME => false,
+        self::LAST_NAME => true,
+        self::COMPANY => false,
+        self::STREET1 => false,
+        self::STREET2 => false,
+        self::CITY => false,
+        self::REGION => false,
+        self::POSTCODE => false,
+        self::COUNTRY => false,
+        self::PHONE => false
     ];
 
     /**
      * @var array
      */
-    protected $nonCreatableFields = [
-        self::ID,
-        self::CREATED,
-        self::UPDATED
+    protected $updatingFields = [
+        self::MAGENTO_ADDRESS_ID => false,
+        self::FIRST_NAME => false,
+        self::MIDDLE_NAME => false,
+        self::LAST_NAME => false,
+        self::COMPANY => false,
+        self::STREET1 => false,
+        self::STREET2 => false,
+        self::CITY => false,
+        self::REGION => false,
+        self::POSTCODE => false,
+        self::COUNTRY => false,
+        self::PHONE => false
     ];
-
-    /**
-     * @var array
-     */
-    protected $requiredFields = [
-        self::CUSTOMER_ID,
-        self::FIRST_NAME,
-        self::LAST_NAME
-    ];
-
-    /**
-     * @return bool
-     */
-    public function isValid()
-    {
-        return $this->getId() ? true : parent::isValid();
-    }
 
     /**
      * @return string|null
@@ -299,19 +283,5 @@ class Address extends DataObject implements AddressInterface
     public function getUpdated()
     {
         return $this->getData(self::UPDATED);
-    }
-
-    /**
-     * @param bool $changedOnly
-     * @return array
-     */
-    public function getFormData($changedOnly = true)
-    {
-        if (!$this->getData($this->idField)) {
-            return array_diff_key($this->data, array_flip($this->nonCreatableFields));
-        }
-        
-        $data = $changedOnly ? $this->changes : $this->data;
-        return array_diff_key($data, array_flip($this->nonUpdatableFields));
     }
 }

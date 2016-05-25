@@ -6,6 +6,23 @@ use SubscribePro\Service\DataObjectInterface;
 
 interface AddressInterface extends DataObjectInterface
 {
+    const ID = 'id';
+    const CUSTOMER_ID = 'customer_id';
+    const MAGENTO_ADDRESS_ID = 'magento_address_id';
+    const FIRST_NAME = 'first_name';
+    const MIDDLE_NAME = 'middle_name';
+    const LAST_NAME = 'last_name';
+    const COMPANY = 'company';
+    const STREET1 = 'street1';
+    const STREET2 = 'street2';
+    const CITY = 'city';
+    const REGION = 'region';
+    const POSTCODE = 'postcode';
+    const COUNTRY = 'country';
+    const PHONE = 'phone';
+    const CREATED = 'created';
+    const UPDATED = 'updated';
+    
     /**
      * @return string|null
      */
