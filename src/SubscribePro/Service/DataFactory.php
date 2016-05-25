@@ -11,12 +11,14 @@ class DataFactory
 
     /**
      * @param string $itemClass
+     * @param string $itemType
      */
     public function __construct(
-        $itemClass = '\SubscribePro\Service\DataObject'
+        $itemClass = '\SubscribePro\Service\DataObject',
+        $itemType = '\SubscribePro\Service\DataObjectInterface'
     ) {
-        if (!is_a($itemClass, '\SubscribePro\Service\DataObjectInterface', true)) {
-            throw new \InvalidArgumentException("{$itemClass} must implement DataObjectInterface.");
+        if (!is_a($itemClass, $itemType, true)) {
+            throw new \InvalidArgumentException("{$itemClass} must implement {$itemType}.");
         }
         $this->itemClass = $itemClass;
     }
@@ -32,7 +34,7 @@ class DataFactory
 
     /**
      * @param array $data
-     * @return DataObjectInterface[]
+     * @return array
      */
     public function createCollection(array $data = [])
     {

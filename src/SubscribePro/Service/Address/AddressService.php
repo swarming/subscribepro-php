@@ -10,7 +10,14 @@ class AddressService extends AbstractService
      * @var array
      */
     protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Address\Address'
+        'itemClass' => '\SubscribePro\Service\Address\Address',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $staticConfig = [
+        'itemType' => '\SubscribePro\Service\Address\AddressInterface',
     ];
 
     /**

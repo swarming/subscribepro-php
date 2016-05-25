@@ -4,7 +4,7 @@ namespace SubscribePro\Service\Customer;
 
 use SubscribePro\Service\DataObject;
 
-class Customer extends DataObject
+class Customer extends DataObject implements CustomerInterface
 {
     const ID = 'id';
     const EMAIL = 'email';

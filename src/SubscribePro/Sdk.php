@@ -126,7 +126,8 @@ class Sdk
     public function __call($method, $args)
     {
         if (substr($method, 0, 6) === 'create' && substr($method, -7) === 'Service') {
-            return $this->createService(underscore(substr($method, 6, -7)), $args);
+            $config = sizeof($args) ? array_shift($args) : [];
+            return $this->createService(underscore(substr($method, 6, -7)), $config);
         }
 
         throw new \BadMethodCallException("Method {$method} does not exist.");

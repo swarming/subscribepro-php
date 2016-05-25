@@ -10,7 +10,14 @@ class CustomerService extends AbstractService
      * @var array
      */
     protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Customer\Customer'
+        'itemClass' => '\SubscribePro\Service\Customer\Customer',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $staticConfig = [
+        'itemType' => '\SubscribePro\Service\Customer\CustomerInterface',
     ];
 
     /**

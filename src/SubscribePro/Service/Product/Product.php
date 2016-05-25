@@ -4,7 +4,7 @@ namespace SubscribePro\Service\Product;
 
 use SubscribePro\Service\DataObject;
 
-class Product extends DataObject
+class Product extends DataObject implements ProductInterface
 {
     const ID = 'id';
     const SKU = 'sku';

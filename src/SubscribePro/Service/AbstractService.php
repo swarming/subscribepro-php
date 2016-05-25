@@ -25,6 +25,11 @@ abstract class AbstractService
     protected $defaultConfig = [];
 
     /**
+     * @var array
+     */
+    protected $staticConfig = [];
+
+    /**
      * @var string
      */
     protected $itemType = '\SubscribePro\Service\DataObject';
@@ -38,9 +43,10 @@ abstract class AbstractService
         array $config = []
     ) {
         $this->httpClient = $httpClient;
-        $this->config = array_merge($this->defaultConfig, $config);
+        $this->config = array_merge($this->defaultConfig, $config, $this->staticConfig);
         $this->dataFactory = new DataFactory(
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\DataObject')
+            $this->getConfigValue('itemClass', '\SubscribePro\Service\DataObject'),
+            $this->getConfigValue('itemType', '\SubscribePro\Service\DataObjectInterface')
         );
     }
 

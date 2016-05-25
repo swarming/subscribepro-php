@@ -10,7 +10,14 @@ class ProductService extends AbstractService
      * @var array
      */
     protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Product\Product'
+        'itemClass' => '\SubscribePro\Service\Product\Product',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $staticConfig = [
+        'itemType' => '\SubscribePro\Service\Product\ProductInterface',
     ];
 
     /**

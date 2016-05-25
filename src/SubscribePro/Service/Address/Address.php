@@ -4,7 +4,7 @@ namespace SubscribePro\Service\Address;
 
 use SubscribePro\Service\DataObject;
 
-class Address extends DataObject
+class Address extends DataObject implements AddressInterface
 {
     const ID = 'id';
     const CUSTOMER_ID = 'customer_id';
