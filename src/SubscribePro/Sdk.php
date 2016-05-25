@@ -6,6 +6,7 @@ namespace SubscribePro;
  * @method \SubscribePro\Service\Product\ProductService createProductService(array $config = [])
  * @method \SubscribePro\Service\Customer\CustomerService createCustomerService(array $config = [])
  * @method \SubscribePro\Service\Address\AddressService createAddressService(array $config = [])
+ * @method \SubscribePro\Service\Subscription\SubscriptionService createSubscriptionService(array $config = [])
  */
 class Sdk
 {

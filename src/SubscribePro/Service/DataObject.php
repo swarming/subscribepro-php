@@ -17,46 +17,33 @@ class DataObject implements DataObjectInterface
     /**
      * @var array
      */
-    protected $originData = [];
+    protected $creatingFields = [];
 
     /**
      * @var array
      */
-    protected $changes = [];
+    protected $updatingFields = [];
 
     /**
      * @var array
      */
-    protected $nonUpdatableFields = ['id'];
-
-    /**
-     * @var array
-     */
-    protected $requiredFields = [];
+    protected $eitherFieldRequired = [];
 
     /**
      * @param array $data
      */
     public function __construct(array $data = [])
     {
-        $this->initData($data);
+        $this->importData($data);
     }
 
     /**
      * @param array $data
      * @return $this
      */
-    public function initData(array $data = [])
+    public function importData(array $data = [])
     {
         $this->data = $data;
-        if (isset($data[$this->idField]) && !empty($data[$this->idField])) {
-            $this->originData = $data;
-            $this->changes = [];
-        } else {
-            $this->changes = $data;
-            $this->originData = [];
-        }
-
         return $this;
     }
 
@@ -75,9 +62,6 @@ class DataObject implements DataObjectInterface
     public function setId($id)
     {
         $this->setData($this->idField, $id);
-        $this->originData = [];
-        $this->changes = $this->data;
-        
         return $this;
     }
 
@@ -88,12 +72,6 @@ class DataObject implements DataObjectInterface
      */
     protected function setData($key, $value)
     {
-        if (empty($this->originData[$key]) || $this->originData[$key] != $value) {
-            $this->changes[$key] = $value;
-        } else if (isset($this->changes[$key])) {
-            unset($this->changes[$key]);
-        }
-
         $this->data[$key] = $value;
         return $this;
     }
@@ -123,39 +101,33 @@ class DataObject implements DataObjectInterface
     {
         return $this->data;
     }
-    
-    /**
-     * @return bool
-     */
-    public function isChanged()
-    {
-        return !empty($this->changes);
-    }
 
     /**
      * @return array
      */
-    public function getChangedData()
+    protected function getFormFields()
     {
-        return $this->changes;
-    }
-
-    /**
-     * @param bool $changedOnly
-     * @return array
-     */
-    public function getFormData($changedOnly = true)
-    {
-        $data = $changedOnly ? $this->changes : $this->data;
-        return array_diff_key($data, array_flip($this->nonUpdatableFields));
+        return $this->isNew() ? $this->creatingFields : $this->updatingFields;
     }
 
     /**
      * @return array
+     * @throws \InvalidArgumentException
      */
-    public function getRequiredFields()
+    public function getFormData()
     {
-        return $this->requiredFields;
+        $formData = [];
+        $fields = $this->getFormFields();
+        foreach ($fields as $field => $isRequired) {
+            if (!isset($this->data[$field]) && $isRequired) {
+                throw new \InvalidArgumentException("Required {$field} field is not set.");
+            }
+            if (!isset($this->data[$field])) {
+                continue;
+            }
+            $formData[$field] = $this->data[$field];
+        }
+        return $formData;
     }
 
     /**
@@ -163,11 +135,13 @@ class DataObject implements DataObjectInterface
      */
     public function isValid()
     {
-        foreach ($this->requiredFields as $requiredField) {
-            if (empty($this->getData($requiredField))) {
+        $fields = $this->getFormFields();
+        foreach ($fields as $field => $isRequired) {
+            if ($isRequired && null === $this->getData($field)) {
                 return false;
             }
         }
-        return true;
+
+        return true; /* TODO Return missing fields */
     }
 }

@@ -4,14 +4,11 @@ namespace SubscribePro\Service;
 
 interface DataObjectInterface
 {
-
     /**
-     * load data to object
-     * 
      * @param array $data
      * @return $this
      */
-    public function initData(array $data = []);
+    public function importData(array $data = []);
 
     /**
      * @return int|null
@@ -35,10 +32,10 @@ interface DataObjectInterface
     public function toArray();
 
     /**
-     * @param bool $changedOnly
      * @return array
+     * @throws \InvalidArgumentException
      */
-    public function getFormData($changedOnly = true);
+    public function getFormData();
 
     /**
      * @return bool

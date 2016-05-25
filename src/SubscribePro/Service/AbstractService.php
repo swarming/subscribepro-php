@@ -10,14 +10,14 @@ abstract class AbstractService
     protected $httpClient;
 
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
      * @var \SubscribePro\Service\DataFactory
      */
     protected $dataFactory;
+
+    /**
+     * @var array
+     */
+    protected $config;
 
     /**
      * @var array
@@ -28,11 +28,6 @@ abstract class AbstractService
      * @var array
      */
     protected $staticConfig = [];
-
-    /**
-     * @var string
-     */
-    protected $itemType = '\SubscribePro\Service\DataObject';
 
     /**
      * @param \SubscribePro\Http $httpClient
@@ -71,7 +66,7 @@ abstract class AbstractService
 
     /**
      * @param array $data
-     * @return \SubscribePro\Service\Product\Product
+     * @return \SubscribePro\Service\DataObjectInterface
      */
     public function createItem(array $data = [])
     {
@@ -80,10 +75,12 @@ abstract class AbstractService
 
     /**
      * @param array $data
-     * @return DataObjectInterface[]
+     * @return \SubscribePro\Service\DataObjectInterface[]
      */
-    public function createCollection(array $data = [])
+    protected function buildList(array $data = [])
     {
-        return $this->dataFactory->createCollection($data);
+        return array_map(function ($itemData) {
+            return $itemData instanceOf DataObject ? $itemData : $this->createItem($itemData);
+        }, $data);
     }
 }

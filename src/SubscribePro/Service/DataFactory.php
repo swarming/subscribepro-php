@@ -31,15 +31,4 @@ class DataFactory
     {
         return new $this->itemClass($data);
     }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    public function createCollection(array $data = [])
-    {
-        return array_map(function ($itemData) {
-            return $itemData instanceOf DataObject ? $itemData : $this->createItem($itemData);
-        }, $data);
-    }
 }

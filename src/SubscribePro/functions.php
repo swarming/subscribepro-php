@@ -22,8 +22,8 @@ function underscore($name)
 }
 
 /**
- * @param $date
- * @param $outputFormat
+ * @param string $date
+ * @param string $outputFormat
  * @param string $inputFormat
  * @return string
  */

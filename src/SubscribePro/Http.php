@@ -63,6 +63,7 @@ class Http
         $this->client = new Client([
             'base_uri' => $this->baseUrl,
             'handler'  => $this->handlerStack,
+            RequestOptions::HTTP_ERRORS => false,
             RequestOptions::AUTH => [$this->app->getClientId(), $this->app->getClientSecret()]
         ]);
     }
@@ -129,12 +130,12 @@ class Http
     /**
      * @param string $uri
      * @param array $params
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return array|int|null
+     * @throws \RuntimeException
      */
     public function get($uri, $params = [])
     {
         $options = empty($params) ? [] : ['query' => $params];
-        $options['http_errors'] = false;
         $response = $this->getClient()->get($this->buildUrl($uri), $options);
 
         return $this->processResponse($response);
@@ -143,12 +144,12 @@ class Http
     /**
      * @param string $uri
      * @param array $postData
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return array|int|null
+     * @throws \RuntimeException
      */
     public function post($uri, $postData = [])
     {
         $options = empty($postData) ? [] : ['json' => $postData];
-        $options['http_errors'] = false;
         $response = $this->getClient()->post($this->buildUrl($uri), $options);
 
         return $this->processResponse($response);
@@ -156,18 +157,26 @@ class Http
 
     /**
      * @param \Psr\Http\Message\ResponseInterface $response
-     * @return bool|mixed
+     * @return array|int|null
+     * @throws \RuntimeException
      */
     protected function processResponse($response)
     {
-        if ($response->getStatusCode() == 200) {
-            $body = $response->getBody();
-            return json_decode($body, true);
-        }
-        if ($response->getStatusCode() == 404) {
-            return [];
+        if ($response->getStatusCode() < 300) {
+            $body = (string)$response->getBody();
+            return !empty($body) ? json_decode($body, true) : $response->getStatusCode();
         }
 
-        return false; /* TODO Probably we should throw Exception */
+        throw new \RuntimeException($this->getErrorMessage($response), $response->getStatusCode());
+    }
+
+    /**
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return string
+     */
+    protected function getErrorMessage($response)
+    {
+        $errorBody = json_decode((string)$response->getBody(), true);
+        return !empty($errorBody['message']) ? $errorBody['message'] : $response->getReasonPhrase();
     }
 }

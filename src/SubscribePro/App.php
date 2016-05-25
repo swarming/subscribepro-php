@@ -5,12 +5,12 @@ namespace SubscribePro;
 class App
 {
     /**
-     * @var string The app ID.
+     * @var string
      */
     protected $clientId;
 
     /**
-     * @var string The app secret.
+     * @var string
      */
     protected $clientSecret;
 
