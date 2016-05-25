@@ -7,7 +7,7 @@ use SubscribePro\App;
 class AppTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var App
+     * @var \SubscribePro\App
      */
     protected $app;
 
