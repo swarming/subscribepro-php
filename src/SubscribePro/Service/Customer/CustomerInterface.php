@@ -6,6 +6,23 @@ use SubscribePro\Service\DataObjectInterface;
 
 interface CustomerInterface extends DataObjectInterface
 {
+    const ID = 'id';
+    const EMAIL = 'email';
+    const MAGENTO_CUSTOMER_ID = 'magento_customer_id';
+    const MAGENTO_CUSTOMER_GROUP_ID = 'magento_customer_group_id';
+    const MAGENTO_WEBSITE_ID = 'magento_website_id';
+    const CREATE_MAGENTO_CUSTOMER = 'create_magento_customer';
+    const EXTERNAL_VAULT_CUSTOMER_TOKEN = 'external_vault_customer_token';
+    const FIRST_NAME = 'first_name';
+    const MIDDLE_NAME = 'middle_name';
+    const LAST_NAME = 'last_name';
+    const FULL_NAME = 'full_name';
+    const ACTIVE_SUBSCRIPTION_COUNT = 'active_subscription_count';
+    const SUBSCRIPTION_COUNT = 'subscription_count';
+    const ACTIVE_SUBSCRIBED_QTY = 'active_subscribed_qty';
+    const CREATED = 'created';
+    const UPDATED = 'updated';
+    
     /**
      * @return string|null
      */
@@ -49,6 +66,11 @@ interface CustomerInterface extends DataObjectInterface
      * @return $this
      */
     public function setMiddleName($middleName);
+
+    /**
+     * @return string|null
+     */
+    public function getFullName();
 
     /**
      * @return int|null

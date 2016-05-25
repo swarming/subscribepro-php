@@ -22,49 +22,37 @@ class CustomerService extends AbstractService
 
     /**
      * @param int $spId
-     * @return \SubscribePro\Service\Customer\Customer
+     * @return \SubscribePro\Service\Customer\CustomerInterface
+     * @throws \RuntimeException
      */
     public function loadItem($spId)
     {
         $response = $this->httpClient->get("/v2/customers/{$spId}.json");
-        if (!$response) {
-            return false;
-        }
 
-        $itemData = isset($response['customer']) ? $response['customer'] : [];
+        $itemData = !empty($response['customer']) ? $response['customer'] : [];
         $item = $this->createItem($itemData);
 
         return $item;
     }
 
     /**
-     * @param \SubscribePro\Service\Customer\Customer $item
-     * @param bool $changedOnly
-     * @return bool|Customer
-     * @throws \Exception
+     * @param \SubscribePro\Service\Customer\CustomerInterface $item
+     * @return \SubscribePro\Service\Customer\CustomerInterface
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    public function saveItem($item, $changedOnly = true)
+    public function saveItem($item)
     {
-        if (!$item->isValid()) {
-            throw new \Exception('Not all required fields are set.');
-        }
-
-        $response = $this->httpClient->post(
-            $this->getFormUri($item),
-            ['customer' => $item->getFormData($changedOnly)]
-        );
-        if (!$response) {
-            return false;
-        }
+        $response = $this->httpClient->post($this->getFormUri($item), ['customer' => $item->getFormData()]);
 
         $itemData = isset($response['customer']) ? $response['customer'] : [];
-        $item->initData($itemData);
+        $item->importData($itemData);
 
         return $item;
     }
 
     /**
-     * @param \SubscribePro\Service\Customer\Customer $item
+     * @param \SubscribePro\Service\Customer\CustomerInterface $item
      * @return string
      */
     protected function getFormUri($item)
@@ -73,17 +61,25 @@ class CustomerService extends AbstractService
     }
 
     /**
-     * @param array $params
-     * @return Customer[]
+     * Retrieve a list of all customers. The list could be filtered.
+     *  Available filters:
+     * - magento_customer_id
+     * - email
+     * - first_name
+     * - last_name
+     *
+     * @param array $filters
+     * @return \SubscribePro\Service\Customer\CustomerInterface[]
+     * @throws \RuntimeException
      */
-    public function loadCollection(array $params = [])
+    public function loadList(array $filters = [])
     {
-        $response = $this->httpClient->get('/v2/customers.json', $params);
+        $response = $this->httpClient->get('/v2/customers.json', $filters);
         if (!$response) {
             return false;
         }
 
-        $responseData = isset($response['customers']) && is_array($response['customers']) ? $response['customers'] : [];
-        return $this->createCollection($responseData);
+        $responseData = !empty($response['customers']) ? $response['customers'] : [];
+        return $this->buildList($responseData);
     }
 }

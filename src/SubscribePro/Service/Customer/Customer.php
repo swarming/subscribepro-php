@@ -6,23 +6,6 @@ use SubscribePro\Service\DataObject;
 
 class Customer extends DataObject implements CustomerInterface
 {
-    const ID = 'id';
-    const EMAIL = 'email';
-    const MAGENTO_CUSTOMER_ID = 'magento_customer_id';
-    const MAGENTO_CUSTOMER_GROUP_ID = 'magento_customer_group_id';
-    const MAGENTO_WEBSITE_ID = 'magento_website_id';
-    const CREATE_MAGENTO_CUSTOMER = 'create_magento_customer';
-    const EXTERNAL_VAULT_CUSTOMER_TOKEN = 'external_vault_customer_token';
-    const FIRST_NAME = 'first_name';
-    const MIDDLE_NAME = 'middle_name';
-    const LAST_NAME = 'last_name';
-    const FULL_NAME = 'full_name';
-    const ACTIVE_SUBSCRIPTION_COUNT = 'active_subscription_count';
-    const SUBSCRIPTION_COUNT = 'subscription_count';
-    const ACTIVE_SUBSCRIBED_QTY = 'active_subscribed_qty';
-    const CREATED = 'created';
-    const UPDATED = 'updated';
-
     /**
      * @var string
      */
@@ -31,23 +14,29 @@ class Customer extends DataObject implements CustomerInterface
     /**
      * @var array
      */
-    protected $nonUpdatableFields = [
-        self::ID,
-        self::FULL_NAME,
-        self::ACTIVE_SUBSCRIBED_QTY,
-        self::ACTIVE_SUBSCRIPTION_COUNT,
-        self::SUBSCRIPTION_COUNT,
-        self::CREATED,
-        self::UPDATED
+    protected $creatingFields = [
+        self::EMAIL => true,
+        self::MAGENTO_CUSTOMER_ID => false,
+        self::MAGENTO_CUSTOMER_GROUP_ID => false,
+        self::MAGENTO_WEBSITE_ID => false,
+        self::CREATE_MAGENTO_CUSTOMER => false,
+        self::FIRST_NAME => true,
+        self::MIDDLE_NAME => false,
+        self::LAST_NAME => true
     ];
 
     /**
      * @var array
      */
-    protected $requiredFields = [
-        self::EMAIL,
-        self::FIRST_NAME,
-        self::LAST_NAME
+    protected $updatingFields = [
+        self::EMAIL => true,
+        self::MAGENTO_CUSTOMER_ID => false,
+        self::MAGENTO_CUSTOMER_GROUP_ID => false,
+        self::MAGENTO_WEBSITE_ID => false,
+        self::EXTERNAL_VAULT_CUSTOMER_TOKEN => false,
+        self::FIRST_NAME => true,
+        self::MIDDLE_NAME => false,
+        self::LAST_NAME => true
     ];
 
     /**
@@ -110,12 +99,20 @@ class Customer extends DataObject implements CustomerInterface
     }
 
     /**
-     * @param string $middleName|null
+     * @param string|null $middleName
      * @return $this
      */
     public function setMiddleName($middleName)
     {
         return $this->setData(self::MIDDLE_NAME, $middleName);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFullName()
+    {
+        return $this->getData(self::FULL_NAME);
     }
 
     /**
@@ -127,7 +124,7 @@ class Customer extends DataObject implements CustomerInterface
     }
 
     /**
-     * @param int $magentoCustomerId|null
+     * @param int|null $magentoCustomerId
      * @return $this
      */
     public function setMagentoCustomerId($magentoCustomerId)
@@ -144,7 +141,7 @@ class Customer extends DataObject implements CustomerInterface
     }
 
     /**
-     * @param int $magentoCustomerGroupId|null
+     * @param int|null $magentoCustomerGroupId
      * @return $this
      */
     public function setMagentoCustomerGroupId($magentoCustomerGroupId)
@@ -161,14 +158,13 @@ class Customer extends DataObject implements CustomerInterface
     }
 
     /**
-     * @param int $magentoWebsiteId|null
+     * @param int|null $magentoWebsiteId
      * @return $this
      */
     public function setMagentoWebsiteId($magentoWebsiteId)
     {
         return $this->setData(self::MAGENTO_WEBSITE_ID, $magentoWebsiteId);
     }
-
 
     /**
      * @return bool
@@ -196,7 +192,7 @@ class Customer extends DataObject implements CustomerInterface
     }
 
     /**
-     * @param string $externalVaultCustomerToken|null
+     * @param string|null $externalVaultCustomerToken
      * @return $this
      */
     public function setExternalVaultCustomerToken($externalVaultCustomerToken)
