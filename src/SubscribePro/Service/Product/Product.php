@@ -6,31 +6,6 @@ use SubscribePro\Service\DataObject;
 
 class Product extends DataObject implements ProductInterface
 {
-    const ID = 'id';
-    const SKU = 'sku';
-    const NAME = 'name';
-    const SHOW_ON_UI = 'show_on_ui';
-    const MIN_QTY = 'min_qty';
-    const MAX_QTY = 'max_qty';
-    const PRICE = 'price';
-    const DISCOUNT = 'discount';
-    const IS_DISCOUNT_PERCENTAGE = 'is_discount_percentage';
-    const SUBSCRIPTION_OPTION_MODE = 'subscription_option_mode';
-    const DEFAULT_SUBSCRIPTION_OPTION = 'default_subscription_option';
-    const DEFAULT_INTERVAL = 'default_interval';
-    const INTERVALS = 'intervals';
-    const PRODUCT_OPTIONS_MODE = 'product_options_mode';
-    const IS_TRIAL_PRODUCT = 'is_trial_product';
-    const TRIAL_INTERVAL = 'trial_interval';
-    const TRIAL_PRICE = 'trial_price';
-    const TRIAL_FULL_PRODUCT_SKU = 'trial_full_product_sku';
-    const TRIAL_EMAIL_TEMPLATE_CODE = 'trial_email_template_code';
-    const TRIAL_EMAIL_THRESHOLD_DAYS = 'trial_email_threshold_days';
-    const TRIAL_WELCOME_EMAIL_TEMPLATE_CODE = 'trial_welcome_email_template_code';
-    const IS_SUBSCRIPTION_ENABLED = 'is_subscription_enabled';
-    const CREATED = 'created';
-    const UPDATED = 'updated';
-
     /**
      * @var string
      */
@@ -39,28 +14,52 @@ class Product extends DataObject implements ProductInterface
     /**
      * @var array
      */
-    protected $nonUpdatableFields = [
-        self::ID,
-        self::CREATED,
-        self::UPDATED
+    protected $creatingFields = [
+        self::SKU => true,
+        self::NAME => true,
+        self::PRICE => true,
+        self::SHOW_ON_UI => false,
+        self::MIN_QTY => false,
+        self::MAX_QTY => false,
+        self::DISCOUNT => false,
+        self::IS_DISCOUNT_PERCENTAGE => false,
+        self::SUBSCRIPTION_OPTION_MODE => false,
+        self::DEFAULT_SUBSCRIPTION_OPTION => false,
+        self::DEFAULT_INTERVAL => false,
+        self::INTERVALS => false,
+        self::IS_TRIAL_PRODUCT => false,
+        self::TRIAL_INTERVAL => false,
+        self::TRIAL_PRICE => false,
+        self::TRIAL_FULL_PRODUCT_SKU => false,
+        self::TRIAL_EMAIL_TEMPLATE_CODE => false,
+        self::TRIAL_EMAIL_THRESHOLD_DAYS => false,
+        self::TRIAL_WELCOME_EMAIL_TEMPLATE_CODE => false
     ];
 
     /**
      * @var array
      */
-    protected $requiredFields = [
-        self::SKU,
-        self::NAME,
-        self::PRICE
+    protected $updatingFields = [
+        self::SKU => false,
+        self::NAME => false,
+        self::PRICE => false,
+        self::SHOW_ON_UI => false,
+        self::MIN_QTY => false,
+        self::MAX_QTY => false,
+        self::DISCOUNT => false,
+        self::IS_DISCOUNT_PERCENTAGE => false,
+        self::SUBSCRIPTION_OPTION_MODE => false,
+        self::DEFAULT_SUBSCRIPTION_OPTION => false,
+        self::DEFAULT_INTERVAL => false,
+        self::INTERVALS => false,
+        self::IS_TRIAL_PRODUCT => false,
+        self::TRIAL_INTERVAL => false,
+        self::TRIAL_PRICE => false,
+        self::TRIAL_FULL_PRODUCT_SKU => false,
+        self::TRIAL_EMAIL_TEMPLATE_CODE => false,
+        self::TRIAL_EMAIL_THRESHOLD_DAYS => false,
+        self::TRIAL_WELCOME_EMAIL_TEMPLATE_CODE => false
     ];
-
-    /**
-     * @return bool
-     */
-    public function isValid()
-    {
-        return $this->getId() ? true : parent::isValid();
-    }
 
     /**
      * @return string|null
@@ -400,23 +399,6 @@ class Product extends DataObject implements ProductInterface
     public function setTrialWelcomeEmailTemplateCode($trialWelcomeEmailTemplateCode)
     {
         return $this->setData(self::TRIAL_WELCOME_EMAIL_TEMPLATE_CODE, $trialWelcomeEmailTemplateCode);
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function getIsSubscriptionEnabled()
-    {
-        return $this->getData(self::IS_SUBSCRIPTION_ENABLED);
-    }
-
-    /**
-     * @param bool|null $isSubscriptionEnabled
-     * @return $this
-     */
-    public function setIsSubscriptionEnabled($isSubscriptionEnabled)
-    {
-        return $this->setData(self::IS_SUBSCRIPTION_ENABLED, $isSubscriptionEnabled);
     }
 
     /**

@@ -6,6 +6,30 @@ use SubscribePro\Service\DataObjectInterface;
 
 interface ProductInterface extends DataObjectInterface
 {
+    const ID = 'id';
+    const SKU = 'sku';
+    const NAME = 'name';
+    const SHOW_ON_UI = 'show_on_ui';
+    const MIN_QTY = 'min_qty';
+    const MAX_QTY = 'max_qty';
+    const PRICE = 'price';
+    const DISCOUNT = 'discount';
+    const IS_DISCOUNT_PERCENTAGE = 'is_discount_percentage';
+    const SUBSCRIPTION_OPTION_MODE = 'subscription_option_mode';
+    const DEFAULT_SUBSCRIPTION_OPTION = 'default_subscription_option';
+    const DEFAULT_INTERVAL = 'default_interval';
+    const INTERVALS = 'intervals';
+    const PRODUCT_OPTIONS_MODE = 'product_options_mode';
+    const IS_TRIAL_PRODUCT = 'is_trial_product';
+    const TRIAL_INTERVAL = 'trial_interval';
+    const TRIAL_PRICE = 'trial_price';
+    const TRIAL_FULL_PRODUCT_SKU = 'trial_full_product_sku';
+    const TRIAL_EMAIL_TEMPLATE_CODE = 'trial_email_template_code';
+    const TRIAL_EMAIL_THRESHOLD_DAYS = 'trial_email_threshold_days';
+    const TRIAL_WELCOME_EMAIL_TEMPLATE_CODE = 'trial_welcome_email_template_code';
+    const CREATED = 'created';
+    const UPDATED = 'updated';
+
     /**
      * @return string|null
      */
@@ -225,17 +249,6 @@ interface ProductInterface extends DataObjectInterface
      * @return $this
      */
     public function setTrialWelcomeEmailTemplateCode($trialWelcomeEmailTemplateCode);
-
-    /**
-     * @return bool|null
-     */
-    public function getIsSubscriptionEnabled();
-
-    /**
-     * @param bool|null $isSubscriptionEnabled
-     * @return $this
-     */
-    public function setIsSubscriptionEnabled($isSubscriptionEnabled);
 
     /**
      * @return string|null

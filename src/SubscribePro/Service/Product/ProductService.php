@@ -22,14 +22,11 @@ class ProductService extends AbstractService
 
     /**
      * @param int $spId
-     * @return \SubscribePro\Service\Product\Product
+     * @return \SubscribePro\Service\Product\ProductInterface
      */
     public function loadItem($spId)
     {
         $response = $this->httpClient->get("/v2/products/{$spId}.json");
-        if (!$response) {
-            return false;
-        }
 
         $itemData = !empty($response['product']) ? $response['product'] : [];
         $item = $this->createItem($itemData);
@@ -38,33 +35,22 @@ class ProductService extends AbstractService
     }
 
     /**
-     * @param \SubscribePro\Service\Product\Product $item
-     * @param bool $changedOnly
-     * @return bool|Product
-     * @throws \Exception
+     * @param \SubscribePro\Service\Product\ProductInterface $item
+     * @return \SubscribePro\Service\Product\ProductInterface
+     * @throws \InvalidArgumentException
      */
-    public function saveItem($item, $changedOnly = true)
+    public function saveItem($item)
     {
-        if (!$item->isValid()) {
-            throw new \Exception('Not all required fields are set.');
-        }
+        $response = $this->httpClient->post($this->getFormUri($item), ['product' => $item->getFormData()]);
 
-        $response = $this->httpClient->post(
-            $this->getFormUri($item),
-            ['product' => $item->getFormData($changedOnly)]
-        );
-        if (!$response) {
-            return false;
-        }
-
-        $itemData = isset($response['product']) ? $response['product'] : [];
-        $item->initData($itemData);
+        $itemData = !empty($response['product']) ? $response['product'] : [];
+        $item->importData($itemData);
 
         return $item;
     }
 
     /**
-     * @param \SubscribePro\Service\Product\Product $item
+     * @param \SubscribePro\Service\Product\ProductInterface $item
      * @return string
      */
     protected function getFormUri($item)
@@ -74,17 +60,14 @@ class ProductService extends AbstractService
 
     /**
      * @param string|null $sku
-     * @return false|Product[]
+     * @return \SubscribePro\Service\Product\ProductInterface
      */
-    public function loadCollection($sku = null)
+    public function loadList($sku = null)
     {
         $params = $sku ? ['sku' => $sku] : [];
         $response = $this->httpClient->get('/v2/products.json', $params);
-        if (!$response) {
-            return false;
-        }
 
-        $responseData = isset($response['products']) && is_array($response['products']) ? $response['products'] : [];
-        return $this->createCollection($responseData);
+        $responseData = !empty($response['products']) ? $response['products'] : [];
+        return $this->buildList($responseData);
     }
 }
