@@ -10,19 +10,8 @@ class CustomerService extends AbstractService
      * @var array
      */
     protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Customer\Customer',
-        'collectionClass' => '\SubscribePro\Service\Customer\CustomerCollection'
+        'itemClass' => '\SubscribePro\Service\Customer\Customer'
     ];
-
-    /**
-     * @var string
-     */
-    protected $itemType = '\SubscribePro\Service\Customer\Customer';
-
-    /**
-     * @var string
-     */
-    protected $collectionType = '\SubscribePro\Service\Customer\CustomerCollection';
 
     /**
      * @param int $spId
@@ -52,17 +41,7 @@ class CustomerService extends AbstractService
         if (!$item->isValid()) {
             throw new \Exception('Not all required fields are set.');
         }
-        
-        return $this->doSaveItem($item, $changedOnly);
-    }
 
-    /**
-     * @param \SubscribePro\Service\Customer\Customer $item
-     * @param bool $changedOnly
-     * @return mixed
-     */
-    protected function doSaveItem($item, $changedOnly = true)
-    {
         $response = $this->httpClient->post(
             $this->getFormUri($item),
             ['customer' => $item->getFormData($changedOnly)]
@@ -70,7 +49,7 @@ class CustomerService extends AbstractService
         if (!$response) {
             return false;
         }
-        
+
         $itemData = isset($response['customer']) ? $response['customer'] : [];
         $item->initData($itemData);
 
@@ -88,7 +67,7 @@ class CustomerService extends AbstractService
 
     /**
      * @param array $params
-     * @return \SubscribePro\Service\DataCollection
+     * @return Customer[]
      */
     public function loadCollection(array $params = [])
     {
@@ -97,29 +76,7 @@ class CustomerService extends AbstractService
             return false;
         }
 
-        $collection = $this->createCollection();
-        if ($response && isset($response['customers'])) {
-            $collection->importData($response['customers']);
-        }
-        return $collection;
-    }
-
-    /**
-     * @param \SubscribePro\Service\DataCollection $collection
-     * @param bool $changedOnly
-     * @return \SubscribePro\Service\DataCollection
-     * @throws \Exception
-     */
-    public function saveCollection($collection, $changedOnly = true)
-    {
-        if (!$collection->isValid()) {
-            throw new \Exception('Not all required fields are set in one or more items.');
-        }
-
-        foreach ($collection->getItems() as $item) {
-            $this->doSaveItem($item, $changedOnly);
-        }
-        
-        return $collection;
+        $responseData = isset($response['customers']) && is_array($response['customers']) ? $response['customers'] : [];
+        return $this->createCollection($responseData);
     }
 }

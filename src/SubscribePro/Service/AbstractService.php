@@ -30,11 +30,6 @@ abstract class AbstractService
     protected $itemType = '\SubscribePro\Service\DataObject';
 
     /**
-     * @var string
-     */
-    protected $collectionType = '\SubscribePro\Service\DataCollection';
-
-    /**
      * @param \SubscribePro\Http $httpClient
      * @param array $config
      */
@@ -45,10 +40,7 @@ abstract class AbstractService
         $this->httpClient = $httpClient;
         $this->config = array_merge($this->defaultConfig, $config);
         $this->dataFactory = new DataFactory(
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\DataObject'),
-            $this->itemType,
-            $this->getConfigValue('collectionClass', '\SubscribePro\Service\DataCollection'),
-            $this->collectionType
+            $this->getConfigValue('itemClass', '\SubscribePro\Service\DataObject')
         );
     }
 
@@ -82,7 +74,7 @@ abstract class AbstractService
 
     /**
      * @param array $data
-     * @return \SubscribePro\Service\Product\ProductCollection
+     * @return DataObjectInterface[]
      */
     public function createCollection(array $data = [])
     {

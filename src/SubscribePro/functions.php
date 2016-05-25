@@ -20,3 +20,19 @@ function underscore($name)
     $result = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $name), '_'));
     return $result;
 }
+
+/**
+ * @param $date
+ * @param $outputFormat
+ * @param string $inputFormat
+ * @return string
+ */
+function formatDate($date, $outputFormat, $inputFormat = \DateTime::ISO8601)
+{
+    if (!$outputFormat) {
+        return $date;
+    }
+
+    $dateTime = \DateTime::createFromFormat($inputFormat, $date);
+    return $dateTime ? $dateTime->format($outputFormat) : $date;
+}

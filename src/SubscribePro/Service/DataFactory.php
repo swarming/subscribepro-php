@@ -10,30 +10,15 @@ class DataFactory
     protected $itemClass;
 
     /**
-     * @var string
-     */
-    protected $collectionClass;
-
-    /**
      * @param string $itemClass
-     * @param string $itemType
-     * @param string $collectionClass
-     * @param string $collectionType
      */
     public function __construct(
-        $itemClass = '\SubscribePro\Service\DataObject',
-        $itemType = '\SubscribePro\Service\DataObject',
-        $collectionClass = '\SubscribePro\Service\DataCollection',
-        $collectionType = '\SubscribePro\Service\DataCollection'
+        $itemClass = '\SubscribePro\Service\DataObject'
     ) {
-        if (!is_a($itemClass, $itemType, true)) {
-            throw new \InvalidArgumentException("{$itemClass} must be an instance of {$itemType}.");
-        }
-        if (!is_a($collectionClass, $collectionType, true)) {
-            throw new \InvalidArgumentException("{$collectionClass} must be an instance of {$collectionType}.");
+        if (!is_a($itemClass, '\SubscribePro\Service\DataObjectInterface', true)) {
+            throw new \InvalidArgumentException("{$itemClass} must implement DataObjectInterface.");
         }
         $this->itemClass = $itemClass;
-        $this->collectionClass = $collectionClass;
     }
 
     /**
@@ -47,10 +32,12 @@ class DataFactory
 
     /**
      * @param array $data
-     * @return \SubscribePro\Service\DataCollection
+     * @return DataObjectInterface[]
      */
     public function createCollection(array $data = [])
     {
-        return new $this->collectionClass($this, $data);
+        return array_map(function ($itemData) {
+            return $itemData instanceOf DataObject ? $itemData : $this->createItem($itemData);
+        }, $data);
     }
 }

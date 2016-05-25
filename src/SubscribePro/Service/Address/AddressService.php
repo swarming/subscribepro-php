@@ -10,19 +10,8 @@ class AddressService extends AbstractService
      * @var array
      */
     protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Address\Address',
-        'collectionClass' => '\SubscribePro\Service\Address\AddressCollection'
+        'itemClass' => '\SubscribePro\Service\Address\Address'
     ];
-
-    /**
-     * @var string
-     */
-    protected $itemType = '\SubscribePro\Service\Address\Address';
-
-    /**
-     * @var string
-     */
-    protected $collectionType = '\SubscribePro\Service\Address\AddressCollection';
 
     /**
      * @param int $spId
@@ -52,17 +41,7 @@ class AddressService extends AbstractService
         if (!$item->isValid()) {
             throw new \Exception('Not all required fields are set.');
         }
-        
-        return $this->doSaveItem($item, $changedOnly);
-    }
 
-    /**
-     * @param \SubscribePro\Service\Address\Address $item
-     * @param bool $changedOnly
-     * @return mixed
-     */
-    protected function doSaveItem($item, $changedOnly = true)
-    {
         $response = $this->httpClient->post(
             $this->getFormUri($item),
             ['address' => $item->getFormData($changedOnly)]
@@ -70,7 +49,7 @@ class AddressService extends AbstractService
         if (!$response) {
             return false;
         }
-        
+
         $itemData = isset($response['address']) ? $response['address'] : [];
         $item->initData($itemData);
 
@@ -88,7 +67,7 @@ class AddressService extends AbstractService
 
     /**
      * @param int|null $customerId
-     * @return bool|\SubscribePro\Service\Address\AddressCollection
+     * @return false|Address[]
      */
     public function loadCollection($customerId = null)
     {
@@ -98,10 +77,7 @@ class AddressService extends AbstractService
             return false;
         }
 
-        $collection = $this->createCollection();
-        if ($response && isset($response['addresses'])) {
-            $collection->importData($response['addresses']);
-        }
-        return $collection;
+        $responseData = isset($response['addresses']) && is_array($response['addresses']) ? $response['addresses'] : [];  
+        return $this->createCollection($responseData);
     }
 }

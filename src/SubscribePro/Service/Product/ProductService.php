@@ -10,19 +10,8 @@ class ProductService extends AbstractService
      * @var array
      */
     protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Product\Product',
-        'collectionClass' => '\SubscribePro\Service\Product\ProductCollection'
+        'itemClass' => '\SubscribePro\Service\Product\Product'
     ];
-
-    /**
-     * @var string
-     */
-    protected $itemType = '\SubscribePro\Service\Product\Product';
-
-    /**
-     * @var string
-     */
-    protected $collectionType = '\SubscribePro\Service\Product\ProductCollection';
 
     /**
      * @param int $spId
@@ -31,6 +20,9 @@ class ProductService extends AbstractService
     public function loadItem($spId)
     {
         $response = $this->httpClient->get("/v2/products/{$spId}.json");
+        if (!$response) {
+            return false;
+        }
 
         $itemData = !empty($response['product']) ? $response['product'] : [];
         $item = $this->createItem($itemData);
@@ -49,23 +41,16 @@ class ProductService extends AbstractService
         if (!$item->isValid()) {
             throw new \Exception('Not all required fields are set.');
         }
-        
-        return $this->doSaveItem($item, $changedOnly);
-    }
 
-    /**
-     * @param \SubscribePro\Service\Product\Product $item
-     * @param bool $changedOnly
-     * @return mixed
-     */
-    protected function doSaveItem($item, $changedOnly = true)
-    {
         $response = $this->httpClient->post(
             $this->getFormUri($item),
             ['product' => $item->getFormData($changedOnly)]
         );
+        if (!$response) {
+            return false;
+        }
 
-        $itemData = !empty($response['product']) ? $response['product'] : [];
+        $itemData = isset($response['product']) ? $response['product'] : [];
         $item->initData($itemData);
 
         return $item;
@@ -82,36 +67,17 @@ class ProductService extends AbstractService
 
     /**
      * @param string|null $sku
-     * @return \SubscribePro\Service\DataCollection
+     * @return false|Product[]
      */
     public function loadCollection($sku = null)
     {
         $params = $sku ? ['sku' => $sku] : [];
         $response = $this->httpClient->get('/v2/products.json', $params);
-
-        $collection = $this->createCollection();
-        if ($response && !empty($response['products'])) {
-            $collection->importData($response['products']);
-        }
-        return $collection;
-    }
-
-    /**
-     * @param \SubscribePro\Service\DataCollection $collection
-     * @param bool $changedOnly
-     * @return \SubscribePro\Service\DataCollection
-     * @throws \Exception
-     */
-    public function saveCollection($collection, $changedOnly = true)
-    {
-        if (!$collection->isValid()) {
-            throw new \Exception('Not all required fields are set in one or more items.');
+        if (!$response) {
+            return false;
         }
 
-        foreach ($collection as $item) {
-            $this->doSaveItem($item, $changedOnly);
-        }
-        
-        return $collection;
+        $responseData = isset($response['products']) && is_array($response['products']) ? $response['products'] : [];
+        return $this->createCollection($responseData);
     }
 }
