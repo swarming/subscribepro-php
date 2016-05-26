@@ -402,18 +402,20 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCreated()
+    public function getCreated($format = null)
     {
-        return $this->getData(self::CREATED);
+        return \SubscribePro\formatDate($this->getData(self::CREATED), $format);
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getUpdated()
+    public function getUpdated($format = null)
     {
-        return $this->getData(self::UPDATED);
+        return \SubscribePro\formatDate($this->getData(self::UPDATED), $format);
     }
 }

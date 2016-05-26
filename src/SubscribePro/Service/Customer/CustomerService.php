@@ -4,6 +4,9 @@ namespace SubscribePro\Service\Customer;
 
 use SubscribePro\Service\AbstractService;
 
+/**
+ * @method \SubscribePro\Service\Customer\CustomerInterface createItem(array $data = [])
+ */
 class CustomerService extends AbstractService
 {
     /**
@@ -61,7 +64,7 @@ class CustomerService extends AbstractService
     }
 
     /**
-     * Retrieve a list of all customers. The list could be filtered.
+     * Retrieve an array of all customers. Customers may be filtered.
      *  Available filters:
      * - magento_customer_id
      * - email
@@ -72,14 +75,18 @@ class CustomerService extends AbstractService
      * @return \SubscribePro\Service\Customer\CustomerInterface[]
      * @throws \RuntimeException
      */
-    public function loadList(array $filters = [])
+    public function loadItems(array $filters = [])
     {
-        $response = $this->httpClient->get('/v2/customers.json', $filters);
-        if (!$response) {
-            return false;
+        $allowedKeys = ['magento_customer_id', 'email', 'first_name', 'last_name'];
+        $validFilters = array_intersect_key($filters, array_fill_keys($allowedKeys, null));
+        
+        if (sizeof($filters) > sizeof($validFilters)) {
+            throw new \InvalidArgumentException('Only ['.implode(', ', $allowedKeys).'] query filters are allowed.');
         }
-
+        
+        $response = $this->httpClient->get('/v2/customers.json', $filters);
         $responseData = !empty($response['customers']) ? $response['customers'] : [];
+        
         return $this->buildList($responseData);
     }
 }

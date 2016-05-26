@@ -367,11 +367,12 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getNextOrderDate()
+    public function getNextOrderDate($format = null)
     {
-        return $this->getData(self::NEXT_ORDER_DATE);
+        return \SubscribePro\formatDate($this->getData(self::NEXT_ORDER_DATE), $format, 'Y-m-d');
     }
 
     /**
@@ -384,19 +385,21 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getLastOrderDate()
+    public function getLastOrderDate($format = null)
     {
-        return $this->getData(self::LAST_ORDER_DATE);
+        return \SubscribePro\formatDate($this->getData(self::LAST_ORDER_DATE), $format);
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getExpirationDate()
+    public function getExpirationDate($format = null)
     {
-        return $this->getData(self::EXPIRATION_DATE);
+        return \SubscribePro\formatDate($this->getData(self::EXPIRATION_DATE), $format, 'Y-m-d');
     }
 
     /**
@@ -443,11 +446,12 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getErrorTime()
+    public function getErrorTime($format = null)
     {
-        return $this->getData(self::ERROR_TIME);
+        return \SubscribePro\formatDate($this->getData(self::ERROR_TIME), $format);
     }
 
     /**
@@ -491,11 +495,12 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getRetryAfter()
+    public function getRetryAfter($format = null)
     {
-        return $this->getData(self::RETRY_AFTER);
+        return \SubscribePro\formatDate($this->getData(self::RETRY_AFTER), $format);
     }
 
     /**
@@ -507,26 +512,29 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCreated()
+    public function getCreated($format = null)
     {
-        return $this->getData(self::CREATED);
+        return \SubscribePro\formatDate($this->getData(self::CREATED), $format);
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getUpdated()
+    public function getUpdated($format = null)
     {
-        return $this->getData(self::UPDATED);
+        return \SubscribePro\formatDate($this->getData(self::UPDATED), $format);
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCancelled()
+    public function getCancelled($format = null)
     {
-        return $this->getData(self::CANCELLED);
+        return \SubscribePro\formatDate($this->getData(self::CANCELLED), $format);
     }
 }

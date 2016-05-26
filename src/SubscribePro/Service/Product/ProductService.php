@@ -4,6 +4,9 @@ namespace SubscribePro\Service\Product;
 
 use SubscribePro\Service\AbstractService;
 
+/**
+ * @method \SubscribePro\Service\Product\ProductInterface createItem(array $data = [])
+ */
 class ProductService extends AbstractService
 {
     /**
@@ -62,7 +65,7 @@ class ProductService extends AbstractService
      * @param string|null $sku
      * @return \SubscribePro\Service\Product\ProductInterface
      */
-    public function loadList($sku = null)
+    public function loadItems($sku = null)
     {
         $params = $sku ? ['sku' => $sku] : [];
         $response = $this->httpClient->get('/v2/products.json', $params);

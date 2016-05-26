@@ -4,6 +4,9 @@ namespace SubscribePro\Service\Address;
 
 use SubscribePro\Service\AbstractService;
 
+/**
+ * @method \SubscribePro\Service\Address\AddressInterface createItem(array $data = [])
+ */
 class AddressService extends AbstractService
 {
     /**
@@ -53,6 +56,22 @@ class AddressService extends AbstractService
 
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $item
+     * @return \SubscribePro\Service\Address\AddressInterface
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public function findOrSave($item)
+    {
+        $response = $this->httpClient->post('/v2/address/find-or-create.json', ['address' => $item->getFormData()]);
+
+        $itemData = isset($response['address']) ? $response['address'] : [];
+        $item->importData($itemData);
+
+        return $item;
+    }
+
+    /**
+     * @param \SubscribePro\Service\Address\AddressInterface $item
      * @return string
      */
     protected function getFormUri($item)
@@ -65,7 +84,7 @@ class AddressService extends AbstractService
      * @return \SubscribePro\Service\Address\AddressInterface[]
      * @throws \RuntimeException
      */
-    public function loadList($customerId = null)
+    public function loadItems($customerId = null)
     {
         $params = $customerId ? ['customer_id' => $customerId] : [];
         $response = $this->httpClient->get('/v2/addresses.json', $params);

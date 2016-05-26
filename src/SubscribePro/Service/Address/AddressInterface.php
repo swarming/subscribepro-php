@@ -62,7 +62,7 @@ interface AddressInterface extends DataObjectInterface
     public function getMiddleName();
 
     /**
-     * @param string $middleName|null
+     * @param string|null $middleName
      * @return $this
      */
     public function setMiddleName($middleName);
@@ -73,18 +73,12 @@ interface AddressInterface extends DataObjectInterface
     public function getMagentoAddressId();
 
     /**
-     * @param string $magentoAddressId|null
-     * @return $this
-     */
-    public function setMagentoAddressId($magentoAddressId);
-
-    /**
      * @return string|null
      */
     public function getCompany();
 
     /**
-     * @param string $company|null
+     * @param string|null $company
      * @return $this
      */
     public function setCompany($company);
@@ -95,7 +89,7 @@ interface AddressInterface extends DataObjectInterface
     public function getStreet1();
 
     /**
-     * @param string $street1|null
+     * @param string|null $street1
      * @return $this
      */
     public function setStreet1($street1);
@@ -106,7 +100,7 @@ interface AddressInterface extends DataObjectInterface
     public function getStreet2();
 
     /**
-     * @param string $street2|null
+     * @param string|null $street2
      * @return $this
      */
     public function setStreet2($street2);
@@ -167,12 +161,14 @@ interface AddressInterface extends DataObjectInterface
     public function setPhone($phone);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCreated();
+    public function getCreated($format = null);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getUpdated();
+    public function getUpdated($format = null);
 }

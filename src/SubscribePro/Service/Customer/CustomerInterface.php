@@ -62,7 +62,7 @@ interface CustomerInterface extends DataObjectInterface
     public function getMiddleName();
 
     /**
-     * @param string $middleName|null
+     * @param string|null $middleName
      * @return $this
      */
     public function setMiddleName($middleName);
@@ -78,7 +78,7 @@ interface CustomerInterface extends DataObjectInterface
     public function getMagentoCustomerId();
 
     /**
-     * @param int $magentoCustomerId|null
+     * @param int|null $magentoCustomerId
      * @return $this
      */
     public function setMagentoCustomerId($magentoCustomerId);
@@ -89,7 +89,7 @@ interface CustomerInterface extends DataObjectInterface
     public function getMagentoCustomerGroupId();
 
     /**
-     * @param int $magentoCustomerGroupId|null
+     * @param int|null $magentoCustomerGroupId
      * @return $this
      */
     public function setMagentoCustomerGroupId($magentoCustomerGroupId);
@@ -100,7 +100,7 @@ interface CustomerInterface extends DataObjectInterface
     public function getMagentoWebsiteId();
 
     /**
-     * @param int $magentoWebsiteId|null
+     * @param int|null $magentoWebsiteId
      * @return $this
      */
     public function setMagentoWebsiteId($magentoWebsiteId);
@@ -122,7 +122,7 @@ interface CustomerInterface extends DataObjectInterface
     public function getExternalVaultCustomerToken();
 
     /**
-     * @param string $externalVaultCustomerToken|null
+     * @param string|null $externalVaultCustomerToken
      * @return $this
      */
     public function setExternalVaultCustomerToken($externalVaultCustomerToken);
@@ -143,12 +143,14 @@ interface CustomerInterface extends DataObjectInterface
     public function getActiveSubscribedQty();
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCreated();
+    public function getCreated($format = null);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getUpdated();
+    public function getUpdated($format = null);
 }

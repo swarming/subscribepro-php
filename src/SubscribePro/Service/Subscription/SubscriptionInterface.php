@@ -205,25 +205,28 @@ interface SubscriptionInterface extends DataObjectInterface
     public function setFirstOrderAlreadyCreated($firstOrderAlreadyCreated);
 
     /**
-     * @return string|null
-     */
-    public function getNextOrderDate();
-
-    /**
      * @param string $nextOrderDate
      * @return $this
      */
     public function setNextOrderDate($nextOrderDate);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getLastOrderDate();
+    public function getNextOrderDate($format = null);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getExpirationDate();
+    public function getLastOrderDate($format = null);
+
+    /**
+     * @param null|string $format
+     * @return string|null
+     */
+    public function getExpirationDate($format = null);
 
     /**
      * @param string $expirationDate
@@ -254,9 +257,10 @@ interface SubscriptionInterface extends DataObjectInterface
     public function setUserDefinedFields(array $userDefinedFields);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getErrorTime();
+    public function getErrorTime($format = null);
 
     /**
      * @return string|null
@@ -284,9 +288,10 @@ interface SubscriptionInterface extends DataObjectInterface
     public function getFailedOrderAttemptCount();
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getRetryAfter();
+    public function getRetryAfter($format = null);
 
     /**
      * @return int|null
@@ -294,17 +299,20 @@ interface SubscriptionInterface extends DataObjectInterface
     public function getRecurringOrderCount();
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCreated();
+    public function getCreated($format = null);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getUpdated();
+    public function getUpdated($format = null);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCancelled();
+    public function getCancelled($format = null);
 }

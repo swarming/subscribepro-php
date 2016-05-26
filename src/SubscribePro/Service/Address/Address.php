@@ -16,7 +16,6 @@ class Address extends DataObject implements AddressInterface
      */
     protected $creatingFields = [
         self::CUSTOMER_ID => true,
-        self::MAGENTO_ADDRESS_ID => false,
         self::FIRST_NAME => true,
         self::MIDDLE_NAME => false,
         self::LAST_NAME => true,
@@ -34,7 +33,6 @@ class Address extends DataObject implements AddressInterface
      * @var array
      */
     protected $updatingFields = [
-        self::MAGENTO_ADDRESS_ID => false,
         self::FIRST_NAME => false,
         self::MIDDLE_NAME => false,
         self::LAST_NAME => false,
@@ -108,7 +106,7 @@ class Address extends DataObject implements AddressInterface
     }
 
     /**
-     * @param string $middleName|null
+     * @param string|null $middleName
      * @return $this
      */
     public function setMiddleName($middleName)
@@ -125,15 +123,6 @@ class Address extends DataObject implements AddressInterface
     }
 
     /**
-     * @param string $magentoAddressId|null
-     * @return $this
-     */
-    public function setMagentoAddressId($magentoAddressId)
-    {
-        return $this->setData(self::MAGENTO_ADDRESS_ID, $magentoAddressId);
-    }
-
-    /**
      * @return string|null
      */
     public function getCompany()
@@ -142,7 +131,7 @@ class Address extends DataObject implements AddressInterface
     }
 
     /**
-     * @param string $company|null
+     * @param string|null $company
      * @return $this
      */
     public function setCompany($company)
@@ -159,7 +148,7 @@ class Address extends DataObject implements AddressInterface
     }
 
     /**
-     * @param string $street1|null
+     * @param string|null $street1
      * @return $this
      */
     public function setStreet1($street1)
@@ -176,7 +165,7 @@ class Address extends DataObject implements AddressInterface
     }
 
     /**
-     * @param string $street2|null
+     * @param string|null $street2
      * @return $this
      */
     public function setStreet2($street2)
@@ -270,18 +259,20 @@ class Address extends DataObject implements AddressInterface
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCreated()
+    public function getCreated($format = null)
     {
-        return $this->getData(self::CREATED);
+        return \SubscribePro\formatDate($this->getData(self::CREATED), $format);
     }
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getUpdated()
+    public function getUpdated($format = null)
     {
-        return $this->getData(self::UPDATED);
+        return \SubscribePro\formatDate($this->getData(self::UPDATED), $format);
     }
 }

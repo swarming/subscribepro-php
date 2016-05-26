@@ -251,12 +251,14 @@ interface ProductInterface extends DataObjectInterface
     public function setTrialWelcomeEmailTemplateCode($trialWelcomeEmailTemplateCode);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getCreated();
+    public function getCreated($format = null);
 
     /**
+     * @param null|string $format
      * @return string|null
      */
-    public function getUpdated();
+    public function getUpdated($format = null);
 }

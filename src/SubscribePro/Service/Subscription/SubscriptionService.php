@@ -4,6 +4,9 @@ namespace SubscribePro\Service\Subscription;
 
 use SubscribePro\Service\AbstractService;
 
+/**
+ * @method \SubscribePro\Service\Subscription\SubscriptionInterface createItem(array $data = [])
+ */
 class SubscriptionService extends AbstractService
 {
     /**
@@ -65,7 +68,7 @@ class SubscriptionService extends AbstractService
      * @return \SubscribePro\Service\Subscription\SubscriptionInterface[]
      * @throws \RuntimeException
      */
-    public function loadList($customerId = null)
+    public function loadItems($customerId = null)
     {
         $params = $customerId ? ['customer_id' => $customerId] : [];
         $response = $this->httpClient->get('/v2/subscriptions.json', $params);
