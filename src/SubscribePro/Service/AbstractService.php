@@ -63,24 +63,4 @@ abstract class AbstractService
     {
         $this->config[$key] = $value;
     }
-
-    /**
-     * @param array $data
-     * @return \SubscribePro\Service\DataObjectInterface
-     */
-    public function createItem(array $data = [])
-    {
-        return $this->dataFactory->createItem($data);
-    }
-
-    /**
-     * @param array $data
-     * @return \SubscribePro\Service\DataObjectInterface[]
-     */
-    protected function buildList(array $data = [])
-    {
-        return array_map(function ($itemData) {
-            return $this->createItem($itemData);
-        }, $data);
-    }
 }
