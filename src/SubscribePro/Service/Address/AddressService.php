@@ -2,12 +2,14 @@
 
 namespace SubscribePro\Service\Address;
 
-use SubscribePro\Service\AbstractService;
+use SubscribePro\Service\AbstractDataObjectService;
 
 /**
  * @method \SubscribePro\Service\Address\AddressInterface createItem(array $data = [])
+ * @method \SubscribePro\Service\Address\AddressInterface loadItem(int $spId)
+ * @method \SubscribePro\Service\Address\AddressInterface saveItem(AddressInterface $item)
  */
-class AddressService extends AbstractService
+class AddressService extends AbstractDataObjectService
 {
     /**
      * @var array
@@ -24,35 +26,29 @@ class AddressService extends AbstractService
     ];
 
     /**
-     * @param int $spId
-     * @return \SubscribePro\Service\Address\AddressInterface
-     * @throws \RuntimeException
+     * @var string
      */
-    public function loadItem($spId)
-    {
-        $response = $this->httpClient->get("/v2/addresses/{$spId}.json");
-
-        $itemData = !empty($response['address']) ? $response['address'] : [];
-        $item = $this->createItem($itemData);
-
-        return $item;
-    }
+    protected $entityName = 'address';
 
     /**
-     * @param \SubscribePro\Service\Address\AddressInterface $item
-     * @return \SubscribePro\Service\Address\AddressInterface
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @var string
      */
-    public function saveItem($item)
-    {
-        $response = $this->httpClient->post($this->getFormUri($item), ['address' => $item->getFormData()]);
+    protected $entitiesName = 'addresses';
 
-        $itemData = !empty($response['address']) ? $response['address'] : [];
-        $item->importData($itemData);
+    /**
+     * @var string
+     */
+    protected $createUrl = '/v2/address.json';
 
-        return $item;
-    }
+    /**
+     * @var string
+     */
+    protected $entityUrl = '/v2/addresses/%d.json';
+
+    /**
+     * @var string
+     */
+    protected $entitiesUrl = '/v2/addresses.json';
 
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $item
@@ -71,25 +67,14 @@ class AddressService extends AbstractService
     }
 
     /**
-     * @param \SubscribePro\Service\Address\AddressInterface $item
-     * @return string
-     */
-    protected function getFormUri($item)
-    {
-        return $item->isNew() ? '/v2/address.json' : "/v2/addresses/{$item->getId()}.json";
-    }
-
-    /**
      * @param int|null $customerId
      * @return \SubscribePro\Service\Address\AddressInterface[]
      * @throws \RuntimeException
      */
     public function loadItems($customerId = null)
     {
-        $params = $customerId ? ['customer_id' => $customerId] : [];
-        $response = $this->httpClient->get('/v2/addresses.json', $params);
+        $filters = $customerId ? [AddressInterface::CUSTOMER_ID => $customerId] : [];
 
-        $responseData = !empty($response['addresses']) ? $response['addresses'] : [];
-        return $this->buildList($responseData);
+        return parent::loadItems($filters);
     }
 }

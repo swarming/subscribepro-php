@@ -2,12 +2,14 @@
 
 namespace SubscribePro\Service\Subscription;
 
-use SubscribePro\Service\AbstractService;
+use SubscribePro\Service\AbstractDataObjectService;
 
 /**
  * @method \SubscribePro\Service\Subscription\SubscriptionInterface createItem(array $data = [])
+ * @method \SubscribePro\Service\Subscription\SubscriptionInterface loadItem(int $spId)
+ * @method \SubscribePro\Service\Subscription\SubscriptionInterface saveItem(SubscriptionInterface $item)
  */
-class SubscriptionService extends AbstractService
+class SubscriptionService extends AbstractDataObjectService
 {
     /**
      * @var array
@@ -24,58 +26,29 @@ class SubscriptionService extends AbstractService
     ];
 
     /**
-     * @param string $id
-     * @return \SubscribePro\Service\Subscription\SubscriptionInterface
-     * @throws \RuntimeException
+     * @var string
      */
-    public function loadItem($id)
-    {
-        $response = $this->httpClient->get("/v2/subscriptions/{$id}.json");
-
-        $itemData = !empty($response['subscription']) ? $response['subscription'] : [];
-        $item = $this->createItem($itemData);
-
-        return $item;
-    }
+    protected $entityName = 'subscription';
 
     /**
-     * @param \SubscribePro\Service\Subscription\SubscriptionInterface $item
-     * @return \SubscribePro\Service\Subscription\SubscriptionInterface
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @var string
      */
-    public function saveItem($item)
-    {
-        $response = $this->httpClient->post($this->getFormUri($item), ['subscription' => $item->getFormData()]);
-
-        $itemData = !empty($response['subscription']) ? $response['subscription'] : [];
-        $item->importData($itemData);
-
-        return $item;
-    }
+    protected $entitiesName = 'subscriptions';
 
     /**
-     * @param \SubscribePro\Service\Subscription\SubscriptionInterface $item
-     * @return string
+     * @var string
      */
-    protected function getFormUri($item)
-    {
-        return $item->isNew() ? '/v2/subscription.json' : "v2/subscriptions/{$item->getId()}.json";
-    }
+    protected $createUrl = '/v2/subscription.json';
 
     /**
-     * @param string|null $customerId
-     * @return \SubscribePro\Service\Subscription\SubscriptionInterface[]
-     * @throws \RuntimeException
+     * @var string
      */
-    public function loadItems($customerId = null)
-    {
-        $params = $customerId ? ['customer_id' => $customerId] : [];
-        $response = $this->httpClient->get('/v2/subscriptions.json', $params);
+    protected $entityUrl = '/v2/subscriptions/%d.json';
 
-        $subscriptionsData = !empty($response['subscriptions']) ? $response['subscriptions'] : [];
-        return $this->buildList($subscriptionsData);
-    }
+    /**
+     * @var string
+     */
+    protected $entitiesUrl = '/v2/subscriptions.json';
 
     /**
      * @param int $subscriptionId
@@ -111,5 +84,17 @@ class SubscriptionService extends AbstractService
     public function skip($subscriptionId)
     {
         $this->httpClient->post("v2/subscriptions/{$subscriptionId}/skip.json");
+    }
+
+    /**
+     * @param int|null $customerId
+     * @return \SubscribePro\Service\Subscription\SubscriptionInterface[]
+     * @throws \RuntimeException
+     */
+    public function loadItems($customerId = null)
+    {
+        $filters = $customerId ? [SubscriptionInterface::CUSTOMER_ID => $customerId] : [];
+
+        return parent::loadItems($filters);
     }
 }

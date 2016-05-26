@@ -451,7 +451,7 @@ class Subscription extends DataObject implements SubscriptionInterface
      */
     public function getErrorTime($format = null)
     {
-        return \SubscribePro\formatDate($this->getData(self::ERROR_TIME), $format);
+        return \SubscribePro\formatDate($this->getData(self::ERROR_TIME), $format); /* TODO find out date format of this field  */
     }
 
     /**
@@ -500,7 +500,7 @@ class Subscription extends DataObject implements SubscriptionInterface
      */
     public function getRetryAfter($format = null)
     {
-        return \SubscribePro\formatDate($this->getData(self::RETRY_AFTER), $format);
+        return \SubscribePro\formatDate($this->getData(self::RETRY_AFTER), $format); /* TODO find out date format of this field  */
     }
 
     /**

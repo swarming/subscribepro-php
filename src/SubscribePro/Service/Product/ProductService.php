@@ -2,12 +2,14 @@
 
 namespace SubscribePro\Service\Product;
 
-use SubscribePro\Service\AbstractService;
+use SubscribePro\Service\AbstractDataObjectService;
 
 /**
  * @method \SubscribePro\Service\Product\ProductInterface createItem(array $data = [])
+ * @method \SubscribePro\Service\Product\ProductInterface loadItem(int $spId)
+ * @method \SubscribePro\Service\Product\ProductInterface saveItem(ProductInterface $item)
  */
-class ProductService extends AbstractService
+class ProductService extends AbstractDataObjectService
 {
     /**
      * @var array
@@ -24,53 +26,39 @@ class ProductService extends AbstractService
     ];
 
     /**
-     * @param int $spId
-     * @return \SubscribePro\Service\Product\ProductInterface
+     * @var string
      */
-    public function loadItem($spId)
-    {
-        $response = $this->httpClient->get("/v2/products/{$spId}.json");
-
-        $itemData = !empty($response['product']) ? $response['product'] : [];
-        $item = $this->createItem($itemData);
-
-        return $item;
-    }
+    protected $entityName = 'product';
 
     /**
-     * @param \SubscribePro\Service\Product\ProductInterface $item
-     * @return \SubscribePro\Service\Product\ProductInterface
-     * @throws \InvalidArgumentException
+     * @var string
      */
-    public function saveItem($item)
-    {
-        $response = $this->httpClient->post($this->getFormUri($item), ['product' => $item->getFormData()]);
-
-        $itemData = !empty($response['product']) ? $response['product'] : [];
-        $item->importData($itemData);
-
-        return $item;
-    }
+    protected $entitiesName = 'products';
 
     /**
-     * @param \SubscribePro\Service\Product\ProductInterface $item
-     * @return string
+     * @var string
      */
-    protected function getFormUri($item)
-    {
-        return $item->isNew() ? '/v2/product.json' : "/v2/products/{$item->getId()}.json";
-    }
+    protected $createUrl = '/v2/product.json';
+
+    /**
+     * @var string
+     */
+    protected $entityUrl = '/v2/products/%d.json';
+
+    /**
+     * @var string
+     */
+    protected $entitiesUrl = '/v2/products.json';
 
     /**
      * @param string|null $sku
-     * @return \SubscribePro\Service\Product\ProductInterface
+     * @return \SubscribePro\Service\Product\ProductInterface[]
+     * @throws \RuntimeException
      */
     public function loadItems($sku = null)
     {
-        $params = $sku ? ['sku' => $sku] : [];
-        $response = $this->httpClient->get('/v2/products.json', $params);
+        $filters = $sku ? [ProductInterface::SKU => $sku] : [];
 
-        $responseData = !empty($response['products']) ? $response['products'] : [];
-        return $this->buildList($responseData);
+        return parent::loadItems($filters);
     }
 }
