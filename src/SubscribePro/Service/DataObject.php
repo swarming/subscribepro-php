@@ -116,18 +116,11 @@ class DataObject implements DataObjectInterface
      */
     public function getFormData()
     {
-        $formData = [];
-        $fields = $this->getFormFields();
-        foreach ($fields as $field => $isRequired) {
-            if (!isset($this->data[$field]) && $isRequired) {
-                throw new \InvalidArgumentException("Required {$field} field is not set.");
-            }
-            if (!isset($this->data[$field])) {
-                continue;
-            }
-            $formData[$field] = $this->data[$field];
+        if (!$this->isValid()) {
+            throw new \InvalidArgumentException("Not all required fields are set.");
         }
-        return $formData;
+
+        return array_intersect_key($this->data, $this->getFormFields());
     }
 
     /**

@@ -80,7 +80,7 @@ abstract class AbstractService
     protected function buildList(array $data = [])
     {
         return array_map(function ($itemData) {
-            return $itemData instanceOf DataObject ? $itemData : $this->createItem($itemData);
+            return $this->createItem($itemData);
         }, $data);
     }
 }

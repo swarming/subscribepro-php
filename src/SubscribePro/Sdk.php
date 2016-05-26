@@ -48,7 +48,7 @@ class Sdk
 
     /**
      * @param array $config
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $config = [])
     {
@@ -103,7 +103,7 @@ class Sdk
      * @param string $namespace
      * @param array $config
      * @return \SubscribePro\Service\AbstractService
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function createService($namespace, array $config = [])
     {
