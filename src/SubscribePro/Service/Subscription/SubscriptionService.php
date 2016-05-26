@@ -22,7 +22,7 @@ class SubscriptionService extends AbstractService
 
     /**
      * @param string $id
-     * @return \SubscribePro\Service\Subscription\Subscription
+     * @return \SubscribePro\Service\Subscription\SubscriptionInterface
      * @throws \RuntimeException
      */
     public function loadItem($id)

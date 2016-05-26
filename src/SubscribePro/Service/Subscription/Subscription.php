@@ -88,10 +88,10 @@ class Subscription extends DataObject implements SubscriptionInterface
         $formData = parent::getFormData();
 
         foreach ($this->eitherFieldRequired as $pair) {
-            if (isset($formData[$pair[0]])) {
+            if (empty($formData[$pair[0]])) {
+                unset($formData[$pair[0]]);
+            } else {
                 unset($formData[$pair[1]]);
-            } elseif (!isset($formData[$pair[1]])) {
-                throw new \InvalidArgumentException("Either {$pair[0]} or {$pair[1]} must be set.");
             }
         }
 
