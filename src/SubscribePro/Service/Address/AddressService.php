@@ -2,53 +2,65 @@
 
 namespace SubscribePro\Service\Address;
 
-use SubscribePro\Service\AbstractDataObjectService;
+use SubscribePro\Service\AbstractService;
 
 /**
  * @method \SubscribePro\Service\Address\AddressInterface createItem(array $data = [])
  * @method \SubscribePro\Service\Address\AddressInterface loadItem(int $spId)
  * @method \SubscribePro\Service\Address\AddressInterface saveItem(AddressInterface $item)
  */
-class AddressService extends AbstractDataObjectService
+class AddressService extends AbstractService
 {
     /**
-     * @var array
+     * @return string
      */
-    protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Address\Address',
-    ];
+    protected function getEntityName()
+    {
+        return 'address';
+    }
 
     /**
-     * @var array
+     * @return string
      */
-    protected $staticConfig = [
-        'itemType' => '\SubscribePro\Service\Address\AddressInterface',
-    ];
+    protected function getEntitiesName()
+    {
+        return 'addresses';
+    }
 
     /**
-     * @var string
+     * @return string
      */
-    protected $entityName = 'address';
+    protected function getCreateUrl()
+    {
+        return '/v2/address.json';
+    }
 
     /**
-     * @var string
+     * @param string $id
+     * @return string
      */
-    protected $entitiesName = 'addresses';
+    protected function getEntityUrl($id)
+    {
+        return "/v2/addresses/{$id}.json";
+    }
 
     /**
-     * @var string
+     * @return string
      */
-    protected $createUrl = '/v2/address.json';
+    protected function getEntitiesUrl()
+    {
+        return '/v2/addresses.json';
+    }
 
     /**
-     * @var string
+     * @param \SubscribePro\Sdk $sdk
      */
-    protected $entityUrl = '/v2/addresses/%d.json';
-
-    /**
-     * @var string
-     */
-    protected $entitiesUrl = '/v2/addresses.json';
+    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    {
+        $this->dataFactory = new AddressFactory(
+            $this->getConfigValue('itemClass', '\SubscribePro\Service\Address\Address')
+        );
+    }
 
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $item
