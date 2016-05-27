@@ -2,53 +2,65 @@
 
 namespace SubscribePro\Service\Product;
 
-use SubscribePro\Service\AbstractDataObjectService;
+use SubscribePro\Service\AbstractService;
 
 /**
  * @method \SubscribePro\Service\Product\ProductInterface createItem(array $data = [])
  * @method \SubscribePro\Service\Product\ProductInterface loadItem(int $spId)
  * @method \SubscribePro\Service\Product\ProductInterface saveItem(ProductInterface $item)
  */
-class ProductService extends AbstractDataObjectService
+class ProductService extends AbstractService
 {
     /**
-     * @var array
+     * @return string
      */
-    protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Product\Product',
-    ];
+    protected function getEntityName()
+    {
+        return 'product';
+    }
 
     /**
-     * @var array
+     * @return string
      */
-    protected $staticConfig = [
-        'itemType' => '\SubscribePro\Service\Product\ProductInterface',
-    ];
+    protected function getEntitiesName()
+    {
+        return 'products';
+    }
 
     /**
-     * @var string
+     * @return string
      */
-    protected $entityName = 'product';
+    protected function getCreateUrl()
+    {
+        return '/v2/product.json';
+    }
 
     /**
-     * @var string
+     * @param string $id
+     * @return string
      */
-    protected $entitiesName = 'products';
+    protected function getEntityUrl($id)
+    {
+        return "/v2/products/{$id}.json";
+    }
 
     /**
-     * @var string
+     * @return string
      */
-    protected $createUrl = '/v2/product.json';
+    protected function getEntitiesUrl()
+    {
+        return '/v2/products.json';
+    }
 
     /**
-     * @var string
+     * @param \SubscribePro\Sdk $sdk
      */
-    protected $entityUrl = '/v2/products/%d.json';
-
-    /**
-     * @var string
-     */
-    protected $entitiesUrl = '/v2/products.json';
+    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    {
+        $this->dataFactory = new ProductFactory(
+            $this->getConfigValue('itemClass', '\SubscribePro\Service\Product\Product')
+        );
+    }
 
     /**
      * @param string|null $sku
