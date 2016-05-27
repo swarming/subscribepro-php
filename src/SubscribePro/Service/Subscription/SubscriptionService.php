@@ -2,53 +2,79 @@
 
 namespace SubscribePro\Service\Subscription;
 
-use SubscribePro\Service\AbstractDataObjectService;
+use SubscribePro\Service\AbstractService;
 
 /**
  * @method \SubscribePro\Service\Subscription\SubscriptionInterface createItem(array $data = [])
  * @method \SubscribePro\Service\Subscription\SubscriptionInterface loadItem(int $spId)
  * @method \SubscribePro\Service\Subscription\SubscriptionInterface saveItem(SubscriptionInterface $item)
  */
-class SubscriptionService extends AbstractDataObjectService
+class SubscriptionService extends AbstractService
 {
     /**
-     * @var array
+     * @return string
      */
-    protected $defaultConfig = [
-        'itemClass' => '\SubscribePro\Service\Subscription\Subscription',
-    ];
+    protected function getEntityName()
+    {
+        return 'subscription';
+    }
 
     /**
-     * @var array
+     * @return string
      */
-    protected $staticConfig = [
-        'itemType' => '\SubscribePro\Service\Subscription\SubscriptionInterface',
-    ];
+    protected function getEntitiesName()
+    {
+        return 'subscriptions';
+    }
 
     /**
-     * @var string
+     * @return string
      */
-    protected $entityName = 'subscription';
+    protected function getCreateUrl()
+    {
+        return '/v2/subscription.json';
+    }
 
     /**
-     * @var string
+     * @param string $id
+     * @return string
      */
-    protected $entitiesName = 'subscriptions';
+    protected function getEntityUrl($id)
+    {
+        return "/v2/subscriptions/{$id}.json";
+    }
 
     /**
-     * @var string
+     * @return string
      */
-    protected $createUrl = '/v2/subscription.json';
+    protected function getEntitiesUrl()
+    {
+        return '/v2/subscriptions.json';
+    }
 
     /**
-     * @var string
+     * @param \SubscribePro\Sdk $sdk
      */
-    protected $entityUrl = '/v2/subscriptions/%d.json';
+    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    {
+        $this->dataFactory = new SubscriptionFactory(
+            $sdk->getAddressService()->getDataFactory(),
+            $sdk->getPaymentProfileService()->getDataFactory(),
+            $this->getConfigValue('itemClass', '\SubscribePro\Service\Subscription\Subscription')
+        );
+    }
 
     /**
-     * @var string
+     * @param int|null $customerId
+     * @return \SubscribePro\Service\Subscription\SubscriptionInterface[]
+     * @throws \RuntimeException
      */
-    protected $entitiesUrl = '/v2/subscriptions.json';
+    public function loadItems($customerId = null)
+    {
+        $filters = $customerId ? [SubscriptionInterface::CUSTOMER_ID => $customerId] : [];
+
+        return parent::loadItems($filters);
+    }
 
     /**
      * @param int $subscriptionId
@@ -84,17 +110,5 @@ class SubscriptionService extends AbstractDataObjectService
     public function skip($subscriptionId)
     {
         $this->httpClient->post("v2/subscriptions/{$subscriptionId}/skip.json");
-    }
-
-    /**
-     * @param int|null $customerId
-     * @return \SubscribePro\Service\Subscription\SubscriptionInterface[]
-     * @throws \RuntimeException
-     */
-    public function loadItems($customerId = null)
-    {
-        $filters = $customerId ? [SubscriptionInterface::CUSTOMER_ID => $customerId] : [];
-
-        return parent::loadItems($filters);
     }
 }

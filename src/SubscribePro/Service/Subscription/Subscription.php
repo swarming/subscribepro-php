@@ -3,6 +3,8 @@
 namespace SubscribePro\Service\Subscription;
 
 use SubscribePro\Service\DataObject;
+use SubscribePro\Service\Address\AddressInterface;
+use SubscribePro\Service\PaymentProfile\PaymentProfileInterface;
 
 class Subscription extends DataObject implements SubscriptionInterface
 {
@@ -68,15 +70,28 @@ class Subscription extends DataObject implements SubscriptionInterface
      */
     public function importData(array $data = [])
     {
-        $data[self::SHIPPING_ADDRESS_ID] = empty($data[self::SHIPPING_ADDRESS]['id'])
-            ? null
-            : $data[self::SHIPPING_ADDRESS]['id'];
+        if (!empty($data[self::SHIPPING_ADDRESS]) && $data[self::SHIPPING_ADDRESS] instanceof AddressInterface) {
+            $data[self::SHIPPING_ADDRESS_ID] = $data[self::SHIPPING_ADDRESS]->getId();
+        }
 
-        $data[self::PAYMENT_PROFILE_ID] = empty($data[self::PAYMENT_PROFILE]['id'])
-            ? null
-            : $data[self::PAYMENT_PROFILE]['id'];
+        if (!empty($data[self::PAYMENT_PROFILE]) && $data[self::PAYMENT_PROFILE] instanceof PaymentProfileInterface) {
+            $data[self::PAYMENT_PROFILE_ID] = $data[self::SHIPPING_ADDRESS]->getId();
+        }
 
         return parent::importData($data);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $data = parent::toArray();
+
+        $data[self::PAYMENT_PROFILE] = $this->getPaymentProfile()->toArray();
+        $data[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->toArray();
+
+        return $data;
     }
 
     /**
@@ -86,6 +101,9 @@ class Subscription extends DataObject implements SubscriptionInterface
     public function getFormData()
     {
         $formData = parent::getFormData();
+
+        $formData[self::PAYMENT_PROFILE] = $this->getPaymentProfile()->getFormData();
+        $formData[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->getFormData();
 
         foreach ($this->eitherFieldRequired as $pair) {
             if (empty($formData[$pair[0]])) {
@@ -108,7 +126,10 @@ class Subscription extends DataObject implements SubscriptionInterface
                 return false;
             }
         }
-        return parent::isValid();
+
+        return parent::isValid()
+            && $this->getPaymentProfile()->isValid()
+            && $this->getShippingAddress()->isValid();
     }
 
     /**
@@ -265,18 +286,18 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @return array
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      */
     public function getPaymentProfile()
     {
-        return $this->getData(self::PAYMENT_PROFILE, []);
+        return $this->getData(self::PAYMENT_PROFILE);
     }
 
     /**
-     * @param array $paymentProfile
+     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return $this
      */
-    public function setPaymentProfile($paymentProfile)
+    public function setPaymentProfile(PaymentProfileInterface $paymentProfile)
     {
         return $this->setData(self::PAYMENT_PROFILE, $paymentProfile);
     }
@@ -299,18 +320,18 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @return array
+     * @return \SubscribePro\Service\Address\AddressInterface
      */
     public function getShippingAddress()
     {
-        return $this->getData(self::SHIPPING_ADDRESS, []);
+        return $this->getData(self::SHIPPING_ADDRESS);
     }
 
     /**
-     * @param array $shippingAddress
+     * @param \SubscribePro\Service\Address\AddressInterface $shippingAddress
      * @return $this
      */
-    public function setShippingAddress($shippingAddress)
+    public function setShippingAddress(AddressInterface $shippingAddress)
     {
         return $this->setData(self::SHIPPING_ADDRESS, $shippingAddress);
     }

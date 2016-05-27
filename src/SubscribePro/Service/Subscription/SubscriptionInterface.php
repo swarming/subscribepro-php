@@ -3,6 +3,8 @@
 namespace SubscribePro\Service\Subscription;
 
 use SubscribePro\Service\DataObjectInterface;
+use SubscribePro\Service\Address\AddressInterface;
+use SubscribePro\Service\PaymentProfile\PaymentProfileInterface;
 
 interface SubscriptionInterface extends DataObjectInterface
 {
@@ -139,15 +141,15 @@ interface SubscriptionInterface extends DataObjectInterface
     public function setPaymentProfileId($paymentProfileId);
 
     /**
-     * @return array
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      */
     public function getPaymentProfile();
 
     /**
-     * @param array $paymentProfile
+     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return $this
      */
-    public function setPaymentProfile($paymentProfile);
+    public function setPaymentProfile(PaymentProfileInterface $paymentProfile);
 
     /**
      * @return int|null
@@ -161,15 +163,15 @@ interface SubscriptionInterface extends DataObjectInterface
     public function setShippingAddressId($shippingAddressId);
 
     /**
-     * @return array
+     * @return \SubscribePro\Service\Address\AddressInterface
      */
     public function getShippingAddress();
 
     /**
-     * @param array $shippingAddress
+     * @param \SubscribePro\Service\Address\AddressInterface $shippingAddress
      * @return $this
      */
-    public function setShippingAddress($shippingAddress);
+    public function setShippingAddress(AddressInterface $shippingAddress);
 
     /**
      * @return string|null
