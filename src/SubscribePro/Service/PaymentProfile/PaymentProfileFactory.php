@@ -7,7 +7,7 @@ use SubscribePro\Service\DataObjectFactoryInterface;
 class PaymentProfileFactory implements DataObjectFactoryInterface
 {
     /**
-     * @var \SubscribePro\Service\PaymentProfile\PaymentProfile
+     * @var \SubscribePro\Service\DataObjectFactoryInterface
      */
     protected $addressFactory;
 

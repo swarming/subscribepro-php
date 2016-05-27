@@ -47,6 +47,19 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * @param array $data
+     * @return $this
+     */
+    public function importData(array $data = [])
+    {
+        if (!empty($data[self::BILLING_ADDRESS]) && !$data[self::BILLING_ADDRESS] instanceof AddressInterface) {
+            $data[self::BILLING_ADDRESS] = $this->getBillingAddress()->importData($data[self::BILLING_ADDRESS]);
+        }
+            
+        return parent::importData($data);
+    }
+
+    /**
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -62,7 +75,7 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      */
     public function isValid()
     {
-        return parent::isValid() && $this->getBillingAddress()->isValid();
+        return ($this->getCustomerId() || $this->getMagentoCustomerId()) && parent::isValid() && $this->getBillingAddress()->isValid();
     }
 
     /**

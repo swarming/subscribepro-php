@@ -8,6 +8,7 @@ namespace SubscribePro;
  * @method \SubscribePro\Service\Address\AddressService getAddressService()
  * @method \SubscribePro\Service\Subscription\SubscriptionService getSubscriptionService()
  * @method \SubscribePro\Service\PaymentProfile\PaymentProfileService getPaymentProfileService()
+ * @method \SubscribePro\Service\Transaction\TransactionService getTransactionService()
  */
 class Sdk
 {

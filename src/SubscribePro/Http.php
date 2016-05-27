@@ -156,6 +156,20 @@ class Http
     }
 
     /**
+     * @param string $uri
+     * @param array $putData
+     * @return array|int|null
+     * @throws \RuntimeException
+     */
+    public function put($uri, $putData = [])
+    {
+        $options = empty($putData) ? [] : ['json' => $putData];
+        $response = $this->getClient()->put($this->buildUrl($uri), $options);
+
+        return $this->processResponse($response);
+    }
+
+    /**
      * @param \Psr\Http\Message\ResponseInterface $response
      * @return array|int|null
      * @throws \RuntimeException
