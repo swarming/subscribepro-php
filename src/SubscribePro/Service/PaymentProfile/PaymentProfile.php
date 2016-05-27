@@ -28,6 +28,21 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     /**
      * @var array
      */
+    protected $thirdPartyTokenFields = [
+        self::CUSTOMER_ID => true,
+        self::THIRD_PARTY_PAYMENT_TOKEN => true,
+        self::THIRD_PARTY_VAULT_TYPE => false,
+        self::CREDITCARD_TYPE => false,
+        self::CREDITCARD_LAST_DIGITS => false,
+        self::CREDITCARD_FIRST_DIGITS => false,
+        self::CREDITCARD_MONTH => false,
+        self::CREDITCARD_YEAR => false,
+        self::BILLING_ADDRESS => true
+    ];
+
+    /**
+     * @var array
+     */
     protected $updatingFields = [
         self::CREDITCARD_MONTH => true,
         self::CREDITCARD_YEAR => true,
@@ -68,6 +83,21 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
         $formData = parent::getFormData();
         $formData[self::BILLING_ADDRESS] = $this->getBillingAddress()->getFormData();
         return $formData;
+    }
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getThirdPartyTokenData()
+    {
+        foreach ($this->thirdPartyTokenFields as $field => $isRequired) {
+            if ($isRequired && null === $this->getData($field)) {
+                throw new \InvalidArgumentException("Not all required fields are set.");
+            }
+        }
+
+        return array_intersect_key($this->data, $this->thirdPartyTokenFields);
     }
 
     /**
@@ -154,11 +184,29 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * @param string $creditcardFirstDigits
+     * @return $this
+     */
+    public function setCreditcardFirstDigits($creditcardFirstDigits)
+    {
+        return $this->setData(self::CREDITCARD_FIRST_DIGITS, $creditcardFirstDigits);
+    }
+
+    /**
      * @return string
      */
     public function getCreditcardLastDigits()
     {
         return $this->getData(self::CREDITCARD_LAST_DIGITS);
+    }
+
+    /**
+     * @param string $creditcardLastDigits
+     * @return $this
+     */
+    public function setCreditcardLastDigits($creditcardLastDigits)
+    {
+        return $this->setData(self::CREDITCARD_LAST_DIGITS, $creditcardLastDigits);
     }
 
     /**
@@ -270,11 +318,29 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * @param string $thirdPartyVaultType
+     * @return $this
+     */
+    public function setThirdPartyVaultType($thirdPartyVaultType)
+    {
+        return $this->setData(self::THIRD_PARTY_VAULT_TYPE, $thirdPartyVaultType);
+    }
+
+    /**
      * @return string|null
      */
     public function getThirdPartyPaymentToken()
     {
         return $this->getData(self::THIRD_PARTY_PAYMENT_TOKEN);
+    }
+
+    /**
+     * @param string $thirdPartyPaymentToken
+     * @return $this
+     */
+    public function setThirdPartyPaymentToken($thirdPartyPaymentToken)
+    {
+        return $this->setData(self::THIRD_PARTY_PAYMENT_TOKEN, $thirdPartyPaymentToken);
     }
 
     /**

@@ -65,6 +65,22 @@ class PaymentProfileService extends AbstractService
     }
 
     /**
+     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     * @throws \RuntimeException
+     */
+    public function thirdPartyToken(PaymentProfileInterface $paymentProfile)
+    {
+        $paymentProfileData = [$this->getEntityName() => $paymentProfile->getThirdPartyTokenData()];
+        $response = $this->httpClient->post("v2/paymentprofile/third-party-token.json", $paymentProfileData);
+
+        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $paymentProfile->importData($data);
+
+        return $paymentProfile;
+    }
+
+    /**
      * @param int $paymentProfileId
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException

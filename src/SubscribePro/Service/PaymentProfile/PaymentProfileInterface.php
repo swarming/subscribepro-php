@@ -78,6 +78,18 @@ interface PaymentProfileInterface extends DataObjectInterface
     public function getCreditcardFirstDigits();
 
     /**
+     * @param string $creditcardFirstDigits
+     * @return $this
+     */
+    public function setCreditcardFirstDigits($creditcardFirstDigits);
+
+    /**
+     * @param string $creditcardLastDigits
+     * @return $this
+     */
+    public function setCreditcardLastDigits($creditcardLastDigits);
+
+    /**
      * @return string
      */
     public function getCreditcardLastDigits();
@@ -152,6 +164,18 @@ interface PaymentProfileInterface extends DataObjectInterface
     public function getThirdPartyVaultType();
 
     /**
+     * @param string $thirdPartyVaultType
+     * @return $this
+     */
+    public function setThirdPartyVaultType($thirdPartyVaultType);
+
+    /**
+     * @param string $thirdPartyPaymentToken
+     * @return $this
+     */
+    public function setThirdPartyPaymentToken($thirdPartyPaymentToken);
+
+    /**
      * @return string|null
      */
     public function getThirdPartyPaymentToken();
@@ -170,4 +194,10 @@ interface PaymentProfileInterface extends DataObjectInterface
      * @return string
      */
     public function getUpdated();
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getThirdPartyTokenData();
 }
