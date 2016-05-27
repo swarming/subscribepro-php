@@ -25,11 +25,6 @@ class DataObject implements DataObjectInterface
     protected $updatingFields = [];
 
     /**
-     * @var array
-     */
-    protected $eitherFieldRequired = [];
-
-    /**
      * @param array $data
      */
     public function __construct(array $data = [])

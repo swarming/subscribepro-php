@@ -3,10 +3,11 @@
 namespace SubscribePro;
 
 /**
- * @method \SubscribePro\Service\Product\ProductService createProductService(array $config = [])
- * @method \SubscribePro\Service\Customer\CustomerService createCustomerService(array $config = [])
- * @method \SubscribePro\Service\Address\AddressService createAddressService(array $config = [])
- * @method \SubscribePro\Service\Subscription\SubscriptionService createSubscriptionService(array $config = [])
+ * @method \SubscribePro\Service\Product\ProductService getProductService()
+ * @method \SubscribePro\Service\Customer\CustomerService getCustomerService()
+ * @method \SubscribePro\Service\Address\AddressService getAddressService()
+ * @method \SubscribePro\Service\Subscription\SubscriptionService getSubscriptionService()
+ * @method \SubscribePro\Service\PaymentProfile\PaymentProfileService getPaymentProfileService()
  */
 class Sdk
 {
@@ -45,6 +46,11 @@ class Sdk
      * @var array
      */
     protected $config;
+
+    /**
+     * @var array
+     */
+    protected $services = [];
 
     /**
      * @param array $config
@@ -98,14 +104,28 @@ class Sdk
     }
 
     /**
-     * Get a service by name using an array of constructor options
+     * Get a service by name
      *
      * @param string $namespace
-     * @param array $config
      * @return \SubscribePro\Service\AbstractService
      * @throws \InvalidArgumentException
      */
-    public function createService($namespace, array $config = [])
+    public function getService($namespace)
+    {
+        if (!isset($this->services[$namespace])) {
+            $this->services[$namespace] = $this->createService($namespace);
+        }
+        return $this->services[$namespace];
+    }
+
+    /**
+     * Create a service by name
+     *
+     * @param string $namespace
+     * @return \SubscribePro\Service\AbstractService
+     * @throws \InvalidArgumentException
+     */
+    protected function createService($namespace)
     {
         $namespace = camelize($namespace);
         $serviceClient = "SubscribePro\\Service\\{$namespace}\\{$namespace}Service";
@@ -114,8 +134,7 @@ class Sdk
             throw new \InvalidArgumentException("'{$namespace}' namespace does not exist.");
         }
 
-        $config = array_merge($this->getNamespaceConfig($namespace), $config);
-        return new $serviceClient($this->http, $config);
+        return new $serviceClient($this, $this->getNamespaceConfig($namespace));
     }
 
     /**
@@ -126,9 +145,8 @@ class Sdk
      */
     public function __call($method, $args)
     {
-        if (substr($method, 0, 6) === 'create' && substr($method, -7) === 'Service') {
-            $config = sizeof($args) ? array_shift($args) : [];
-            return $this->createService(underscore(substr($method, 6, -7)), $config);
+        if (substr($method, 0, 3) === 'get' && substr($method, -7) === 'Service') {
+            return $this->getService(underscore(substr($method, 3, -7)));
         }
 
         throw new \BadMethodCallException("Method {$method} does not exist.");
