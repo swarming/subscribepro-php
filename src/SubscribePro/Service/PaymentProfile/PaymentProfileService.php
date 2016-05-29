@@ -45,17 +45,14 @@ class PaymentProfileService extends AbstractService
      * - magento_customer_id
      * - customer_email
      *
-     * @param array|null $filters
+     * @param array $filters
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface[]
      * @throws \RuntimeException
      */
-    public function loadItems($filters = [])
+    public function loadItems(array $filters = [])
     {
-        $invalidFilters = is_array($filters)
-            ? array_diff_key($filters, array_fill_keys($this->allowedKeysForFilter, null))
-            : [];
-
-        if (sizeof($invalidFilters)) {
+        $invalidFilters = array_diff_key($filters, array_flip($this->allowedKeysForFilter));
+        if (!empty($invalidFilters)) {
             throw new \InvalidArgumentException(
                 'Only [' . implode(', ', $this->allowedKeysForFilter) . '] query filters are allowed.'
             );
@@ -95,7 +92,7 @@ class PaymentProfileService extends AbstractService
 
     /**
      * @param int $paymentProfileId
-     * @param TransactionInterface $transaction
+     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
      * @throws \RuntimeException
      */
@@ -112,7 +109,7 @@ class PaymentProfileService extends AbstractService
 
     /**
      * @param int $paymentProfileId
-     * @param TransactionInterface $transaction
+     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
      * @throws \RuntimeException
      */
@@ -129,7 +126,7 @@ class PaymentProfileService extends AbstractService
 
     /**
      * @param int $paymentProfileId
-     * @param TransactionInterface $transaction
+     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
      * @throws \RuntimeException
      */
@@ -151,7 +148,7 @@ class PaymentProfileService extends AbstractService
     {
         $this->dataFactory = new PaymentProfileFactory(
             $sdk->getAddressService()->getDataFactory(),
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\PaymentProfile\PaymentProfile')
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\PaymentProfile\PaymentProfile')
         );
     }
 

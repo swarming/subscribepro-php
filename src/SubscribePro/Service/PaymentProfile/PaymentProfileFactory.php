@@ -14,20 +14,20 @@ class PaymentProfileFactory implements DataObjectFactoryInterface
     /**
      * @var string
      */
-    protected $itemClass;
+    protected $instanceName;
 
     /**
      * @param \SubscribePro\Service\DataObjectFactoryInterface $addressFactory
-     * @param string $itemClass
+     * @param string $instanceName
      */
     public function __construct(
         \SubscribePro\Service\DataObjectFactoryInterface $addressFactory,
-        $itemClass = '\SubscribePro\Service\PaymentProfile\PaymentProfile'
+        $instanceName = '\SubscribePro\Service\PaymentProfile\PaymentProfile'
     ) {
-        if (!is_a($itemClass, '\SubscribePro\Service\PaymentProfile\PaymentProfileInterface', true)) {
-            throw new \InvalidArgumentException("{$itemClass} must implement \\SubscribePro\\Service\\PaymentProfile\\PaymentProfileInterface.");
+        if (!is_a($instanceName, '\SubscribePro\Service\PaymentProfile\PaymentProfileInterface', true)) {
+            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\PaymentProfile\\PaymentProfileInterface.");
         }
-        $this->itemClass = $itemClass;
+        $this->instanceName = $instanceName;
         $this->addressFactory = $addressFactory;
     }
 
@@ -37,11 +37,19 @@ class PaymentProfileFactory implements DataObjectFactoryInterface
      */
     public function createItem(array $data = [])
     {
-        $addressData = !empty($data[PaymentProfileInterface::BILLING_ADDRESS])
-            ? $data[PaymentProfileInterface::BILLING_ADDRESS]
-            : [];
+        $addressData = $this->getFieldData($data, PaymentProfileInterface::BILLING_ADDRESS);
         $data[PaymentProfileInterface::BILLING_ADDRESS] = $this->addressFactory->createItem($addressData);
 
-        return new $this->itemClass($data);
+        return new $this->instanceName($data);
+    }
+
+    /**
+     * @param array $data
+     * @param string $field
+     * @return array
+     */
+    protected function getFieldData($data, $field)
+    {
+        return !empty($data[$field]) ? $data[$field] : [];
     }
 }

@@ -77,7 +77,7 @@ class TransactionService extends AbstractService
     protected function createDataFactory(\SubscribePro\Sdk $sdk)
     {
         $this->dataFactory = new TransactionFactory(
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\Transaction\Transaction')
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\Transaction\Transaction')
         );
     }
 }

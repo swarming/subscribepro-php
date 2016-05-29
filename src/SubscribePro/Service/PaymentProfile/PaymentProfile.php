@@ -67,8 +67,9 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      */
     public function importData(array $data = [])
     {
-        if (!empty($data[self::BILLING_ADDRESS]) && !$data[self::BILLING_ADDRESS] instanceof AddressInterface) {
-            $data[self::BILLING_ADDRESS] = $this->getBillingAddress()->importData($data[self::BILLING_ADDRESS]);
+        if (!isset($data[self::BILLING_ADDRESS]) || !$data[self::BILLING_ADDRESS] instanceof AddressInterface) {
+            $billingAddressData = isset($data[self::BILLING_ADDRESS]) && is_array($data[self::BILLING_ADDRESS]) ? $data[self::BILLING_ADDRESS] : [];
+            $data[self::BILLING_ADDRESS] = $this->getBillingAddress()->importData($billingAddressData);
         }
             
         return parent::importData($data);

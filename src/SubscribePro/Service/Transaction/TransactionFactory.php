@@ -9,18 +9,18 @@ class TransactionFactory implements DataObjectFactoryInterface
     /**
      * @var string
      */
-    protected $itemClass;
+    protected $instanceName;
 
     /**
-     * @param string $itemClass
+     * @param string $instanceName
      */
     public function __construct(
-        $itemClass = '\SubscribePro\Service\Transaction\Transaction'
+        $instanceName = '\SubscribePro\Service\Transaction\Transaction'
     ) {
-        if (!is_a($itemClass, '\SubscribePro\Service\Transaction\TransactionInterface', true)) {
-            throw new \InvalidArgumentException("{$itemClass} must implement \\SubscribePro\\Service\\Transaction\\TransactionInterface.");
+        if (!is_a($instanceName, '\SubscribePro\Service\Transaction\TransactionInterface', true)) {
+            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Transaction\\TransactionInterface.");
         }
-        $this->itemClass = $itemClass;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -29,6 +29,6 @@ class TransactionFactory implements DataObjectFactoryInterface
      */
     public function createItem(array $data = [])
     {
-        return new $this->itemClass($data);
+        return new $this->instanceName($data);
     }
 }
