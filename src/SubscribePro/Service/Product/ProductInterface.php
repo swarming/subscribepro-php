@@ -27,8 +27,30 @@ interface ProductInterface extends DataObjectInterface
     const TRIAL_EMAIL_TEMPLATE_CODE = 'trial_email_template_code';
     const TRIAL_EMAIL_THRESHOLD_DAYS = 'trial_email_threshold_days';
     const TRIAL_WELCOME_EMAIL_TEMPLATE_CODE = 'trial_welcome_email_template_code';
+    const IS_SUBSCRIPTION_ENABLED = 'is_subscription_enabled';
     const CREATED = 'created';
     const UPDATED = 'updated';
+
+    /**#@+
+     * Subscription Option Mode constants
+     */
+    const SOM_SUBSCRIPTION_AND_ONETIME_PURCHASE = 'subscription_and_onetime_purchase';
+    const SOM_SUBSCRIPTION_ONLY = 'subscription_only';
+    /**#@-*/
+
+    /**#@+
+     * Subscription Option constants
+     */
+    const SO_ONETIME_PURCHASE = 'onetime_purchase';
+    const SO_SUBSCRIPTION = 'subscription';
+    /**#@-*/
+
+    /**#@+
+     * Product Options Mode constants
+     */
+    const POM_PASS_THROUGH = 'pass_through';
+    const POM_NO_OPTIONS = 'no_options';
+    /**#@-*/
 
     /**
      * @return string|null
@@ -249,6 +271,11 @@ interface ProductInterface extends DataObjectInterface
      * @return $this
      */
     public function setTrialWelcomeEmailTemplateCode($trialWelcomeEmailTemplateCode);
+
+    /**
+     * @return bool
+     */
+    public function getIsSubscriptionEnabled();
 
     /**
      * @param null|string $format

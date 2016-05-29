@@ -23,11 +23,12 @@ class Product extends DataObject implements ProductInterface
         self::MAX_QTY => false,
         self::DISCOUNT => false,
         self::IS_DISCOUNT_PERCENTAGE => false,
-//        self::SUBSCRIPTION_OPTION_MODE => false, /* TODO find out whether we can use this field for POST  */
-//        self::DEFAULT_SUBSCRIPTION_OPTION => false, /* TODO find out whether we can use this field for POST  */
+        self::SUBSCRIPTION_OPTION_MODE => false,
+        self::DEFAULT_SUBSCRIPTION_OPTION => false,
         self::DEFAULT_INTERVAL => false,
         self::INTERVALS => false,
-//        self::IS_TRIAL_PRODUCT => false, /* TODO find out whether we can use this field for POST  */
+        self::PRODUCT_OPTIONS_MODE => false,
+        self::IS_TRIAL_PRODUCT => false,
         self::TRIAL_INTERVAL => false,
         self::TRIAL_PRICE => false,
         self::TRIAL_FULL_PRODUCT_SKU => false,
@@ -48,17 +49,47 @@ class Product extends DataObject implements ProductInterface
         self::MAX_QTY => false,
         self::DISCOUNT => false,
         self::IS_DISCOUNT_PERCENTAGE => false,
-//        self::SUBSCRIPTION_OPTION_MODE => false, /* TODO find out whether we can use this field for POST  */
-//        self::DEFAULT_SUBSCRIPTION_OPTION => false, /* TODO find out whether we can use this field for POST  */
+        self::SUBSCRIPTION_OPTION_MODE => false,
+        self::DEFAULT_SUBSCRIPTION_OPTION => false,
         self::DEFAULT_INTERVAL => false,
         self::INTERVALS => false,
-//        self::IS_TRIAL_PRODUCT => false, /* TODO find out whether we can use this field for POST  */
+        self::IS_TRIAL_PRODUCT => false,
         self::TRIAL_INTERVAL => false,
         self::TRIAL_PRICE => false,
         self::TRIAL_FULL_PRODUCT_SKU => false,
         self::TRIAL_EMAIL_TEMPLATE_CODE => false,
         self::TRIAL_EMAIL_THRESHOLD_DAYS => false,
         self::TRIAL_WELCOME_EMAIL_TEMPLATE_CODE => false
+    ];
+
+    /**
+     * Subscription Option Modes
+     *
+     * @var array
+     */
+    protected $subscriptionOptionModes = [
+        ProductInterface::SOM_SUBSCRIPTION_ONLY,
+        ProductInterface::SOM_SUBSCRIPTION_AND_ONETIME_PURCHASE
+    ];
+
+    /**
+     * Subscription options
+     *
+     * @var array
+     */
+    protected $subscriptionOptions = [
+        ProductInterface::SO_SUBSCRIPTION,
+        ProductInterface::SO_ONETIME_PURCHASE
+    ];
+
+    /**
+     * Product options modes
+     *
+     * @var array
+     */
+    protected $productOptionsModes = [
+        ProductInterface::POM_PASS_THROUGH,
+        ProductInterface::POM_NO_OPTIONS
     ];
 
     /**
@@ -198,6 +229,8 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
+     * Subscription Option Mode: 'subscription_only' or 'subscription_and_onetime_purchase'
+     *
      * @return string|null
      */
     public function getSubscriptionOptionMode()
@@ -206,15 +239,22 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param string|null $subscriptionOptionMode
+     * Subscription Option Mode: 'subscription_only' or 'subscription_and_onetime_purchase'
+     *
+     * @param string $subscriptionOptionMode
      * @return $this
      */
     public function setSubscriptionOptionMode($subscriptionOptionMode)
     {
+        if (!in_array($subscriptionOptionMode, $this->subscriptionOptionModes)) {
+            throw new \InvalidArgumentException('Unsupported subscription option mode.');
+        }
         return $this->setData(self::SUBSCRIPTION_OPTION_MODE, $subscriptionOptionMode);
     }
 
     /**
+     * Default subscription option: 'subscription' or 'onetime_purchase'
+     *
      * @return string|null
      */
     public function getDefaultSubscriptionOption()
@@ -223,15 +263,22 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param string|null $defaultSubscriptionOption
+     * Subscription option: 'subscription' or 'onetime_purchase'
+     *
+     * @param string $defaultSubscriptionOption
      * @return $this
      */
     public function setDefaultSubscriptionOption($defaultSubscriptionOption)
     {
+        if (!in_array($defaultSubscriptionOption, $this->subscriptionOptions)) {
+            throw new \InvalidArgumentException('Unsupported subscription option.');
+        }
         return $this->setData(self::DEFAULT_SUBSCRIPTION_OPTION, $defaultSubscriptionOption);
     }
 
     /**
+     * Default subscription option: 'subscription' or 'onetime_purchase'
+     *
      * @return string|null
      */
     public function getDefaultInterval()
@@ -266,6 +313,8 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
+     * Product options mode: 'pass_through' or 'no_options'
+     *
      * @return string|null
      */
     public function getProductOptionsMode()
@@ -274,11 +323,16 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param string|null $productOptionsMode
+     * Product options mode: 'pass_through' or 'no_options'
+     *
+     * @param string $productOptionsMode
      * @return $this
      */
     public function setProductOptionsMode($productOptionsMode)
     {
+        if (!in_array($productOptionsMode, $this->productOptionsModes)) {
+            throw new \InvalidArgumentException('Unsupported product options mode.');
+        }
         return $this->setData(self::PRODUCT_OPTIONS_MODE, $productOptionsMode);
     }
 
@@ -399,6 +453,14 @@ class Product extends DataObject implements ProductInterface
     public function setTrialWelcomeEmailTemplateCode($trialWelcomeEmailTemplateCode)
     {
         return $this->setData(self::TRIAL_WELCOME_EMAIL_TEMPLATE_CODE, $trialWelcomeEmailTemplateCode);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSubscriptionEnabled()
+    {
+        return $this->getData(self::IS_SUBSCRIPTION_ENABLED);
     }
 
     /**

@@ -58,7 +58,7 @@ class ProductService extends AbstractService
     protected function createDataFactory(\SubscribePro\Sdk $sdk)
     {
         $this->dataFactory = new ProductFactory(
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\Product\Product')
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\Product\Product')
         );
     }
 

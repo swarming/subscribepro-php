@@ -9,18 +9,18 @@ class ProductFactory implements DataObjectFactoryInterface
     /**
      * @var string
      */
-    protected $itemClass;
+    protected $instanceName;
 
     /**
-     * @param string $itemClass
+     * @param string $instanceName
      */
     public function __construct(
-        $itemClass = '\SubscribePro\Service\Product\Product'
+        $instanceName = '\SubscribePro\Service\Product\Product'
     ) {
-        if (!is_a($itemClass, '\SubscribePro\Service\Product\ProductInterface', true)) {
-            throw new \InvalidArgumentException("{$itemClass} must implement \\SubscribePro\\Service\\Product\\ProductInterface.");
+        if (!is_a($instanceName, '\SubscribePro\Service\Product\ProductInterface', true)) {
+            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Product\\ProductInterface.");
         }
-        $this->itemClass = $itemClass;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -29,6 +29,6 @@ class ProductFactory implements DataObjectFactoryInterface
      */
     public function createItem(array $data = [])
     {
-        return new $this->itemClass($data);
+        return new $this->instanceName($data);
     }
 }
