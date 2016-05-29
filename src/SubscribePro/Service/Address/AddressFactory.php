@@ -9,18 +9,18 @@ class AddressFactory implements DataObjectFactoryInterface
     /**
      * @var string
      */
-    protected $itemClass;
+    protected $instanceName;
 
     /**
-     * @param string $itemClass
+     * @param string $instanceName
      */
     public function __construct(
-        $itemClass = '\SubscribePro\Service\Address\Address'
+        $instanceName = '\SubscribePro\Service\Address\Address'
     ) {
-        if (!is_a($itemClass, '\SubscribePro\Service\Address\AddressInterface', true)) {
-            throw new \InvalidArgumentException("{$itemClass} must implement \\SubscribePro\\Service\\Address\\AddressInterface.");
+        if (!is_a($instanceName, '\SubscribePro\Service\Address\AddressInterface', true)) {
+            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Address\\AddressInterface.");
         }
-        $this->itemClass = $itemClass;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -29,6 +29,6 @@ class AddressFactory implements DataObjectFactoryInterface
      */
     public function createItem(array $data = [])
     {
-        return new $this->itemClass($data);
+        return new $this->instanceName($data);
     }
 }

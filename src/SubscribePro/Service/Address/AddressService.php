@@ -58,7 +58,7 @@ class AddressService extends AbstractService
     protected function createDataFactory(\SubscribePro\Sdk $sdk)
     {
         $this->dataFactory = new AddressFactory(
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\Address\Address')
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\Address\Address')
         );
     }
 
