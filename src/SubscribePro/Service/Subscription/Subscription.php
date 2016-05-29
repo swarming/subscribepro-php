@@ -46,7 +46,7 @@ class Subscription extends DataObject implements SubscriptionInterface
         self::PRODUCT_SKU => true,
         self::QTY => true,
         self::USE_FIXED_PRICE => true,
-        self::FIXED_PRICE => false, // true
+        self::FIXED_PRICE => false,
         self::INTERVAL => true,
         self::NEXT_ORDER_DATE => true,
         self::SEND_CUSTOMER_NOTIFICATION_EMAIL => false,
@@ -70,13 +70,18 @@ class Subscription extends DataObject implements SubscriptionInterface
      */
     public function importData(array $data = [])
     {
-        if (!empty($data[self::SHIPPING_ADDRESS]) && $data[self::SHIPPING_ADDRESS] instanceof AddressInterface) {
-            $data[self::SHIPPING_ADDRESS_ID] = $data[self::SHIPPING_ADDRESS]->getId();
+        if (!isset($data[self::SHIPPING_ADDRESS]) || !($data[self::SHIPPING_ADDRESS] instanceof AddressInterface)) {
+            $shippingAddressData = isset($data[self::SHIPPING_ADDRESS]) && is_array($data[self::SHIPPING_ADDRESS]) ? $data[self::SHIPPING_ADDRESS] : [];
+            $data[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->importData($shippingAddressData);
         }
+        $data[self::SHIPPING_ADDRESS_ID] = $this->getShippingAddress()->getId();
 
-        if (!empty($data[self::PAYMENT_PROFILE]) && $data[self::PAYMENT_PROFILE] instanceof PaymentProfileInterface) {
-            $data[self::PAYMENT_PROFILE_ID] = $data[self::SHIPPING_ADDRESS]->getId();
+
+        if (!isset($data[self::PAYMENT_PROFILE]) || !($data[self::PAYMENT_PROFILE] instanceof PaymentProfileInterface)) {
+            $paymentProfileData = isset($data[self::PAYMENT_PROFILE]) && is_array($data[self::PAYMENT_PROFILE]) ? $data[self::PAYMENT_PROFILE] : [];
+            $data[self::PAYMENT_PROFILE] = $this->getPaymentProfile()->importData($paymentProfileData);
         }
+        $data[self::PAYMENT_PROFILE_ID] = $this->getPaymentProfile()->getId();
 
         return parent::importData($data);
     }
@@ -102,7 +107,6 @@ class Subscription extends DataObject implements SubscriptionInterface
     {
         $formData = parent::getFormData();
 
-        $formData[self::PAYMENT_PROFILE] = $this->getPaymentProfile()->getFormData();
         $formData[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->getFormData();
 
         foreach ($this->eitherFieldRequired as $pair) {
@@ -181,6 +185,14 @@ class Subscription extends DataObject implements SubscriptionInterface
     public function setProductSku($productSku)
     {
         return $this->setData(self::PRODUCT_SKU, $productSku);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubscriptionProducts()
+    {
+        return $this->getData(self::SUBSCRIPTION_PRODUCTS, []);
     }
 
     /**
@@ -303,6 +315,30 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
+     * @return string|null
+     */
+    public function getAuthorizeNetPaymentProfileId()
+    {
+        return $this->getData(self::AUTHORIZE_NET_PAYMENT_PROFILE_ID);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCreditcardLastDigits()
+    {
+        return $this->getData(self::CREDITCARD_LAST_DIGITS);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMagentoBillingAddressId()
+    {
+        return $this->getData(self::MAGENTO_BILLING_ADDRESS_ID);
+    }
+
+    /**
      * @return int|null
      */
     public function getShippingAddressId()
@@ -334,6 +370,14 @@ class Subscription extends DataObject implements SubscriptionInterface
     public function setShippingAddress(AddressInterface $shippingAddress)
     {
         return $this->setData(self::SHIPPING_ADDRESS, $shippingAddress);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMagentoShippingAddressId()
+    {
+        return $this->getData(self::MAGENTO_SHIPPING_ADDRESS_ID);
     }
 
     /**

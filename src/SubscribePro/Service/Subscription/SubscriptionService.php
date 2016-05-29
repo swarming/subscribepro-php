@@ -60,7 +60,7 @@ class SubscriptionService extends AbstractService
         $this->dataFactory = new SubscriptionFactory(
             $sdk->getAddressService()->getDataFactory(),
             $sdk->getPaymentProfileService()->getDataFactory(),
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\Subscription\Subscription')
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\Subscription\Subscription')
         );
     }
 

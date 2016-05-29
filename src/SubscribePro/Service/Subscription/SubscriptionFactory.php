@@ -19,22 +19,22 @@ class SubscriptionFactory implements DataObjectFactoryInterface
     /**
      * @var string
      */
-    protected $itemClass;
+    protected $instanceName;
 
     /**
      * @param \SubscribePro\Service\DataObjectFactoryInterface $addressFactory
      * @param \SubscribePro\Service\DataObjectFactoryInterface $paymentProfileFactory
-     * @param string $itemClass
+     * @param string $instanceName
      */
     public function __construct(
         \SubscribePro\Service\DataObjectFactoryInterface $addressFactory,
         \SubscribePro\Service\DataObjectFactoryInterface $paymentProfileFactory,
-        $itemClass = '\SubscribePro\Service\Subscription\Subscription'
+        $instanceName = '\SubscribePro\Service\Subscription\Subscription'
     ) {
-        if (!is_a($itemClass, '\SubscribePro\Service\Subscription\SubscriptionInterface', true)) {
-            throw new \InvalidArgumentException("{$itemClass} must implement \\SubscribePro\\Service\\Subscription\\SubscriptionInterface.");
+        if (!is_a($instanceName, '\SubscribePro\Service\Subscription\SubscriptionInterface', true)) {
+            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Subscription\\SubscriptionInterface.");
         }
-        $this->itemClass = $itemClass;
+        $this->instanceName = $instanceName;
         $this->addressFactory = $addressFactory;
         $this->paymentProfileFactory = $paymentProfileFactory;
     }
@@ -45,16 +45,22 @@ class SubscriptionFactory implements DataObjectFactoryInterface
      */
     public function createItem(array $data = [])
     {
-        $addressData = !empty($data[SubscriptionInterface::SHIPPING_ADDRESS])
-            ? $data[SubscriptionInterface::SHIPPING_ADDRESS]
-            : [];
+        $addressData = $this->getFieldData($data, SubscriptionInterface::SHIPPING_ADDRESS);
         $data[SubscriptionInterface::SHIPPING_ADDRESS] = $this->addressFactory->createItem($addressData);
 
-        $paymentProfileData = !empty($data[SubscriptionInterface::PAYMENT_PROFILE])
-            ? $data[SubscriptionInterface::PAYMENT_PROFILE]
-            : [];
+        $paymentProfileData = $this->getFieldData($data, SubscriptionInterface::PAYMENT_PROFILE);
         $data[SubscriptionInterface::PAYMENT_PROFILE] = $this->paymentProfileFactory->createItem($paymentProfileData);
 
-        return new $this->itemClass($data);
+        return new $this->instanceName($data);
+    }
+
+    /**
+     * @param array $data
+     * @param string $field
+     * @return array
+     */
+    protected function getFieldData($data, $field)
+    {
+        return !empty($data[$field]) ? $data[$field] : [];
     }
 }

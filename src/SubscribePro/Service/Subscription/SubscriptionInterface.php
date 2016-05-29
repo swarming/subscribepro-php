@@ -12,6 +12,7 @@ interface SubscriptionInterface extends DataObjectInterface
     const CUSTOMER_ID = 'customer_id';
     const STATUS = 'status';
     const PRODUCT_SKU = 'product_sku';
+    const SUBSCRIPTION_PRODUCTS = 'subscription_products';
     const QTY = 'qty';
     const USE_FIXED_PRICE = 'use_fixed_price';
     const FIXED_PRICE = 'fixed_price';
@@ -19,8 +20,12 @@ interface SubscriptionInterface extends DataObjectInterface
     const MAGENTO_STORE_CODE = 'magento_store_code';
     const PAYMENT_PROFILE_ID = 'payment_profile_id';
     const PAYMENT_PROFILE = 'payment_profile';
+    const AUTHORIZE_NET_PAYMENT_PROFILE_ID = 'authorize_net_payment_profile_id';
+    const CREDITCARD_LAST_DIGITS = 'creditcard_last_digits';
+    const MAGENTO_BILLING_ADDRESS_ID = 'magento_billing_address_id';
     const SHIPPING_ADDRESS_ID = 'shipping_address_id';
     const SHIPPING_ADDRESS = 'shipping_address';
+    const MAGENTO_SHIPPING_ADDRESS_ID = 'magento_shipping_address_id';
     const MAGENTO_SHIPPING_METHOD_CODE = 'magento_shipping_method_code';
     const SEND_CUSTOMER_NOTIFICATION_EMAIL = 'send_customer_notification_email';
     const FIRST_ORDER_ALREADY_CREATED = 'first_order_already_created';
@@ -73,6 +78,11 @@ interface SubscriptionInterface extends DataObjectInterface
      * @return $this
      */
     public function setProductSku($productSku);
+
+    /**
+     * @return array
+     */
+    public function getSubscriptionProducts();
 
     /**
      * @return float|null
@@ -152,6 +162,21 @@ interface SubscriptionInterface extends DataObjectInterface
     public function setPaymentProfile(PaymentProfileInterface $paymentProfile);
 
     /**
+     * @return string|null
+     */
+    public function getAuthorizeNetPaymentProfileId();
+
+    /**
+     * @return string|null
+     */
+    public function getCreditcardLastDigits();
+
+    /**
+     * @return int|null
+     */
+    public function getMagentoBillingAddressId();
+
+    /**
      * @return int|null
      */
     public function getShippingAddressId();
@@ -172,6 +197,11 @@ interface SubscriptionInterface extends DataObjectInterface
      * @return $this
      */
     public function setShippingAddress(AddressInterface $shippingAddress);
+
+    /**
+     * @return int|null
+     */
+    public function getMagentoShippingAddressId();
 
     /**
      * @return string|null
