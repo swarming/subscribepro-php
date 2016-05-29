@@ -29,14 +29,14 @@ class Customer extends DataObject implements CustomerInterface
      * @var array
      */
     protected $updatingFields = [
-        self::EMAIL => true,
+        self::EMAIL => false,
         self::MAGENTO_CUSTOMER_ID => false,
         self::MAGENTO_CUSTOMER_GROUP_ID => false,
         self::MAGENTO_WEBSITE_ID => false,
         self::EXTERNAL_VAULT_CUSTOMER_TOKEN => false,
-        self::FIRST_NAME => true,
+        self::FIRST_NAME => false,
         self::MIDDLE_NAME => false,
-        self::LAST_NAME => true
+        self::LAST_NAME => false
     ];
 
     /**

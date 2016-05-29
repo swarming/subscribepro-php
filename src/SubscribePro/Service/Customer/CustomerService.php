@@ -18,7 +18,7 @@ class CustomerService extends AbstractService
         CustomerInterface::MAGENTO_CUSTOMER_ID,
         CustomerInterface::EMAIL,
         CustomerInterface::FIRST_NAME,
-        CustomerInterface::LAST_NAME,
+        CustomerInterface::LAST_NAME
     ];
 
     /**
@@ -68,7 +68,7 @@ class CustomerService extends AbstractService
     protected function createDataFactory(\SubscribePro\Sdk $sdk)
     {
         $this->dataFactory = new CustomerFactory(
-            $this->getConfigValue('itemClass', '\SubscribePro\Service\Customer\Customer')
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\Customer\Customer')
         );
     }
 
@@ -84,13 +84,10 @@ class CustomerService extends AbstractService
      * @return \SubscribePro\Service\Customer\CustomerInterface[]
      * @throws \RuntimeException
      */
-    public function loadItems($filters = [])
+    public function loadItems(array $filters = [])
     {
-        $invalidFilters = is_array($filters)
-            ? array_diff_key($filters, array_fill_keys($this->allowedKeysForFilter, null))
-            : [];
-
-        if (sizeof($invalidFilters)) {
+        $invalidFilters = array_diff_key($filters, array_flip($this->allowedKeysForFilter));
+        if (!empty($invalidFilters)) {
             throw new \InvalidArgumentException(
                 'Only [' . implode(', ', $this->allowedKeysForFilter) . '] query filters are allowed.'
             );
