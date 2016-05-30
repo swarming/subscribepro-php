@@ -4,54 +4,8 @@ namespace SubscribePro\Service\Address;
 
 use SubscribePro\Service\AbstractService;
 
-/**
- * @method \SubscribePro\Service\Address\AddressInterface createItem(array $data = [])
- * @method \SubscribePro\Service\Address\AddressInterface loadItem(int $spId)
- * @method \SubscribePro\Service\Address\AddressInterface saveItem(AddressInterface $item)
- */
 class AddressService extends AbstractService
 {
-    /**
-     * @return string
-     */
-    protected function getEntityName()
-    {
-        return 'address';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesName()
-    {
-        return 'addresses';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCreateUrl()
-    {
-        return '/v2/address.json';
-    }
-
-    /**
-     * @param string $id
-     * @return string
-     */
-    protected function getEntityUrl($id)
-    {
-        return "/v2/addresses/{$id}.json";
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesUrl()
-    {
-        return '/v2/addresses.json';
-    }
-
     /**
      * @param \SubscribePro\Sdk $sdk
      */
@@ -60,6 +14,47 @@ class AddressService extends AbstractService
         $this->dataFactory = new AddressFactory(
             $this->getConfigValue('instanceName', '\SubscribePro\Service\Address\Address')
         );
+    }
+
+    /**
+     * @param array $data
+     * @return \SubscribePro\Service\Address\AddressInterface
+     */
+    public function createAddress(array $data = [])
+    {
+        return $this->createItem($data);
+    }
+
+    /**
+     * @param $id
+     * @throws \RuntimeException
+     * @return \SubscribePro\Service\Address\AddressInterface
+     */
+    public function loadAddress($id)
+    {
+        return $this->loadItem("/v2/addresses/{$id}.json", 'address');
+    }
+
+    /**
+     * @param \SubscribePro\Service\Address\AddressInterface $item
+     * @return \SubscribePro\Service\Address\AddressInterface
+     * @throws \RuntimeException
+     */
+    public function saveAddress(AddressInterface $item)
+    {
+        return $this->saveItem($item, '/v2/address.json', "/v2/addresses/{$item->getId()}.json", 'address');
+    }
+
+    /**
+     * @param int|null $customerId
+     * @return \SubscribePro\Service\Address\AddressInterface[]
+     * @throws \RuntimeException
+     */
+    public function loadAddresses($customerId = null)
+    {
+        $filters = $customerId ? [AddressInterface::CUSTOMER_ID => $customerId] : [];
+
+        return $this->loadItems($filters, '/v2/addresses.json', 'addresses');
     }
 
     /**
@@ -76,17 +71,5 @@ class AddressService extends AbstractService
         $item->importData($itemData);
 
         return $item;
-    }
-
-    /**
-     * @param int|null $customerId
-     * @return \SubscribePro\Service\Address\AddressInterface[]
-     * @throws \RuntimeException
-     */
-    public function loadItems($customerId = null)
-    {
-        $filters = $customerId ? [AddressInterface::CUSTOMER_ID => $customerId] : [];
-
-        return parent::loadItems($filters);
     }
 }

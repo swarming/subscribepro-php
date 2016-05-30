@@ -5,10 +5,6 @@ namespace SubscribePro\Service\PaymentProfile;
 use SubscribePro\Service\AbstractService;
 use SubscribePro\Service\Transaction\TransactionInterface;
 
-/**
- * @method \SubscribePro\Service\PaymentProfile\PaymentProfileInterface createItem(array $data = [])
- * @method \SubscribePro\Service\PaymentProfile\PaymentProfileInterface loadItem(int $spId)
- */
 class PaymentProfileService extends AbstractService
 {
     /**
@@ -18,25 +14,35 @@ class PaymentProfileService extends AbstractService
         PaymentProfileInterface::MAGENTO_CUSTOMER_ID,
         PaymentProfileInterface::CUSTOMER_EMAIL,
     ];
+    /**
+     * @param array $data
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     */
+    public function createPaymentProfile(array $data = [])
+    {
+        return $this->createItem($data);
+    }
 
     /**
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $item
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function saveItem($item)
+    public function savePaymentProfile(PaymentProfileInterface $item)
     {
-        if ($item->isNew()) {
-            $response = $this->httpClient->post($this->getCreateUrl(), [$this->getEntityName() => $item->getFormData()]);
-        } else {
-            $response = $this->httpClient->put($this->getEntityUrl($item->getId()), [$this->getEntityName() => $item->getFormData()]);
-        }
+        $createUrl = '/v1/vault/paymentprofile.json';
+        $updateUrl = "/v1/vault/paymentprofiles/{$item->getId()}.json";
+        return $this->saveItem($item, $createUrl, $updateUrl, 'payment_profile', 'POST', 'PUT');
+    }
 
-        $itemData = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
-        $item->importData($itemData);
-
-        return $item;
+    /**
+     * @param $id
+     * @throws \RuntimeException
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     */
+    public function loadPaymentProfile($id)
+    {
+        return $this->loadItem("/v1/vault/paymentprofiles/{$id}.json", 'payment_profile');
     }
 
     /**
@@ -49,7 +55,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface[]
      * @throws \RuntimeException
      */
-    public function loadItems(array $filters = [])
+    public function loadPaymentProfiles(array $filters = [])
     {
         $invalidFilters = array_diff_key($filters, array_flip($this->allowedKeysForFilter));
         if (!empty($invalidFilters)) {
@@ -58,7 +64,7 @@ class PaymentProfileService extends AbstractService
             );
         }
 
-        return parent::loadItems($filters);
+        return $this->loadItems($filters, '/v1/vault/paymentprofiles.json', 'payment_profiles');
     }
 
     /**
@@ -68,10 +74,10 @@ class PaymentProfileService extends AbstractService
      */
     public function thirdPartyToken(PaymentProfileInterface $paymentProfile)
     {
-        $paymentProfileData = [$this->getEntityName() => $paymentProfile->getThirdPartyTokenData()];
+        $paymentProfileData = ['payment_profile' => $paymentProfile->getThirdPartyTokenData()];
         $response = $this->httpClient->post("v2/paymentprofile/third-party-token.json", $paymentProfileData);
 
-        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $data = !empty($response['payment_profile']) ? $response['payment_profile'] : [];
         $paymentProfile->importData($data);
 
         return $paymentProfile;
@@ -86,7 +92,7 @@ class PaymentProfileService extends AbstractService
     {
         $response = $this->httpClient->put("v1/vault/paymentprofiles/{$paymentProfileId}/redact.json");
 
-        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $data = !empty($response['payment_profile']) ? $response['payment_profile'] : [];
         return $this->createItem($data);
     }
 
@@ -150,46 +156,5 @@ class PaymentProfileService extends AbstractService
             $sdk->getAddressService()->getDataFactory(),
             $this->getConfigValue('instanceName', '\SubscribePro\Service\PaymentProfile\PaymentProfile')
         );
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntityName()
-    {
-        return 'payment_profile';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesName()
-    {
-        return 'payment_profiles';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCreateUrl()
-    {
-        return '/v1/vault/paymentprofile.json';
-    }
-
-    /**
-     * @param string $id
-     * @return string
-     */
-    protected function getEntityUrl($id)
-    {
-        return "/v1/vault/paymentprofiles/{$id}.json";
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesUrl()
-    {
-        return '/v1/vault/paymentprofiles.json';
     }
 }

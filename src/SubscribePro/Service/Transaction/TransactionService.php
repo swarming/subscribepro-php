@@ -4,30 +4,25 @@ namespace SubscribePro\Service\Transaction;
 
 use SubscribePro\Service\AbstractService;
 
-/**
- * @method \SubscribePro\Service\Transaction\TransactionInterface createItem(array $data = [])
- * @method \SubscribePro\Service\Transaction\TransactionInterface loadItem(int $spId)
- */
 class TransactionService extends AbstractService
 {
     /**
-     * @param \SubscribePro\Service\DataObjectInterface $item
-     * @return void
-     * @throws \BadMethodCallException
+     * @param array $data
+     * @return \SubscribePro\Service\Transaction\TransactionInterface
      */
-    public function saveItem($item)
+    public function createTransaction(array $data = [])
     {
-        throw new \BadMethodCallException('Save method not implemented in transaction service.');
+        return $this->createItem($data);
     }
 
     /**
-     * @param mixed $filters
-     * @return void
-     * @throws \BadMethodCallException
+     * @param $id
+     * @throws \RuntimeException
+     * @return \SubscribePro\Service\Transaction\TransactionInterface
      */
-    public function loadItems($filters = null)
+    public function loadTransaction($id)
     {
-        throw new \BadMethodCallException('Load items method not implemented in transaction service.');
+        return $this->loadItem("/v1/vault/transactions/{$id}.json", 'transaction');
     }
 
     /**
@@ -38,10 +33,10 @@ class TransactionService extends AbstractService
      */
     public function capture($transactionId, TransactionInterface $transaction)
     {
-        $transactionData = [$this->getEntityName() => $transaction->getTransactionServiceData()];
+        $transactionData = ['transaction' => $transaction->getTransactionServiceData()];
         $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/capture.json", $transactionData);
 
-        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $data = !empty($response['transaction']) ? $response['transaction'] : [];
         $transaction->importData($data);
 
         return $transaction;
@@ -55,10 +50,10 @@ class TransactionService extends AbstractService
      */
     public function credit($transactionId, TransactionInterface $transaction)
     {
-        $transactionData = [$this->getEntityName() => $transaction->getTransactionServiceData()];
+        $transactionData = ['transaction' => $transaction->getTransactionServiceData()];
         $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/credit.json", $transactionData);
 
-        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $data = !empty($response['transaction']) ? $response['transaction'] : [];
         $transaction->importData($data);
 
         return $transaction;
@@ -73,49 +68,8 @@ class TransactionService extends AbstractService
     {
         $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/void.json");
 
-        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $data = !empty($response['transaction']) ? $response['transaction'] : [];
         return $this->createItem($data);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntityName()
-    {
-        return 'transaction';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesName()
-    {
-        return 'transactions';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCreateUrl()
-    {
-        return "";
-    }
-
-    /**
-     * @param string $id
-     * @return string
-     */
-    protected function getEntityUrl($id)
-    {
-        return "/v1/vault/transactions/{$id}.json";
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesUrl()
-    {
-        return '';
     }
 
     /**

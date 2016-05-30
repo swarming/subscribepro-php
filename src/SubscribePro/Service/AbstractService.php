@@ -43,32 +43,6 @@ abstract class AbstractService
     }
 
     /**
-     * @return string
-     */
-    abstract protected function getEntityName();
-
-    /**
-     * @return string
-     */
-    abstract protected function getEntitiesName();
-
-    /**
-     * @return string
-     */
-    abstract protected function getCreateUrl();
-
-    /**
-     * @param string $id
-     * @return string
-     */
-    abstract protected function getEntityUrl($id);
-
-    /**
-     * @return string
-     */
-    abstract protected function getEntitiesUrl();
-
-    /**
      * @param \SubscribePro\Sdk $sdk
      */
     abstract protected function createDataFactory(\SubscribePro\Sdk $sdk);
@@ -85,21 +59,22 @@ abstract class AbstractService
      * @param array $data
      * @return \SubscribePro\Service\DataObjectInterface
      */
-    public function createItem(array $data = [])
+    protected function createItem(array $data = [])
     {
         return $this->dataFactory->createItem($data);
     }
 
     /**
-     * @param int $spId
+     * @param string $entityUrl
+     * @param string $entityName
      * @return \SubscribePro\Service\DataObjectInterface
      * @throws \RuntimeException
      */
-    public function loadItem($spId)
+    protected function loadItem($entityUrl, $entityName)
     {
-        $response = $this->httpClient->get($this->getEntityUrl($spId));
+        $response = $this->httpClient->get($entityUrl);
 
-        $itemData = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $itemData = !empty($response[$entityName]) ? $response[$entityName] : [];
         $item = $this->createItem($itemData);
 
         return $item;
@@ -107,40 +82,47 @@ abstract class AbstractService
 
     /**
      * @param \SubscribePro\Service\DataObjectInterface $item
+     * @param string|null $createUrl
+     * @param string|null $updateUrl
+     * @param string $entityName
+     * @param string|null $createMethod
+     * @param string|null $updateMethod
      * @return \SubscribePro\Service\DataObjectInterface
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function saveItem($item)
+    protected function saveItem($item, $createUrl, $updateUrl, $entityName, $createMethod = 'POST', $updateMethod = 'POST')
     {
-        $response = $this->httpClient->post($this->getFormUri($item), [$this->getEntityName() => $item->getFormData()]);
-
-        $itemData = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        if ($item->isNew() && !$createUrl) {
+            throw new \BadMethodCallException("Saving new instances is not allowed in {$entityName} service");
+        }
+        if (!$item->isNew() && !$updateUrl) {
+            throw new \BadMethodCallException("Update is not allowed in {$entityName} service");
+        }
+        
+        $url = $item->isNew() ? $createUrl : $updateUrl;
+        $method = $item->isNew() ? $createMethod : $updateMethod;
+        $response = $this->httpClient->request($method, $url, [$entityName => $item->getFormData()]);
+        
+        $itemData = !empty($response[$entityName]) ? $response[$entityName] : [];
         $item->importData($itemData);
 
         return $item;
     }
 
     /**
-     * @param \SubscribePro\Service\DataObjectInterface $item
-     * @return string
-     */
-    protected function getFormUri($item)
-    {
-        return $item->isNew() ? $this->getCreateUrl() : $this->getEntityUrl($item->getId());
-    }
-
-    /**
      * @param array|string|int|null $filters
+     * @param string $entitiesUrl
+     * @param string $entitiesName
      * @throws \RuntimeException
      * @return \SubscribePro\Service\DataObjectInterface[]
      */
-    public function loadItems($filters = null)
+    protected function loadItems($filters = null, $entitiesUrl, $entitiesName)
     {
         $params = is_array($filters) ? $filters : [];
-        $response = $this->httpClient->get($this->getEntitiesUrl(), $params);
+        $response = $this->httpClient->get($entitiesUrl, $params);
 
-        $responseData = !empty($response[$this->getEntitiesName()]) ? $response[$this->getEntitiesName()] : [];
+        $responseData = !empty($response[$entitiesName]) ? $response[$entitiesName] : [];
         return $this->createItems($responseData);
     }
 

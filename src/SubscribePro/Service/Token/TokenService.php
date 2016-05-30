@@ -7,10 +7,6 @@ use SubscribePro\Service\Address\AddressInterface;
 use SubscribePro\Service\PaymentProfile\PaymentProfileInterface;
 use SubscribePro\Service\Transaction\TransactionInterface;
 
-/**
- * @method \SubscribePro\Service\Token\TokenInterface createItem(array $data = [])
- * @method \SubscribePro\Service\Token\TokenInterface loadItem(string $token)
- */
 class TokenService extends AbstractService
 {
 
@@ -20,27 +16,33 @@ class TokenService extends AbstractService
     protected $dataFactory;
 
     /**
-     * @param mixed $filters
-     * @return void
-     * @throws \BadMethodCallException
+     * @param array $data
+     * @return \SubscribePro\Service\Token\TokenInterface
      */
-    public function loadItems($filters = null)
+    public function createToken(array $data = [])
     {
-        throw new \BadMethodCallException('Load items method not implemented in token service.');
+        return $this->createItem($data);
     }
+
+    /**
+     * @param $token
+     * @throws \RuntimeException
+     * @return \SubscribePro\Service\Token\TokenInterface
+     */
+    public function loadToken($token)
+    {
+        return $this->loadItem("/v1/vault/tokens/{$token}.json", 'token');
+    }
+
     /**
      * @param \SubscribePro\Service\Token\TokenInterface $item
      * @return \SubscribePro\Service\Token\TokenInterface
      * @throws \RuntimeException
+     * @throws \BadMethodCallException
      */
-    public function saveItem($item)
+    public function saveToken($item)
     {
-        $response = $this->httpClient->post($this->getCreateUrl(), [$this->getEntityName() => $item->getFormData()]);
-
-        $itemData = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
-        $item->importData($itemData);
-
-        return $item;
+        return $this->saveItem($item, "/v1/vault/token.json", null, 'token');
     }
 
     /**
@@ -130,47 +132,6 @@ class TokenService extends AbstractService
         $data = !empty($response['payment_profile']) ? $response['payment_profile'] : [];
 
         return $this->createPaymentProfileItem($data);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntityName()
-    {
-        return 'token';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesName()
-    {
-        return 'tokens';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCreateUrl()
-    {
-        return "/v1/vault/token.json";
-    }
-
-    /**
-     * @param string $id
-     * @return string
-     */
-    protected function getEntityUrl($id)
-    {
-        return "/v1/vault/tokens/{$id}.json";
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntitiesUrl()
-    {
-        return '';
     }
 
     /**

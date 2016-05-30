@@ -74,14 +74,14 @@ class Subscription extends DataObject implements SubscriptionInterface
             $shippingAddressData = isset($data[self::SHIPPING_ADDRESS]) && is_array($data[self::SHIPPING_ADDRESS]) ? $data[self::SHIPPING_ADDRESS] : [];
             $data[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->importData($shippingAddressData);
         }
-        $data[self::SHIPPING_ADDRESS_ID] = $this->getShippingAddress()->getId();
+        $data[self::SHIPPING_ADDRESS_ID] = $data[self::SHIPPING_ADDRESS]->getId();
 
 
         if (!isset($data[self::PAYMENT_PROFILE]) || !($data[self::PAYMENT_PROFILE] instanceof PaymentProfileInterface)) {
             $paymentProfileData = isset($data[self::PAYMENT_PROFILE]) && is_array($data[self::PAYMENT_PROFILE]) ? $data[self::PAYMENT_PROFILE] : [];
             $data[self::PAYMENT_PROFILE] = $this->getPaymentProfile()->importData($paymentProfileData);
         }
-        $data[self::PAYMENT_PROFILE_ID] = $this->getPaymentProfile()->getId();
+        $data[self::PAYMENT_PROFILE_ID] = $data[self::PAYMENT_PROFILE]->getId();
 
         return parent::importData($data);
     }

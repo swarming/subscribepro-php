@@ -4,52 +4,47 @@ namespace SubscribePro\Service\Product;
 
 use SubscribePro\Service\AbstractService;
 
-/**
- * @method \SubscribePro\Service\Product\ProductInterface createItem(array $data = [])
- * @method \SubscribePro\Service\Product\ProductInterface loadItem(int $spId)
- * @method \SubscribePro\Service\Product\ProductInterface saveItem(ProductInterface $item)
- */
 class ProductService extends AbstractService
 {
     /**
-     * @return string
+     * @param array $data
+     * @return \SubscribePro\Service\Product\ProductInterface
      */
-    protected function getEntityName()
+    public function createProduct(array $data = [])
     {
-        return 'product';
+        return $this->createItem($data);
     }
 
     /**
-     * @return string
+     * @param \SubscribePro\Service\Product\ProductInterface $item
+     * @return \SubscribePro\Service\Product\ProductInterface
+     * @throws \RuntimeException
      */
-    protected function getEntitiesName()
+    public function saveProduct(ProductInterface $item)
     {
-        return 'products';
+        return $this->saveItem($item, '/v2/product.json', "/v2/products/{$item->getId()}.json", 'product');
     }
 
     /**
-     * @return string
+     * @param $id
+     * @throws \RuntimeException
+     * @return \SubscribePro\Service\Product\ProductInterface
      */
-    protected function getCreateUrl()
+    public function loadProduct($id)
     {
-        return '/v2/product.json';
+        return $this->loadItem("/v2/products/{$id}.json", 'product');
     }
 
     /**
-     * @param string $id
-     * @return string
+     * @param string|null $sku
+     * @return \SubscribePro\Service\Product\ProductInterface[]
+     * @throws \RuntimeException
      */
-    protected function getEntityUrl($id)
+    public function loadProducts($sku = null)
     {
-        return "/v2/products/{$id}.json";
-    }
+        $filters = $sku ? [ProductInterface::SKU => $sku] : [];
 
-    /**
-     * @return string
-     */
-    protected function getEntitiesUrl()
-    {
-        return '/v2/products.json';
+        return $this->loadItems($filters, '/v2/products.json', 'products');
     }
 
     /**
@@ -60,17 +55,5 @@ class ProductService extends AbstractService
         $this->dataFactory = new ProductFactory(
             $this->getConfigValue('instanceName', '\SubscribePro\Service\Product\Product')
         );
-    }
-
-    /**
-     * @param string|null $sku
-     * @return \SubscribePro\Service\Product\ProductInterface[]
-     * @throws \RuntimeException
-     */
-    public function loadItems($sku = null)
-    {
-        $filters = $sku ? [ProductInterface::SKU => $sku] : [];
-
-        return parent::loadItems($filters);
     }
 }
