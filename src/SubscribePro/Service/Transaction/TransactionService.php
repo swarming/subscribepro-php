@@ -29,7 +29,54 @@ class TransactionService extends AbstractService
     {
         throw new \BadMethodCallException('Load items method not implemented in transaction service.');
     }
-    
+
+    /**
+     * @param int $transactionId
+     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
+     * @return \SubscribePro\Service\Transaction\TransactionInterface
+     * @throws \RuntimeException
+     */
+    public function capture($transactionId, TransactionInterface $transaction)
+    {
+        $transactionData = [$this->getEntityName() => $transaction->getTransactionServiceData()];
+        $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/capture.json", $transactionData);
+
+        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $transaction->importData($data);
+
+        return $transaction;
+    }
+
+    /**
+     * @param int $transactionId
+     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
+     * @return \SubscribePro\Service\Transaction\TransactionInterface
+     * @throws \RuntimeException
+     */
+    public function credit($transactionId, TransactionInterface $transaction)
+    {
+        $transactionData = [$this->getEntityName() => $transaction->getTransactionServiceData()];
+        $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/credit.json", $transactionData);
+
+        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        $transaction->importData($data);
+
+        return $transaction;
+    }
+
+    /**
+     * @param int $transactionId
+     * @return \SubscribePro\Service\Transaction\TransactionInterface
+     * @throws \RuntimeException
+     */
+    public function void($transactionId)
+    {
+        $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/void.json");
+
+        $data = !empty($response[$this->getEntityName()]) ? $response[$this->getEntityName()] : [];
+        return $this->createItem($data);
+    }
+
     /**
      * @return string
      */
@@ -51,7 +98,7 @@ class TransactionService extends AbstractService
      */
     protected function getCreateUrl()
     {
-        return "/v2/transaction";
+        return "";
     }
 
     /**
@@ -60,7 +107,7 @@ class TransactionService extends AbstractService
      */
     protected function getEntityUrl($id)
     {
-        return "/v2/transactions/{$id}.json";
+        return "/v1/vault/transactions/{$id}.json";
     }
 
     /**
@@ -68,7 +115,7 @@ class TransactionService extends AbstractService
      */
     protected function getEntitiesUrl()
     {
-        return '/v2/transactions.json';
+        return '';
     }
 
     /**

@@ -240,4 +240,9 @@ interface TransactionInterface extends DataObjectInterface
      * @throws \InvalidArgumentException
      */
     public function getVerifyData();
+
+    /**
+     * @return array
+     */
+    public function getTransactionServiceData();
 }

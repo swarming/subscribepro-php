@@ -35,6 +35,14 @@ class Transaction extends DataObject implements TransactionInterface
     /**
      * @var array
      */
+    protected $transactionServiceFields = [
+        self::AMOUNT => false,
+        self::CURRENCY_CODE => false,
+    ];
+
+    /**
+     * @var array
+     */
     protected $updatingFields = [];
 
     /**
@@ -51,6 +59,9 @@ class Transaction extends DataObject implements TransactionInterface
      */
     public function setAmount($amount)
     {
+        if (!is_numeric($amount) || $amount <= 0) {
+            throw new \InvalidArgumentException('The amount should be always given as an integer number of cents. ');
+        }
         return $this->setData(self::AMOUNT, $amount);
     }
 
@@ -68,6 +79,9 @@ class Transaction extends DataObject implements TransactionInterface
      */
     public function setCurrencyCode($currencyCode)
     {
+        if (strlen($currencyCode) !== 3) {
+            throw new \InvalidArgumentException('Currency code should consist of 3 letters.');
+        }
         return $this->setData(self::CURRENCY_CODE, $currencyCode);
     }
 
@@ -356,6 +370,17 @@ class Transaction extends DataObject implements TransactionInterface
         }
 
         return array_intersect_key($this->data, $this->verifyFields);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTransactionServiceData()
+    {
+        if ($this->getData(self::AMOUNT) && !$this->getData(self::CURRENCY_CODE)) {
+            throw new \InvalidArgumentException("Currency code not specified for amount.");
+        }
+        return array_intersect_key($this->data, $this->transactionServiceFields);
     }
 
     protected function getFormFields()
