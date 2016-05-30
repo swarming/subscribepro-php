@@ -44,9 +44,9 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      * @var array
      */
     protected $updatingFields = [
-        self::CREDITCARD_MONTH => true,
-        self::CREDITCARD_YEAR => true,
-        self::BILLING_ADDRESS => true
+        self::CREDITCARD_MONTH => true, /* TODO: Field is not required */
+        self::CREDITCARD_YEAR => true, /* TODO: Field is not required */
+        self::BILLING_ADDRESS => true /* TODO: Field is not required */
     ];
 
     /**
@@ -99,6 +99,19 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
         }
 
         return array_intersect_key($this->data, $this->thirdPartyTokenFields);
+    }
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getCreateByTokenData()
+    {
+        if (!$this->getCustomerId() && !$this->getMagentoCustomerId()) {
+            throw new \InvalidArgumentException("Not all required fields are set.");
+        }
+        
+        return $this->toArray();
     }
 
     /**

@@ -245,4 +245,10 @@ interface TransactionInterface extends DataObjectInterface
      * @return array
      */
     public function getTransactionServiceData();
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getCreateByTokenData();
 }

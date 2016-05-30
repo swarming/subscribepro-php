@@ -25,6 +25,19 @@ class Transaction extends DataObject implements TransactionInterface
     /**
      * @var array
      */
+    protected $createByTokenFields = [
+        self::AMOUNT => true,
+        self::CURRENCY_CODE => true,
+        self::ORDER_ID => false,
+        self::IP => false,
+        self::EMAIL => false,
+        self::CREDITCARD_MONTH => false,
+        self::CREDITCARD_YEAR => false,
+    ];
+
+    /**
+     * @var array
+     */
     protected $verifyFields = [
         self::CURRENCY_CODE => true,
         self::ORDER_ID => false,
@@ -374,6 +387,7 @@ class Transaction extends DataObject implements TransactionInterface
 
     /**
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function getTransactionServiceData()
     {
@@ -381,6 +395,21 @@ class Transaction extends DataObject implements TransactionInterface
             throw new \InvalidArgumentException("Currency code not specified for amount.");
         }
         return array_intersect_key($this->data, $this->transactionServiceFields);
+    }
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getCreateByTokenData()
+    {
+        foreach ($this->createByTokenFields as $field => $isRequired) {
+            if ($isRequired && null === $this->getData($field)) {
+                throw new \InvalidArgumentException("Not all required fields are set.");
+            }
+        }
+        
+        return array_intersect_key($this->data, $this->createByTokenFields);
     }
 
     protected function getFormFields()

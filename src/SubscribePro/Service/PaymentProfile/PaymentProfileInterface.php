@@ -200,4 +200,10 @@ interface PaymentProfileInterface extends DataObjectInterface
      * @throws \InvalidArgumentException
      */
     public function getThirdPartyTokenData();
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getCreateByTokenData();
 }
