@@ -40,7 +40,7 @@ class Token extends DataObject implements TokenInterface
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
     public function getNumber()
     {
@@ -48,7 +48,7 @@ class Token extends DataObject implements TokenInterface
     }
 
     /**
-     * @param int $number
+     * @param string $number
      * @return $this
      */
     public function setNumber($number)
