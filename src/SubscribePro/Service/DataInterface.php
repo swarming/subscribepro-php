@@ -2,7 +2,7 @@
 
 namespace SubscribePro\Service;
 
-interface DataObjectInterface
+interface DataInterface
 {
     /**
      * @param array $data

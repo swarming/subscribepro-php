@@ -2,17 +2,17 @@
 
 namespace SubscribePro\Service\Subscription;
 
-use SubscribePro\Service\DataObjectFactoryInterface;
+use SubscribePro\Service\DataFactoryInterface;
 
-class SubscriptionFactory implements DataObjectFactoryInterface
+class SubscriptionFactory implements DataFactoryInterface
 {
     /**
-     * @var \SubscribePro\Service\DataObjectFactoryInterface
+     * @var \SubscribePro\Service\DataFactoryInterface
      */
     protected $addressFactory;
 
     /**
-     * @var \SubscribePro\Service\DataObjectFactoryInterface
+     * @var \SubscribePro\Service\DataFactoryInterface
      */
     protected $paymentProfileFactory;
 
@@ -22,13 +22,13 @@ class SubscriptionFactory implements DataObjectFactoryInterface
     protected $instanceName;
 
     /**
-     * @param \SubscribePro\Service\DataObjectFactoryInterface $addressFactory
-     * @param \SubscribePro\Service\DataObjectFactoryInterface $paymentProfileFactory
+     * @param \SubscribePro\Service\DataFactoryInterface $addressFactory
+     * @param \SubscribePro\Service\DataFactoryInterface $paymentProfileFactory
      * @param string $instanceName
      */
     public function __construct(
-        \SubscribePro\Service\DataObjectFactoryInterface $addressFactory,
-        \SubscribePro\Service\DataObjectFactoryInterface $paymentProfileFactory,
+        \SubscribePro\Service\DataFactoryInterface $addressFactory,
+        \SubscribePro\Service\DataFactoryInterface $paymentProfileFactory,
         $instanceName = '\SubscribePro\Service\Subscription\Subscription'
     ) {
         if (!is_subclass_of($instanceName, '\SubscribePro\Service\Subscription\SubscriptionInterface')) {
@@ -43,13 +43,13 @@ class SubscriptionFactory implements DataObjectFactoryInterface
      * @param array $data
      * @return \SubscribePro\Service\Subscription\SubscriptionInterface
      */
-    public function createItem(array $data = [])
+    public function create(array $data = [])
     {
         $addressData = $this->getFieldData($data, SubscriptionInterface::SHIPPING_ADDRESS);
-        $data[SubscriptionInterface::SHIPPING_ADDRESS] = $this->addressFactory->createItem($addressData);
+        $data[SubscriptionInterface::SHIPPING_ADDRESS] = $this->addressFactory->create($addressData);
 
         $paymentProfileData = $this->getFieldData($data, SubscriptionInterface::PAYMENT_PROFILE);
-        $data[SubscriptionInterface::PAYMENT_PROFILE] = $this->paymentProfileFactory->createItem($paymentProfileData);
+        $data[SubscriptionInterface::PAYMENT_PROFILE] = $this->paymentProfileFactory->create($paymentProfileData);
 
         return new $this->instanceName($data);
     }

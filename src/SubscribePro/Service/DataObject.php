@@ -2,7 +2,7 @@
 
 namespace SubscribePro\Service;
 
-class DataObject implements DataObjectInterface
+class DataObject implements DataInterface
 {
     /**
      * @var string

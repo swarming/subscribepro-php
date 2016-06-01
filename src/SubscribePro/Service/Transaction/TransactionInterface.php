@@ -2,9 +2,9 @@
 
 namespace SubscribePro\Service\Transaction;
 
-use SubscribePro\Service\DataObjectInterface;
+use SubscribePro\Service\DataInterface;
 
-interface TransactionInterface extends DataObjectInterface
+interface TransactionInterface extends DataInterface
 {
     const ID = 'id';
     const GATEWAY_SPECIFIC_RESPONSE = 'gateway_specific_response';

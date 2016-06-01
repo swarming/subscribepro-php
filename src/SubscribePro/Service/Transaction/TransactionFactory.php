@@ -2,9 +2,9 @@
 
 namespace SubscribePro\Service\Transaction;
 
-use SubscribePro\Service\DataObjectFactoryInterface;
+use SubscribePro\Service\DataFactoryInterface;
 
-class TransactionFactory implements DataObjectFactoryInterface
+class TransactionFactory implements DataFactoryInterface
 {
     /**
      * @var string
@@ -27,7 +27,7 @@ class TransactionFactory implements DataObjectFactoryInterface
      * @param array $data
      * @return \SubscribePro\Service\Transaction\TransactionInterface
      */
-    public function createItem(array $data = [])
+    public function create(array $data = [])
     {
         return new $this->instanceName($data);
     }

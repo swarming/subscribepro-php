@@ -16,7 +16,7 @@ class AddressService extends AbstractService
 
     /**
      * @param \SubscribePro\Sdk $sdk
-     * @return \SubscribePro\Service\DataObjectFactoryInterface
+     * @return \SubscribePro\Service\DataFactoryInterface
      */
     protected function createDataFactory(\SubscribePro\Sdk $sdk)
     {
@@ -31,7 +31,7 @@ class AddressService extends AbstractService
      */
     public function createAddress(array $data = [])
     {
-        return $this->dataFactory->createItem($data);
+        return $this->dataFactory->create($data);
     }
 
     /**

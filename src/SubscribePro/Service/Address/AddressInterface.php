@@ -2,9 +2,9 @@
 
 namespace SubscribePro\Service\Address;
 
-use SubscribePro\Service\DataObjectInterface;
+use SubscribePro\Service\DataInterface;
 
-interface AddressInterface extends DataObjectInterface
+interface AddressInterface extends DataInterface
 {
     const ID = 'id';
     const CUSTOMER_ID = 'customer_id';

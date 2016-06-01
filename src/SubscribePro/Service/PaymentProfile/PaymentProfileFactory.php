@@ -2,12 +2,12 @@
 
 namespace SubscribePro\Service\PaymentProfile;
 
-use SubscribePro\Service\DataObjectFactoryInterface;
+use SubscribePro\Service\DataFactoryInterface;
 
-class PaymentProfileFactory implements DataObjectFactoryInterface
+class PaymentProfileFactory implements DataFactoryInterface
 {
     /**
-     * @var \SubscribePro\Service\DataObjectFactoryInterface
+     * @var \SubscribePro\Service\DataFactoryInterface
      */
     protected $addressFactory;
 
@@ -17,11 +17,11 @@ class PaymentProfileFactory implements DataObjectFactoryInterface
     protected $instanceName;
 
     /**
-     * @param \SubscribePro\Service\DataObjectFactoryInterface $addressFactory
+     * @param \SubscribePro\Service\DataFactoryInterface $addressFactory
      * @param string $instanceName
      */
     public function __construct(
-        \SubscribePro\Service\DataObjectFactoryInterface $addressFactory,
+        \SubscribePro\Service\DataFactoryInterface $addressFactory,
         $instanceName = '\SubscribePro\Service\PaymentProfile\PaymentProfile'
     ) {
         if (!is_subclass_of($instanceName, '\SubscribePro\Service\PaymentProfile\PaymentProfileInterface')) {
@@ -35,10 +35,10 @@ class PaymentProfileFactory implements DataObjectFactoryInterface
      * @param array $data
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      */
-    public function createItem(array $data = [])
+    public function create(array $data = [])
     {
         $addressData = $this->getFieldData($data, PaymentProfileInterface::BILLING_ADDRESS);
-        $data[PaymentProfileInterface::BILLING_ADDRESS] = $this->addressFactory->createItem($addressData);
+        $data[PaymentProfileInterface::BILLING_ADDRESS] = $this->addressFactory->create($addressData);
 
         return new $this->instanceName($data);
     }

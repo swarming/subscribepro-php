@@ -2,11 +2,11 @@
 
 namespace SubscribePro\Service\Subscription;
 
-use SubscribePro\Service\DataObjectInterface;
+use SubscribePro\Service\DataInterface;
 use SubscribePro\Service\Address\AddressInterface;
 use SubscribePro\Service\PaymentProfile\PaymentProfileInterface;
 
-interface SubscriptionInterface extends DataObjectInterface
+interface SubscriptionInterface extends DataInterface
 {
     const ID = 'id';
     const CUSTOMER_ID = 'customer_id';

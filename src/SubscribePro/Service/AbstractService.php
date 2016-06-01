@@ -10,7 +10,7 @@ abstract class AbstractService
     protected $httpClient;
 
     /**
-     * @var \SubscribePro\Service\DataObjectFactoryInterface
+     * @var \SubscribePro\Service\DataFactoryInterface
      */
     protected $dataFactory;
 
@@ -44,12 +44,12 @@ abstract class AbstractService
 
     /**
      * @param \SubscribePro\Sdk $sdk
-     * @return \SubscribePro\Service\DataObjectFactoryInterface
+     * @return \SubscribePro\Service\DataFactoryInterface
      */
     abstract protected function createDataFactory(\SubscribePro\Sdk $sdk);
 
     /**
-     * @return \SubscribePro\Service\DataObjectFactoryInterface
+     * @return \SubscribePro\Service\DataFactoryInterface
      */
     protected function getDataFactory()
     {
@@ -59,13 +59,13 @@ abstract class AbstractService
     /**
      * @param array $response
      * @param string $entityName
-     * @param \SubscribePro\Service\DataObjectInterface|null $item
-     * @return \SubscribePro\Service\DataObjectInterface
+     * @param \SubscribePro\Service\DataInterface|null $item
+     * @return \SubscribePro\Service\DataInterface
      */
-    protected function retrieveItem($response, $entityName, DataObjectInterface $item = null)
+    protected function retrieveItem($response, $entityName, DataInterface $item = null)
     {
         $itemData = !empty($response[$entityName]) ? $response[$entityName] : [];
-        $item = $item ?: $this->dataFactory->createItem();
+        $item = $item ?: $this->dataFactory->create();
         $item->importData($itemData);
         return $item;
     }
@@ -73,7 +73,7 @@ abstract class AbstractService
     /**
      * @param array $response
      * @param string $entitiesName
-     * @return \SubscribePro\Service\DataObjectInterface[]
+     * @return \SubscribePro\Service\DataInterface[]
      */
     protected function retrieveItems($response, $entitiesName)
     {
@@ -84,12 +84,12 @@ abstract class AbstractService
 
     /**
      * @param array $data
-     * @return \SubscribePro\Service\DataObjectInterface[]
+     * @return \SubscribePro\Service\DataInterface[]
      */
     protected function createItems(array $data = [])
     {
         return array_map(function ($itemData) {
-            return $this->dataFactory->createItem($itemData);
+            return $this->dataFactory->create($itemData);
         }, $data);
     }
 }

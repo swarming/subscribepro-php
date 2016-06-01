@@ -16,7 +16,7 @@ class ProductService extends AbstractService
 
     /**
      * @param \SubscribePro\Sdk $sdk
-     * @return \SubscribePro\Service\DataObjectFactoryInterface
+     * @return \SubscribePro\Service\DataFactoryInterface
      */
     protected function createDataFactory(\SubscribePro\Sdk $sdk)
     {
@@ -31,7 +31,7 @@ class ProductService extends AbstractService
      */
     public function createProduct(array $data = [])
     {
-        return $this->dataFactory->createItem($data);
+        return $this->dataFactory->create($data);
     }
 
     /**

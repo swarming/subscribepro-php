@@ -2,9 +2,9 @@
 
 namespace SubscribePro\Service\Token;
 
-use SubscribePro\Service\DataObjectFactoryInterface;
+use SubscribePro\Service\DataFactoryInterface;
 
-class TokenFactory implements DataObjectFactoryInterface
+class TokenFactory implements DataFactoryInterface
 {
     /**
      * @var string
@@ -27,7 +27,7 @@ class TokenFactory implements DataObjectFactoryInterface
      * @param array $data
      * @return \SubscribePro\Service\Token\TokenInterface
      */
-    public function createItem(array $data = [])
+    public function create(array $data = [])
     {
         return new $this->instanceName($data);
     }

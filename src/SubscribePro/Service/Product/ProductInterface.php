@@ -2,9 +2,9 @@
 
 namespace SubscribePro\Service\Product;
 
-use SubscribePro\Service\DataObjectInterface;
+use SubscribePro\Service\DataInterface;
 
-interface ProductInterface extends DataObjectInterface
+interface ProductInterface extends DataInterface
 {
     const ID = 'id';
     const SKU = 'sku';

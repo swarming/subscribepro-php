@@ -2,9 +2,9 @@
 
 namespace SubscribePro\Service\Token;
 
-use SubscribePro\Service\DataObjectInterface;
+use SubscribePro\Service\DataInterface;
 
-interface TokenInterface extends DataObjectInterface
+interface TokenInterface extends DataInterface
 {
     const ID = 'id';
     const NUMBER = 'number';
