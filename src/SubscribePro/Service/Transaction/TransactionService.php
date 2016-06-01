@@ -120,26 +120,26 @@ class TransactionService extends AbstractService
 
     /**
      * @param int $transactionId
-     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
+     * @param \SubscribePro\Service\Transaction\TransactionInterface|null $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
      * @throws \RuntimeException
      */
-    public function capture($transactionId, TransactionInterface $transaction)
+    public function capture($transactionId, TransactionInterface $transaction = null)
     {
-        $transactionData = [self::API_NAME_TRANSACTION => $transaction->getTransactionServiceData()];
+        $transactionData = $transaction ? [self::API_NAME_TRANSACTION => $transaction->getTransactionServiceData()] : [];
         $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/capture.json", $transactionData);
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
     }
 
     /**
      * @param int $transactionId
-     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
+     * @param \SubscribePro\Service\Transaction\TransactionInterface|null $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
      * @throws \RuntimeException
      */
-    public function credit($transactionId, TransactionInterface $transaction)
+    public function credit($transactionId, TransactionInterface $transaction = null)
     {
-        $transactionData = [self::API_NAME_TRANSACTION => $transaction->getTransactionServiceData()];
+        $transactionData = $transaction ? [self::API_NAME_TRANSACTION => $transaction->getTransactionServiceData()] : [];
         $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/credit.json", $transactionData);
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
     }

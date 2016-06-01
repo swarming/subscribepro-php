@@ -391,8 +391,9 @@ class Transaction extends DataObject implements TransactionInterface
      */
     public function getTransactionServiceData()
     {
+        /* TODO find out about requirement of currency code when amount is specified */
         if ($this->getData(self::AMOUNT) && !$this->getData(self::CURRENCY_CODE)) {
-            throw new \InvalidArgumentException("Currency code not specified for amount.");
+            throw new \InvalidArgumentException("Currency code not specified for given amount.");
         }
         return array_intersect_key($this->data, $this->transactionServiceFields);
     }
