@@ -22,24 +22,24 @@ interface TokenInterface extends DataObjectInterface
     const COUNTRY = 'country';
     const PHONE = 'phone';
     const TOKEN = 'token';
-    const STORAGE_STATE = 'storage_state';
-    const TEST = 'test';
     const LAST_FOUR_DIGITS = 'last_four_digits';
     const FIRST_SIX_DIGITS = 'first_six_digits';
     const CARD_TYPE = 'card_type';
     const ELIGIBLE_FOR_CARD_UPDATER = 'eligible_for_card_updater';
     const PAYMENT_METHOD_TYPE = 'payment_method_type';
     const FINGERPRINT = 'fingerprint';
+    const STORAGE_STATE = 'storage_state';
+    const TEST = 'test';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     
     /**
-     * @return int|null
+     * @return string|null
      */
     public function getNumber();
 
     /**
-     * @param int $number
+     * @param string $number
      * @return $this
      */
     public function setNumber($number);
@@ -195,16 +195,6 @@ interface TokenInterface extends DataObjectInterface
     /**
      * @return string|null
      */
-    public function getStorageState();
-
-    /**
-     * @return string|null
-     */
-    public function getTest();
-
-    /**
-     * @return string|null
-     */
     public function getLastFourDigits();
 
     /**
@@ -231,4 +221,26 @@ interface TokenInterface extends DataObjectInterface
      * @return string|null
      */
     public function getFingerprint();
+
+    /**
+     * @return string|null
+     */
+    public function getStorageState();
+
+    /**
+     * @return string|null
+     */
+    public function getTest();
+
+    /**
+     * @param string|null $format
+     * @return string
+     */
+    public function getCreatedAt($format = null);
+
+    /**
+     * @param string|null $format
+     * @return string
+     */
+    public function getUpdatedAt($format = null);
 }

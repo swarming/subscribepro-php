@@ -3,46 +3,80 @@
 namespace SubscribePro\Service\PaymentProfile;
 
 use SubscribePro\Service\AbstractService;
-use SubscribePro\Service\Transaction\TransactionInterface;
 
 class PaymentProfileService extends AbstractService
 {
     /**
+     * Service name
+     */
+    const NAME = 'payment_profile';
+
+    const API_NAME_PROFILE = 'payment_profile';
+    const API_NAME_PROFILES = 'payment_profiles';
+
+    /**
      * @var string
      */
-    protected $allowedKeysForFilter = [
+    protected $allowedFilters = [
         PaymentProfileInterface::MAGENTO_CUSTOMER_ID,
-        PaymentProfileInterface::CUSTOMER_EMAIL,
+        PaymentProfileInterface::CUSTOMER_EMAIL
     ];
+
+    /**
+     * @param \SubscribePro\Sdk $sdk
+     * @return \SubscribePro\Service\DataObjectFactoryInterface
+     */
+    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    {
+        return new PaymentProfileFactory(
+            $sdk->getAddressService()->getDataFactory(),
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\PaymentProfile\PaymentProfile')
+        );
+    }
+
     /**
      * @param array $data
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      */
     public function createPaymentProfile(array $data = [])
     {
-        return $this->createItem($data);
+        return $this->dataFactory->createItem($data);
     }
 
     /**
-     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $item
+     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function savePaymentProfile(PaymentProfileInterface $item)
+    public function savePaymentProfile(PaymentProfileInterface $paymentProfile)
     {
-        $createUrl = '/v1/vault/paymentprofile.json';
-        $updateUrl = "/v1/vault/paymentprofiles/{$item->getId()}.json";
-        return $this->saveItem($item, $createUrl, $updateUrl, 'payment_profile', 'POST', 'PUT');
+        $postData = [self::API_NAME_PROFILE => $paymentProfile->getFormData()];
+        $response = $paymentProfile->isNew()
+            ? $this->httpClient->post('/v1/vault/paymentprofile.json', $postData)
+            : $this->httpClient->put("/v1/vault/paymentprofiles/{$paymentProfile->getId()}.json", $postData);
+        return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
     /**
-     * @param $id
-     * @throws \RuntimeException
+     * @param int $paymentProfileId
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     * @throws \RuntimeException
      */
-    public function loadPaymentProfile($id)
+    public function redact($paymentProfileId)
     {
-        return $this->loadItem("/v1/vault/paymentprofiles/{$id}.json", 'payment_profile');
+        $response = $this->httpClient->put("v1/vault/paymentprofiles/{$paymentProfileId}/redact.json");
+        return $this->retrieveItem($response, self::API_NAME_PROFILE);
+    }
+
+    /**
+     * @param int $paymentProfileId
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     * @throws \RuntimeException
+     */
+    public function loadPaymentProfile($paymentProfileId)
+    {
+        $response = $this->httpClient->get("/v1/vault/paymentprofiles/{$paymentProfileId}.json");
+        return $this->retrieveItem($response, self::API_NAME_PROFILE);
     }
 
     /**
@@ -57,14 +91,15 @@ class PaymentProfileService extends AbstractService
      */
     public function loadPaymentProfiles(array $filters = [])
     {
-        $invalidFilters = array_diff_key($filters, array_flip($this->allowedKeysForFilter));
+        $invalidFilters = array_diff_key($filters, array_flip($this->allowedFilters));
         if (!empty($invalidFilters)) {
             throw new \InvalidArgumentException(
-                'Only [' . implode(', ', $this->allowedKeysForFilter) . '] query filters are allowed.'
+                'Only [' . implode(', ', $this->allowedFilters) . '] query filters are allowed.'
             );
         }
 
-        return $this->loadItems($filters, '/v1/vault/paymentprofiles.json', 'payment_profiles');
+        $response = $this->httpClient->get('/v1/vault/paymentprofiles.json', $filters);
+        return $this->retrieveItems($response, self::API_NAME_PROFILES);
     }
 
     /**
@@ -72,89 +107,47 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function thirdPartyToken(PaymentProfileInterface $paymentProfile)
+    public function saveThirdPartyToken(PaymentProfileInterface $paymentProfile)
     {
-        $paymentProfileData = ['payment_profile' => $paymentProfile->getThirdPartyTokenData()];
-        $response = $this->httpClient->post("v2/paymentprofile/third-party-token.json", $paymentProfileData);
-
-        $data = !empty($response['payment_profile']) ? $response['payment_profile'] : [];
-        $paymentProfile->importData($data);
-
-        return $paymentProfile;
+        $paymentProfileData = [self::API_NAME_PROFILE => $paymentProfile->getThirdPartyTokenFormData()];
+        $response = $this->httpClient->post("/v2/paymentprofile/third-party-token.json", $paymentProfileData);
+        return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
     /**
-     * @param int $paymentProfileId
+     * @param string $token
+     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function redact($paymentProfileId)
+    public function storeToken($token, PaymentProfileInterface $paymentProfile)
     {
-        $response = $this->httpClient->put("v1/vault/paymentprofiles/{$paymentProfileId}/redact.json");
-
-        $data = !empty($response['payment_profile']) ? $response['payment_profile'] : [];
-        return $this->createItem($data);
+        $postData = ['payment_profile' => $paymentProfile->getTokenFormData()];
+        $response = $this->httpClient->post("v1/vault/tokens/{$token}/store.json", $postData);
+        return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
     /**
-     * @param int $paymentProfileId
-     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
-     * @return \SubscribePro\Service\Transaction\TransactionInterface
+     * @param string $token
+     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function authorize($paymentProfileId, TransactionInterface $transaction)
+    public function verifyAndStoreToken($token, PaymentProfileInterface $paymentProfile)
     {
-        $transactionData = ['transaction' => $transaction->getFormData()];
-        $response = $this->httpClient->post("v1/vault/paymentprofiles/{$paymentProfileId}/authorize.json", $transactionData);
-
-        $data = !empty($response['transaction']) ? $response['transaction'] : [];
-        $transaction->importData($data);
-
-        return $transaction;
+        $postData = ['payment_profile' => $paymentProfile->getTokenFormData()];
+        $response = $this->httpClient->post("v1/vault/tokens/{$token}/verifyandstore.json", $postData);
+        return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
     /**
-     * @param int $paymentProfileId
-     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
-     * @return \SubscribePro\Service\Transaction\TransactionInterface
+     * @param string $token
+     * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function purchase($paymentProfileId, TransactionInterface $transaction)
+    public function loadPaymentProfileByToken($token)
     {
-        $transactionData = ['transaction' => $transaction->getFormData()];
-        $response = $this->httpClient->post("v1/vault/paymentprofiles/{$paymentProfileId}/purchase.json", $transactionData);
-
-        $data = !empty($response['transaction']) ? $response['transaction'] : [];
-        $transaction->importData($data);
-
-        return $transaction;
-    }
-
-    /**
-     * @param int $paymentProfileId
-     * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
-     * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
-     */
-    public function verify($paymentProfileId, TransactionInterface $transaction)
-    {
-        $transactionData = ['transaction' => $transaction->getVerifyData()];
-        $response = $this->httpClient->post("v1/vault/paymentprofiles/{$paymentProfileId}/verify.json", $transactionData);
-
-        $data = !empty($response['transaction']) ? $response['transaction'] : [];
-        $transaction->importData($data);
-
-        return $transaction;
-    }
-
-    /**
-     * @param \SubscribePro\Sdk $sdk
-     */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
-    {
-        $this->dataFactory = new PaymentProfileFactory(
-            $sdk->getAddressService()->getDataFactory(),
-            $this->getConfigValue('instanceName', '\SubscribePro\Service\PaymentProfile\PaymentProfile')
-        );
+        $response = $this->httpClient->get("v1/vault/tokens/{$token}/paymentprofile.json");
+        return $this->retrieveItem($response, self::API_NAME_PROFILE);
     }
 }

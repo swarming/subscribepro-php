@@ -17,7 +17,7 @@ class AddressFactory implements DataObjectFactoryInterface
     public function __construct(
         $instanceName = '\SubscribePro\Service\Address\Address'
     ) {
-        if (!is_a($instanceName, '\SubscribePro\Service\Address\AddressInterface', true)) {
+        if (!is_subclass_of($instanceName, '\SubscribePro\Service\Address\AddressInterface')) {
             throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Address\\AddressInterface.");
         }
         $this->instanceName = $instanceName;

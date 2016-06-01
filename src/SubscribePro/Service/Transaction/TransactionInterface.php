@@ -9,7 +9,7 @@ interface TransactionInterface extends DataObjectInterface
     const ID = 'id';
     const GATEWAY_SPECIFIC_RESPONSE = 'gateway_specific_response';
     const GATEWAY_TYPE = 'gateway_type';
-    const AUTHORIZE_NET_RESPONSE_REASON_CODE = 'authorize_net_response_reason_code 	';
+    const AUTHORIZE_NET_RESPONSE_REASON_CODE = 'authorize_net_response_reason_code';
     const SUBSCRIBE_PRO_ERROR_DESCRIPTION = 'subscribe_pro_error_description';
     const CREDITCARD_TYPE = 'creditcard_type';
     const CREDITCARD_LAST_DIGITS = 'creditcard_last_digits';

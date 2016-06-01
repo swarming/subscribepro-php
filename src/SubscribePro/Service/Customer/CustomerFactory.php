@@ -17,7 +17,7 @@ class CustomerFactory implements DataObjectFactoryInterface
     public function __construct(
         $instanceName = '\SubscribePro\Service\Customer\Customer'
     ) {
-        if (!is_a($instanceName, '\SubscribePro\Service\Customer\CustomerInterface', true)) {
+        if (!is_subclass_of($instanceName, '\SubscribePro\Service\Customer\CustomerInterface')) {
             throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Customer\\CustomerInterface.");
         }
         $this->instanceName = $instanceName;

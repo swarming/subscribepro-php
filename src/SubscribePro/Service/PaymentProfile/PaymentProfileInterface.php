@@ -30,6 +30,18 @@ interface PaymentProfileInterface extends DataObjectInterface
     const UPDATED = 'updated';
 
     /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getThirdPartyTokenFormData();
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getTokenFormData();
+
+    /**
      * @return string|null
      */
     public function getCustomerId();
@@ -194,16 +206,4 @@ interface PaymentProfileInterface extends DataObjectInterface
      * @return string
      */
     public function getUpdated();
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getThirdPartyTokenData();
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getCreateByTokenData();
 }

@@ -28,7 +28,7 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     /**
      * @var array
      */
-    protected $thirdPartyTokenFields = [
+    protected $creatingThirdPartyTokenFields = [
         self::CUSTOMER_ID => true,
         self::THIRD_PARTY_PAYMENT_TOKEN => true,
         self::THIRD_PARTY_VAULT_TYPE => false,
@@ -44,9 +44,9 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      * @var array
      */
     protected $updatingFields = [
-        self::CREDITCARD_MONTH => true, /* TODO: Field is not required */
-        self::CREDITCARD_YEAR => true, /* TODO: Field is not required */
-        self::BILLING_ADDRESS => true /* TODO: Field is not required */
+        self::CREDITCARD_MONTH => false,
+        self::CREDITCARD_YEAR => false,
+        self::BILLING_ADDRESS => false
     ];
 
     /**
@@ -90,22 +90,22 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function getThirdPartyTokenData()
+    public function getThirdPartyTokenFormData()
     {
-        foreach ($this->thirdPartyTokenFields as $field => $isRequired) {
+        foreach ($this->creatingThirdPartyTokenFields as $field => $isRequired) {
             if ($isRequired && null === $this->getData($field)) {
                 throw new \InvalidArgumentException("Not all required fields are set.");
             }
         }
 
-        return array_intersect_key($this->data, $this->thirdPartyTokenFields);
+        return array_intersect_key($this->data, $this->creatingThirdPartyTokenFields);
     }
 
     /**
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function getCreateByTokenData()
+    public function getTokenFormData()
     {
         if (!$this->getCustomerId() && !$this->getMagentoCustomerId()) {
             throw new \InvalidArgumentException("Not all required fields are set.");
@@ -119,7 +119,9 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      */
     public function isValid()
     {
-        return ($this->getCustomerId() || $this->getMagentoCustomerId()) && parent::isValid() && $this->getBillingAddress()->isValid();
+        return ($this->getCustomerId() || $this->getMagentoCustomerId())
+            && parent::isValid()
+            && $this->getBillingAddress()->isValid();
     }
 
     /**

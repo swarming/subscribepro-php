@@ -29,7 +29,7 @@ abstract class AbstractService
     ) {
         $this->httpClient = $sdk->getHttp();
         $this->config = $config;
-        $this->createDataFactory($sdk);
+        $this->dataFactory = $this->createDataFactory($sdk);
     }
 
     /**
@@ -44,6 +44,7 @@ abstract class AbstractService
 
     /**
      * @param \SubscribePro\Sdk $sdk
+     * @return \SubscribePro\Service\DataObjectFactoryInterface
      */
     abstract protected function createDataFactory(\SubscribePro\Sdk $sdk);
 
@@ -56,74 +57,29 @@ abstract class AbstractService
     }
 
     /**
-     * @param array $data
-     * @return \SubscribePro\Service\DataObjectInterface
-     */
-    protected function createItem(array $data = [])
-    {
-        return $this->dataFactory->createItem($data);
-    }
-
-    /**
-     * @param string $entityUrl
+     * @param array $response
      * @param string $entityName
+     * @param \SubscribePro\Service\DataObjectInterface|null $item
      * @return \SubscribePro\Service\DataObjectInterface
-     * @throws \RuntimeException
      */
-    protected function loadItem($entityUrl, $entityName)
+    protected function retrieveItem($response, $entityName, DataObjectInterface $item = null)
     {
-        $response = $this->httpClient->get($entityUrl);
-
         $itemData = !empty($response[$entityName]) ? $response[$entityName] : [];
-        $item = $this->createItem($itemData);
-
-        return $item;
-    }
-
-    /**
-     * @param \SubscribePro\Service\DataObjectInterface $item
-     * @param string|null $createUrl
-     * @param string|null $updateUrl
-     * @param string $entityName
-     * @param string|null $createMethod
-     * @param string|null $updateMethod
-     * @return \SubscribePro\Service\DataObjectInterface
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     */
-    protected function saveItem($item, $createUrl, $updateUrl, $entityName, $createMethod = 'POST', $updateMethod = 'POST')
-    {
-        if ($item->isNew() && !$createUrl) {
-            throw new \BadMethodCallException("Saving new instances is not allowed in {$entityName} service");
-        }
-        if (!$item->isNew() && !$updateUrl) {
-            throw new \BadMethodCallException("Update is not allowed in {$entityName} service");
-        }
-        
-        $url = $item->isNew() ? $createUrl : $updateUrl;
-        $method = $item->isNew() ? $createMethod : $updateMethod;
-        $response = $this->httpClient->request($method, $url, [$entityName => $item->getFormData()]);
-        
-        $itemData = !empty($response[$entityName]) ? $response[$entityName] : [];
+        $item = $item ?: $this->dataFactory->createItem();
         $item->importData($itemData);
-
         return $item;
     }
 
     /**
-     * @param array|string|int|null $filters
-     * @param string $entitiesUrl
+     * @param array $response
      * @param string $entitiesName
-     * @throws \RuntimeException
      * @return \SubscribePro\Service\DataObjectInterface[]
      */
-    protected function loadItems($filters = null, $entitiesUrl, $entitiesName)
+    protected function retrieveItems($response, $entitiesName)
     {
-        $params = is_array($filters) ? $filters : [];
-        $response = $this->httpClient->get($entitiesUrl, $params);
-
         $responseData = !empty($response[$entitiesName]) ? $response[$entitiesName] : [];
-        return $this->createItems($responseData);
+        $items = $this->createItems($responseData);
+        return $items;
     }
 
     /**
@@ -133,7 +89,7 @@ abstract class AbstractService
     protected function createItems(array $data = [])
     {
         return array_map(function ($itemData) {
-            return $this->createItem($itemData);
+            return $this->dataFactory->createItem($itemData);
         }, $data);
     }
 }

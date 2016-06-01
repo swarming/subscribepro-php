@@ -32,6 +32,14 @@ class Token extends DataObject implements TokenInterface
     ];
 
     /**
+     * @return array
+     */
+    protected function getFormFields()
+    {
+        return $this->creatingFields;
+    }
+
+    /**
      * @return int|null
      */
     public function getNumber()
@@ -280,22 +288,6 @@ class Token extends DataObject implements TokenInterface
     /**
      * @return string|null
      */
-    public function getStorageState()
-    {
-        return $this->getData(self::STORAGE_STATE);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTest()
-    {
-        return $this->getData(self::TEST);
-    }
-
-    /**
-     * @return string|null
-     */
     public function getLastFourDigits()
     {
         return $this->getData(self::LAST_FOUR_DIGITS);
@@ -342,6 +334,22 @@ class Token extends DataObject implements TokenInterface
     }
 
     /**
+     * @return string|null
+     */
+    public function getStorageState()
+    {
+        return $this->getData(self::STORAGE_STATE);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTest()
+    {
+        return $this->getData(self::TEST);
+    }
+
+    /**
      * @param null|string $format
      * @return string|null
      */
@@ -357,10 +365,5 @@ class Token extends DataObject implements TokenInterface
     public function getUpdatedAt($format = null)
     {
         return \SubscribePro\formatDate($this->getData(self::UPDATED_AT), $format);
-    }
-
-    protected function getFormFields()
-    {
-        return $this->creatingFields;
     }
 }

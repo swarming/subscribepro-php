@@ -7,9 +7,17 @@ use SubscribePro\Service\AbstractService;
 class CustomerService extends AbstractService
 {
     /**
+     * Service name
+     */
+    const NAME = 'customer';
+
+    const ENTITY_NAME = 'customer';
+    const ENTITIES_NAME = 'customers';
+
+    /**
      * @var string
      */
-    protected $allowedKeysForFilter = [
+    protected $allowedFilters = [
         CustomerInterface::MAGENTO_CUSTOMER_ID,
         CustomerInterface::EMAIL,
         CustomerInterface::FIRST_NAME,
@@ -17,12 +25,23 @@ class CustomerService extends AbstractService
     ];
 
     /**
+     * @param \SubscribePro\Sdk $sdk
+     * @return \SubscribePro\Service\DataObjectFactoryInterface
+     */
+    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    {
+        return new CustomerFactory(
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\Customer\Customer')
+        );
+    }
+
+    /**
      * @param array $data
      * @return \SubscribePro\Service\Customer\CustomerInterface
      */
     public function createCustomer(array $data = [])
     {
-        return $this->createItem($data);
+        return $this->dataFactory->createItem($data);
     }
 
     /**
@@ -32,17 +51,20 @@ class CustomerService extends AbstractService
      */
     public function saveCustomer(CustomerInterface $item)
     {
-        return $this->saveItem($item, '/v2/customer.json', "/v2/customers/{$item->getId()}.json", 'customer');
+        $url = $item->isNew() ? '/v2/customer.json' : "/v2/customers/{$item->getId()}.json";
+        $response = $this->httpClient->post($url, [self::ENTITY_NAME => $item->getFormData()]);
+        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
     }
 
     /**
-     * @param $id
-     * @throws \RuntimeException
+     * @param int $customerId
      * @return \SubscribePro\Service\Customer\CustomerInterface
+     * @throws \RuntimeException
      */
-    public function loadCustomer($id)
+    public function loadCustomer($customerId)
     {
-        return $this->loadItem("/v2/customers/{$id}.json", 'customer');
+        $response = $this->httpClient->get("/v2/customers/{$customerId}.json");
+        return $this->retrieveItem($response, self::ENTITY_NAME);
     }
 
     /**
@@ -59,23 +81,14 @@ class CustomerService extends AbstractService
      */
     public function loadCustomers(array $filters = [])
     {
-        $invalidFilters = array_diff_key($filters, array_flip($this->allowedKeysForFilter));
+        $invalidFilters = array_diff_key($filters, array_flip($this->allowedFilters));
         if (!empty($invalidFilters)) {
             throw new \InvalidArgumentException(
-                'Only [' . implode(', ', $this->allowedKeysForFilter) . '] query filters are allowed.'
+                'Only [' . implode(', ', $this->allowedFilters) . '] query filters are allowed.'
             );
         }
 
-        return $this->loadItems($filters, '/v2/customers.json', 'customers');
-    }
-
-    /**
-     * @param \SubscribePro\Sdk $sdk
-     */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
-    {
-        $this->dataFactory = new CustomerFactory(
-            $this->getConfigValue('instanceName', '\SubscribePro\Service\Customer\Customer')
-        );
+        $response = $this->httpClient->get('/v2/customers.json', $filters);
+        return $this->retrieveItems($response, self::ENTITIES_NAME);
     }
 }

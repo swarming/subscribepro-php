@@ -17,7 +17,7 @@ class TransactionFactory implements DataObjectFactoryInterface
     public function __construct(
         $instanceName = '\SubscribePro\Service\Transaction\Transaction'
     ) {
-        if (!is_a($instanceName, '\SubscribePro\Service\Transaction\TransactionInterface', true)) {
+        if (!is_subclass_of($instanceName, '\SubscribePro\Service\Transaction\TransactionInterface')) {
             throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Transaction\\TransactionInterface.");
         }
         $this->instanceName = $instanceName;

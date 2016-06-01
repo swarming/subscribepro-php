@@ -7,11 +7,20 @@ use SubscribePro\Service\AbstractService;
 class AddressService extends AbstractService
 {
     /**
+     * Service name
+     */
+    const NAME = 'address';
+
+    const ENTITY_NAME = 'address';
+    const ENTITIES_NAME = 'addresses';
+
+    /**
      * @param \SubscribePro\Sdk $sdk
+     * @return \SubscribePro\Service\DataObjectFactoryInterface
      */
     protected function createDataFactory(\SubscribePro\Sdk $sdk)
     {
-        $this->dataFactory = new AddressFactory(
+        return new AddressFactory(
             $this->getConfigValue('instanceName', '\SubscribePro\Service\Address\Address')
         );
     }
@@ -22,17 +31,18 @@ class AddressService extends AbstractService
      */
     public function createAddress(array $data = [])
     {
-        return $this->createItem($data);
+        return $this->dataFactory->createItem($data);
     }
 
     /**
-     * @param $id
-     * @throws \RuntimeException
+     * @param int $addressId
      * @return \SubscribePro\Service\Address\AddressInterface
+     * @throws \RuntimeException
      */
-    public function loadAddress($id)
+    public function loadAddress($addressId)
     {
-        return $this->loadItem("/v2/addresses/{$id}.json", 'address');
+        $response = $this->httpClient->get("/v2/addresses/{$addressId}.json");
+        return $this->retrieveItem($response, self::ENTITY_NAME);
     }
 
     /**
@@ -42,7 +52,9 @@ class AddressService extends AbstractService
      */
     public function saveAddress(AddressInterface $item)
     {
-        return $this->saveItem($item, '/v2/address.json', "/v2/addresses/{$item->getId()}.json", 'address');
+        $url = $item->isNew() ? '/v2/address.json' : "/v2/addresses/{$item->getId()}.json";
+        $response = $this->httpClient->post($url, [self::ENTITY_NAME => $item->getFormData()]);
+        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
     }
 
     /**
@@ -52,9 +64,9 @@ class AddressService extends AbstractService
      */
     public function loadAddresses($customerId = null)
     {
-        $filters = $customerId ? [AddressInterface::CUSTOMER_ID => $customerId] : [];
-
-        return $this->loadItems($filters, '/v2/addresses.json', 'addresses');
+        $params = $customerId ? [AddressInterface::CUSTOMER_ID => $customerId] : [];
+        $response = $this->httpClient->get('/v2/addresses.json', $params);
+        return $this->retrieveItems($response, self::ENTITIES_NAME);
     }
 
     /**
@@ -65,11 +77,7 @@ class AddressService extends AbstractService
      */
     public function findOrSave($item)
     {
-        $response = $this->httpClient->post('/v2/address/find-or-create.json', ['address' => $item->getFormData()]);
-
-        $itemData = isset($response['address']) ? $response['address'] : [];
-        $item->importData($itemData);
-
-        return $item;
+        $response = $this->httpClient->post('/v2/address/find-or-create.json', [self::ENTITY_NAME => $item->getFormData()]);
+        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
     }
 }

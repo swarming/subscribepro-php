@@ -31,7 +31,7 @@ class SubscriptionFactory implements DataObjectFactoryInterface
         \SubscribePro\Service\DataObjectFactoryInterface $paymentProfileFactory,
         $instanceName = '\SubscribePro\Service\Subscription\Subscription'
     ) {
-        if (!is_a($instanceName, '\SubscribePro\Service\Subscription\SubscriptionInterface', true)) {
+        if (!is_subclass_of($instanceName, '\SubscribePro\Service\Subscription\SubscriptionInterface')) {
             throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Subscription\\SubscriptionInterface.");
         }
         $this->instanceName = $instanceName;

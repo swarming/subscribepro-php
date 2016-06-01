@@ -7,12 +7,31 @@ use SubscribePro\Service\AbstractService;
 class ProductService extends AbstractService
 {
     /**
+     * Service name
+     */
+    const NAME = 'product';
+
+    const ENTITY_NAME = 'product';
+    const ENTITIES_NAME = 'products';
+
+    /**
+     * @param \SubscribePro\Sdk $sdk
+     * @return \SubscribePro\Service\DataObjectFactoryInterface
+     */
+    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    {
+        return new ProductFactory(
+            $this->getConfigValue('instanceName', '\SubscribePro\Service\Product\Product')
+        );
+    }
+
+    /**
      * @param array $data
      * @return \SubscribePro\Service\Product\ProductInterface
      */
     public function createProduct(array $data = [])
     {
-        return $this->createItem($data);
+        return $this->dataFactory->createItem($data);
     }
 
     /**
@@ -22,17 +41,20 @@ class ProductService extends AbstractService
      */
     public function saveProduct(ProductInterface $item)
     {
-        return $this->saveItem($item, '/v2/product.json', "/v2/products/{$item->getId()}.json", 'product');
+        $url = $item->isNew() ? '/v2/product.json' : "/v2/products/{$item->getId()}.json";
+        $response = $this->httpClient->post($url, [self::ENTITY_NAME => $item->getFormData()]);
+        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
     }
 
     /**
-     * @param $id
-     * @throws \RuntimeException
+     * @param int $productId
      * @return \SubscribePro\Service\Product\ProductInterface
+     * @throws \RuntimeException
      */
-    public function loadProduct($id)
+    public function loadProduct($productId)
     {
-        return $this->loadItem("/v2/products/{$id}.json", 'product');
+        $response = $this->httpClient->get("/v2/products/{$productId}.json");
+        return $this->retrieveItem($response, self::ENTITY_NAME);
     }
 
     /**
@@ -43,17 +65,7 @@ class ProductService extends AbstractService
     public function loadProducts($sku = null)
     {
         $filters = $sku ? [ProductInterface::SKU => $sku] : [];
-
-        return $this->loadItems($filters, '/v2/products.json', 'products');
-    }
-
-    /**
-     * @param \SubscribePro\Sdk $sdk
-     */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
-    {
-        $this->dataFactory = new ProductFactory(
-            $this->getConfigValue('instanceName', '\SubscribePro\Service\Product\Product')
-        );
+        $response = $this->httpClient->get('/v2/products.json', $filters);
+        return $this->retrieveItems($response, self::ENTITIES_NAME);
     }
 }
