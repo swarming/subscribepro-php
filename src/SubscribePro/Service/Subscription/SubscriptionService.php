@@ -75,7 +75,7 @@ class SubscriptionService extends AbstractService
      * @param int $subscriptionId
      * @throws \RuntimeException
      */
-    public function cancel($subscriptionId)
+    public function cancelSubscription($subscriptionId)
     {
         $this->httpClient->post("v2/subscriptions/{$subscriptionId}/cancel.json");
     }
@@ -84,7 +84,7 @@ class SubscriptionService extends AbstractService
      * @param int $subscriptionId
      * @throws \RuntimeException
      */
-    public function pause($subscriptionId)
+    public function pauseSubscription($subscriptionId)
     {
         $this->httpClient->post("v2/subscriptions/{$subscriptionId}/pause.json");
     }
@@ -93,7 +93,7 @@ class SubscriptionService extends AbstractService
      * @param int $subscriptionId
      * @throws \RuntimeException
      */
-    public function restart($subscriptionId)
+    public function restartSubscription($subscriptionId)
     {
         $this->httpClient->post("v2/subscriptions/{$subscriptionId}/restart.json");
     }
@@ -102,7 +102,7 @@ class SubscriptionService extends AbstractService
      * @param int $subscriptionId
      * @throws \RuntimeException
      */
-    public function skip($subscriptionId)
+    public function skipSubscription($subscriptionId)
     {
         $this->httpClient->post("v2/subscriptions/{$subscriptionId}/skip.json");
     }
