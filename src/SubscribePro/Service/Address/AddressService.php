@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\Address;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 
 class AddressService extends AbstractService
@@ -18,7 +19,7 @@ class AddressService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return new AddressFactory(
             $this->getConfigValue('instanceName', '\SubscribePro\Service\Address\Address')
