@@ -11,8 +11,8 @@ class AddressService extends AbstractService
      */
     const NAME = 'address';
 
-    const ENTITY_NAME = 'address';
-    const ENTITIES_NAME = 'addresses';
+    const API_NAME_ADDRESS = 'address';
+    const API_NAME_ADDRESSES = 'addresses';
 
     /**
      * @param \SubscribePro\Sdk $sdk
@@ -42,7 +42,7 @@ class AddressService extends AbstractService
     public function loadAddress($addressId)
     {
         $response = $this->httpClient->get("/v2/addresses/{$addressId}.json");
-        return $this->retrieveItem($response, self::ENTITY_NAME);
+        return $this->retrieveItem($response, self::API_NAME_ADDRESS);
     }
 
     /**
@@ -53,8 +53,20 @@ class AddressService extends AbstractService
     public function saveAddress(AddressInterface $item)
     {
         $url = $item->isNew() ? '/v2/address.json' : "/v2/addresses/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::ENTITY_NAME => $item->getFormData()]);
-        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
+        $response = $this->httpClient->post($url, [self::API_NAME_ADDRESS => $item->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_ADDRESS, $item);
+    }
+
+    /**
+     * @param \SubscribePro\Service\Address\AddressInterface $item
+     * @return \SubscribePro\Service\Address\AddressInterface
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public function findOrSave($item)
+    {
+        $response = $this->httpClient->post('/v2/address/find-or-create.json', [self::API_NAME_ADDRESS => $item->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_ADDRESS, $item);
     }
 
     /**
@@ -66,18 +78,6 @@ class AddressService extends AbstractService
     {
         $params = $customerId ? [AddressInterface::CUSTOMER_ID => $customerId] : [];
         $response = $this->httpClient->get('/v2/addresses.json', $params);
-        return $this->retrieveItems($response, self::ENTITIES_NAME);
-    }
-
-    /**
-     * @param \SubscribePro\Service\Address\AddressInterface $item
-     * @return \SubscribePro\Service\Address\AddressInterface
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     */
-    public function findOrSave($item)
-    {
-        $response = $this->httpClient->post('/v2/address/find-or-create.json', [self::ENTITY_NAME => $item->getFormData()]);
-        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
+        return $this->retrieveItems($response, self::API_NAME_ADDRESSES);
     }
 }

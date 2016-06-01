@@ -11,8 +11,8 @@ class ProductService extends AbstractService
      */
     const NAME = 'product';
 
-    const ENTITY_NAME = 'product';
-    const ENTITIES_NAME = 'products';
+    const API_NAME_PRODUCT = 'product';
+    const API_NAME_PRODUCTS = 'products';
 
     /**
      * @param \SubscribePro\Sdk $sdk
@@ -42,8 +42,8 @@ class ProductService extends AbstractService
     public function saveProduct(ProductInterface $item)
     {
         $url = $item->isNew() ? '/v2/product.json' : "/v2/products/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::ENTITY_NAME => $item->getFormData()]);
-        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
+        $response = $this->httpClient->post($url, [self::API_NAME_PRODUCT => $item->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_PRODUCT, $item);
     }
 
     /**
@@ -54,7 +54,7 @@ class ProductService extends AbstractService
     public function loadProduct($productId)
     {
         $response = $this->httpClient->get("/v2/products/{$productId}.json");
-        return $this->retrieveItem($response, self::ENTITY_NAME);
+        return $this->retrieveItem($response, self::API_NAME_PRODUCT);
     }
 
     /**
@@ -66,6 +66,6 @@ class ProductService extends AbstractService
     {
         $filters = $sku ? [ProductInterface::SKU => $sku] : [];
         $response = $this->httpClient->get('/v2/products.json', $filters);
-        return $this->retrieveItems($response, self::ENTITIES_NAME);
+        return $this->retrieveItems($response, self::API_NAME_PRODUCTS);
     }
 }

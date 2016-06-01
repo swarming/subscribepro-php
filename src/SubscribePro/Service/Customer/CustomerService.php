@@ -11,8 +11,8 @@ class CustomerService extends AbstractService
      */
     const NAME = 'customer';
 
-    const ENTITY_NAME = 'customer';
-    const ENTITIES_NAME = 'customers';
+    const API_NAME_CUSTOMER = 'customer';
+    const API_NAME_CUSTOMERS = 'customers';
 
     /**
      * @var string
@@ -52,8 +52,8 @@ class CustomerService extends AbstractService
     public function saveCustomer(CustomerInterface $item)
     {
         $url = $item->isNew() ? '/v2/customer.json' : "/v2/customers/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::ENTITY_NAME => $item->getFormData()]);
-        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
+        $response = $this->httpClient->post($url, [self::API_NAME_CUSTOMER => $item->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_CUSTOMER, $item);
     }
 
     /**
@@ -64,7 +64,7 @@ class CustomerService extends AbstractService
     public function loadCustomer($customerId)
     {
         $response = $this->httpClient->get("/v2/customers/{$customerId}.json");
-        return $this->retrieveItem($response, self::ENTITY_NAME);
+        return $this->retrieveItem($response, self::API_NAME_CUSTOMER);
     }
 
     /**
@@ -89,6 +89,6 @@ class CustomerService extends AbstractService
         }
 
         $response = $this->httpClient->get('/v2/customers.json', $filters);
-        return $this->retrieveItems($response, self::ENTITIES_NAME);
+        return $this->retrieveItems($response, self::API_NAME_CUSTOMERS);
     }
 }

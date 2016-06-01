@@ -11,8 +11,8 @@ class SubscriptionService extends AbstractService
      */
     const NAME = 'subscription';
 
-    const ENTITY_NAME = 'subscription';
-    const ENTITIES_NAME = 'subscriptions';
+    const API_NAME_SUBSCRIPTION = 'subscription';
+    const API_NAME_SUBSCRIPTIONS = 'subscriptions';
 
     /**
      * @param \SubscribePro\Sdk $sdk
@@ -44,8 +44,8 @@ class SubscriptionService extends AbstractService
     public function saveSubscription(SubscriptionInterface $item)
     {
         $url = $item->isNew() ? '/v2/subscription.json' : "/v2/subscriptions/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::ENTITY_NAME => $item->getFormData()]);
-        return $this->retrieveItem($response, self::ENTITY_NAME, $item);
+        $response = $this->httpClient->post($url, [self::API_NAME_SUBSCRIPTION => $item->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_SUBSCRIPTION, $item);
     }
 
     /**
@@ -56,7 +56,7 @@ class SubscriptionService extends AbstractService
     public function loadSubscription($subscriptionId)
     {
         $response = $this->httpClient->get("/v2/subscriptions/{$subscriptionId}.json");
-        return $this->retrieveItem($response, self::ENTITY_NAME);
+        return $this->retrieveItem($response, self::API_NAME_SUBSCRIPTION);
     }
 
     /**
@@ -68,7 +68,7 @@ class SubscriptionService extends AbstractService
     {
         $filters = $customerId ? [SubscriptionInterface::CUSTOMER_ID => $customerId] : [];
         $response = $this->httpClient->get('/v2/subscriptions.json', $filters);
-        return $this->retrieveItems($response, self::ENTITIES_NAME);
+        return $this->retrieveItems($response, self::API_NAME_SUBSCRIPTIONS);
     }
 
     /**
