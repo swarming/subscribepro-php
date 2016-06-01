@@ -50,9 +50,9 @@ class Address extends DataObject implements AddressInterface
      * @var array
      */
     protected $billingAddressFields = [
-        self::FIRST_NAME => false, /* TODO for update fields are not required (in docs they are required) */
+        self::FIRST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
         self::MIDDLE_NAME => false,
-        self::LAST_NAME => false, /* TODO for update fields are not required (in docs they are required) */
+        self::LAST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
         self::COMPANY => false,
         self::STREET1 => false,
         self::STREET2 => false,
@@ -88,6 +88,33 @@ class Address extends DataObject implements AddressInterface
         }
 
         return array_intersect_key($this->data, $this->billingAddressFields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUpdateDataValid()
+    {
+        foreach ($this->updatingFields as $field => $isRequired) {
+            if ($isRequired && null === $this->getData($field)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getUpdateData()
+    {
+        if (!$this->isUpdateDataValid()) {
+            throw new \InvalidArgumentException("Not all required fields are set.");
+        }
+
+        return array_intersect_key($this->data, $this->updatingFields);
     }
 
     /**

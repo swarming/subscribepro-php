@@ -33,6 +33,17 @@ interface AddressInterface extends DataInterface
      * @throws \InvalidArgumentException
      */
     public function getBillingAddressFormData();
+
+    /**
+     * @return bool
+     */
+    public function isUpdateDataValid();
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getUpdateData();
     
     /**
      * @return string|null
