@@ -36,10 +36,20 @@ interface PaymentProfileInterface extends DataInterface
     public function getThirdPartyTokenFormData();
 
     /**
+     * @return bool
+     */
+    public function isThirdPartyDataValid();
+
+    /**
      * @return array
      * @throws \InvalidArgumentException
      */
     public function getTokenFormData();
+
+    /**
+     * @return bool
+     */
+    public function isTokenDataValid();
 
     /**
      * @return string|null

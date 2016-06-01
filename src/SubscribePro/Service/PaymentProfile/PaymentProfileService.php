@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\PaymentProfile;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 
 class PaymentProfileService extends AbstractService
@@ -26,7 +27,7 @@ class PaymentProfileService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return new PaymentProfileFactory(
             $sdk->getAddressService()->getDataFactory(),
@@ -38,7 +39,7 @@ class PaymentProfileService extends AbstractService
      * @param array $data
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      */
-    public function createPaymentProfile(array $data = [])
+    public function createProfile(array $data = [])
     {
         return $this->dataFactory->create($data);
     }
@@ -48,7 +49,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function savePaymentProfile(PaymentProfileInterface $paymentProfile)
+    public function saveProfile(PaymentProfileInterface $paymentProfile)
     {
         $postData = [self::API_NAME_PROFILE => $paymentProfile->getFormData()];
         $response = $paymentProfile->isNew()
@@ -62,7 +63,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function redact($paymentProfileId)
+    public function redactProfile($paymentProfileId)
     {
         $response = $this->httpClient->put("v1/vault/paymentprofiles/{$paymentProfileId}/redact.json");
         return $this->retrieveItem($response, self::API_NAME_PROFILE);
@@ -73,7 +74,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function loadPaymentProfile($paymentProfileId)
+    public function loadProfile($paymentProfileId)
     {
         $response = $this->httpClient->get("/v1/vault/paymentprofiles/{$paymentProfileId}.json");
         return $this->retrieveItem($response, self::API_NAME_PROFILE);
@@ -89,7 +90,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface[]
      * @throws \RuntimeException
      */
-    public function loadPaymentProfiles(array $filters = [])
+    public function loadProfiles(array $filters = [])
     {
         $invalidFilters = array_diff_key($filters, array_flip($this->allowedFilters));
         if (!empty($invalidFilters)) {
@@ -109,8 +110,10 @@ class PaymentProfileService extends AbstractService
      */
     public function saveThirdPartyToken(PaymentProfileInterface $paymentProfile)
     {
-        $paymentProfileData = [self::API_NAME_PROFILE => $paymentProfile->getThirdPartyTokenFormData()];
-        $response = $this->httpClient->post("/v2/paymentprofile/third-party-token.json", $paymentProfileData);
+        $response = $this->httpClient->post(
+            "/v2/paymentprofile/third-party-token.json",
+            [self::API_NAME_PROFILE => $paymentProfile->getThirdPartyTokenFormData()]
+        );
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
@@ -122,8 +125,10 @@ class PaymentProfileService extends AbstractService
      */
     public function storeToken($token, PaymentProfileInterface $paymentProfile)
     {
-        $postData = ['payment_profile' => $paymentProfile->getTokenFormData()];
-        $response = $this->httpClient->post("v1/vault/tokens/{$token}/store.json", $postData);
+        $response = $this->httpClient->post(
+            "v1/vault/tokens/{$token}/store.json",
+            ['payment_profile' => $paymentProfile->getTokenFormData()]
+        );
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
@@ -135,8 +140,10 @@ class PaymentProfileService extends AbstractService
      */
     public function verifyAndStoreToken($token, PaymentProfileInterface $paymentProfile)
     {
-        $postData = ['payment_profile' => $paymentProfile->getTokenFormData()];
-        $response = $this->httpClient->post("v1/vault/tokens/{$token}/verifyandstore.json", $postData);
+        $response = $this->httpClient->post(
+            "v1/vault/tokens/{$token}/verifyandstore.json",
+            ['payment_profile' => $paymentProfile->getTokenFormData()]
+        );
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
@@ -145,7 +152,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function loadPaymentProfileByToken($token)
+    public function loadProfileByToken($token)
     {
         $response = $this->httpClient->get("v1/vault/tokens/{$token}/paymentprofile.json");
         return $this->retrieveItem($response, self::API_NAME_PROFILE);

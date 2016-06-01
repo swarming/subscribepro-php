@@ -87,18 +87,39 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return ($this->getCustomerId() || $this->getMagentoCustomerId())
+            && parent::isValid()
+            && $this->getBillingAddress()->isValid();
+    }
+
+    /**
      * @return array
      * @throws \InvalidArgumentException
      */
     public function getThirdPartyTokenFormData()
     {
-        foreach ($this->creatingThirdPartyTokenFields as $field => $isRequired) {
-            if ($isRequired && null === $this->getData($field)) {
-                throw new \InvalidArgumentException("Not all required fields are set.");
-            }
+        if (!$this->isThirdPartyDataValid()) {
+            throw new \InvalidArgumentException("Not all required fields are set.");
         }
 
         return array_intersect_key($this->data, $this->creatingThirdPartyTokenFields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isThirdPartyDataValid()
+    {
+        foreach ($this->creatingThirdPartyTokenFields as $field => $isRequired) {
+            if ($isRequired && null === $this->getData($field)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -107,21 +128,25 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      */
     public function getTokenFormData()
     {
-        if (!$this->getCustomerId() && !$this->getMagentoCustomerId()) {
+        if (!$this->isTokenDataValid()) {
             throw new \InvalidArgumentException("Not all required fields are set.");
         }
-        
+
         return $this->toArray();
     }
 
     /**
      * @return bool
      */
-    public function isValid()
+    public function isTokenDataValid()
     {
-        return ($this->getCustomerId() || $this->getMagentoCustomerId())
-            && parent::isValid()
-            && $this->getBillingAddress()->isValid();
+        foreach ($this->updatingFields as $field => $isRequired) {
+            if ($isRequired && null === $this->getData($field)) {
+                return false;
+            }
+        }
+
+        return $this->getCustomerId() || $this->getMagentoCustomerId();
     }
 
     /**
