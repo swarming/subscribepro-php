@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\Customer;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 
 class CustomerService extends AbstractService
@@ -28,7 +29,7 @@ class CustomerService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return new CustomerFactory(
             $this->getConfigValue('instanceName', '\SubscribePro\Service\Customer\Customer')
