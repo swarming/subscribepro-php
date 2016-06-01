@@ -64,7 +64,7 @@ class ProductService extends AbstractService
      */
     public function loadProducts($sku = null)
     {
-        $filters = $sku ? [ProductInterface::SKU => $sku] : [];
+        $filters = !empty($sku) ? [ProductInterface::SKU => $sku] : [];
         $response = $this->httpClient->get('/v2/products.json', $filters);
         return $this->retrieveItems($response, self::API_NAME_PRODUCTS);
     }
