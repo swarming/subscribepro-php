@@ -82,7 +82,7 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     public function getFormData()
     {
         $formData = parent::getFormData();
-        $formData[self::BILLING_ADDRESS] = $this->getBillingAddress()->getFormData();
+        $formData[self::BILLING_ADDRESS] = $this->getBillingAddress()->getBillingAddressFormData();
         return $formData;
     }
 
@@ -93,7 +93,7 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     {
         return ($this->getCustomerId() || $this->getMagentoCustomerId())
             && parent::isValid()
-            && $this->getBillingAddress()->isValid();
+            && $this->getBillingAddress()->isBillingAddressValid();
     }
 
     /**

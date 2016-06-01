@@ -22,6 +22,17 @@ interface AddressInterface extends DataInterface
     const PHONE = 'phone';
     const CREATED = 'created';
     const UPDATED = 'updated';
+
+    /**
+     * @return bool
+     */
+    public function isBillingAddressValid();
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getBillingAddressFormData();
     
     /**
      * @return string|null

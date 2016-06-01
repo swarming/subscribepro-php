@@ -47,6 +47,50 @@ class Address extends DataObject implements AddressInterface
     ];
 
     /**
+     * @var array
+     */
+    protected $billingAddressFields = [
+        self::FIRST_NAME => false, /* TODO for update fields are not required (in docs they are required) */
+        self::MIDDLE_NAME => false,
+        self::LAST_NAME => false, /* TODO for update fields are not required (in docs they are required) */
+        self::COMPANY => false,
+        self::STREET1 => false,
+        self::STREET2 => false,
+        self::CITY => false,
+        self::REGION => false,
+        self::POSTCODE => false,
+        self::COUNTRY => false,
+        self::PHONE => false
+    ];
+
+    /**
+     * @return bool
+     */
+    public function isBillingAddressValid()
+    {
+        foreach ($this->billingAddressFields as $field => $isRequired) {
+            if ($isRequired && null === $this->getData($field)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getBillingAddressFormData()
+    {
+        if (!$this->isBillingAddressValid()) {
+            throw new \InvalidArgumentException("Not all required fields are set.");
+        }
+
+        return array_intersect_key($this->data, $this->billingAddressFields);
+    }
+
+    /**
      * @return string|null
      */
     public function getCustomerId()
