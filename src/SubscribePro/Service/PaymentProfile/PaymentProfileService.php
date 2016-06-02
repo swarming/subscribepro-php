@@ -123,7 +123,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function storeToken($token, PaymentProfileInterface $paymentProfile)
+    public function saveToken($token, PaymentProfileInterface $paymentProfile)
     {
         $response = $this->httpClient->post(
             "v1/vault/tokens/{$token}/store.json",
@@ -138,7 +138,7 @@ class PaymentProfileService extends AbstractService
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      * @throws \RuntimeException
      */
-    public function verifyAndStoreToken($token, PaymentProfileInterface $paymentProfile)
+    public function verifyAndSaveToken($token, PaymentProfileInterface $paymentProfile)
     {
         $response = $this->httpClient->post(
             "v1/vault/tokens/{$token}/verifyandstore.json",
