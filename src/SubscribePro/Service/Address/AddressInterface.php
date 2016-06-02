@@ -24,6 +24,12 @@ interface AddressInterface extends DataInterface
     const UPDATED = 'updated';
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id);
+    
+    /**
      * @param bool $isNew
      * @return bool
      */

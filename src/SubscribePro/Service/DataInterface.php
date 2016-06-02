@@ -16,12 +16,6 @@ interface DataInterface
     public function getId();
 
     /**
-     * @param int|null $id
-     * @return $this
-     */
-    public function setId($id);
-
-    /**
      * @return bool
      */
     public function isNew();

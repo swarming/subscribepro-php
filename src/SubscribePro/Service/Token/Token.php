@@ -9,7 +9,7 @@ class Token extends DataObject implements TokenInterface
     /**
      * @var string
      */
-    protected $idField = self::ID;
+    protected $idField = self::TOKEN;
 
     /**
      * @var array
@@ -42,6 +42,30 @@ class Token extends DataObject implements TokenInterface
     /**
      * @return string|null
      */
+    public function getToken()
+    {
+        return $this->getData(self::TOKEN);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentMethodType()
+    {
+        return $this->getData(self::PAYMENT_METHOD_TYPE);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCardType()
+    {
+        return $this->getData(self::CARD_TYPE);
+    }
+
+    /**
+     * @return string|null
+     */
     public function getNumber()
     {
         return $this->getData(self::NUMBER);
@@ -54,6 +78,22 @@ class Token extends DataObject implements TokenInterface
     public function setNumber($number)
     {
         return $this->setData(self::NUMBER, $number);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastFourDigits()
+    {
+        return $this->getData(self::LAST_FOUR_DIGITS);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFirstSixDigits()
+    {
+        return $this->getData(self::FIRST_SIX_DIGITS);
     }
 
     /**
@@ -139,6 +179,14 @@ class Token extends DataObject implements TokenInterface
     public function setLastName($lastName)
     {
         return $this->setData(self::LAST_NAME, $lastName);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFullName()
+    {
+        return $this->getData(self::FULL_NAME);
     }
 
     /**
@@ -280,57 +328,9 @@ class Token extends DataObject implements TokenInterface
     /**
      * @return string|null
      */
-    public function getToken()
-    {
-        return $this->getData(self::TOKEN);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getLastFourDigits()
-    {
-        return $this->getData(self::LAST_FOUR_DIGITS);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getFirstSixDigits()
-    {
-        return $this->getData(self::FIRST_SIX_DIGITS);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getCardType()
-    {
-        return $this->getData(self::CARD_TYPE);
-    }
-
-    /**
-     * @return string|null
-     */
     public function getEligibleForCardUpdater()
     {
         return $this->getData(self::ELIGIBLE_FOR_CARD_UPDATER);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPaymentMethodType()
-    {
-        return $this->getData(self::PAYMENT_METHOD_TYPE);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getFingerprint()
-    {
-        return $this->getData(self::FINGERPRINT);
     }
 
     /**
@@ -347,6 +347,14 @@ class Token extends DataObject implements TokenInterface
     public function getTest()
     {
         return $this->getData(self::TEST);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFingerprint()
+    {
+        return $this->getData(self::FINGERPRINT);
     }
 
     /**

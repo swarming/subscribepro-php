@@ -41,6 +41,12 @@ interface TransactionInterface extends DataInterface
     const CREATED = 'created';
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * @return int|null
      */
     public function getAmount();

@@ -43,21 +43,11 @@ class DataObject implements DataInterface
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
     public function getId()
     {
         return $this->getData($this->idField);
-    }
-
-    /**
-     * @param int|null $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->setData($this->idField, $id);
-        return $this;
     }
 
     /**

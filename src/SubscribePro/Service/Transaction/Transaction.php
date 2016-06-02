@@ -59,6 +59,16 @@ class Transaction extends DataObject implements TransactionInterface
     protected $updatingFields = [];
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->setData($this->idField, $id);
+        return $this;
+    }
+
+    /**
      * @return int|null
      */
     public function getAmount()

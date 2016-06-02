@@ -124,6 +124,16 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->setData($this->idField, $id);
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
     public function getCustomerId()

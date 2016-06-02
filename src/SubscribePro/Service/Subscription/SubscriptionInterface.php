@@ -47,6 +47,12 @@ interface SubscriptionInterface extends DataInterface
     const CANCELLED = 'cancelled';
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * @return string|null
      */
     public function getCustomerId();

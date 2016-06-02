@@ -6,13 +6,18 @@ use SubscribePro\Service\DataInterface;
 
 interface TokenInterface extends DataInterface
 {
-    const ID = 'id';
+    const TOKEN = 'token';
+    const PAYMENT_METHOD_TYPE = 'payment_method_type';
+    const CARD_TYPE = 'card_type';
     const NUMBER = 'number';
+    const LAST_FOUR_DIGITS = 'last_four_digits';
+    const FIRST_SIX_DIGITS = 'first_six_digits';
     const VERIFICATION_VALUE = 'verification_value';
     const MONTH = 'month';
     const YEAR = 'year';
     const FIRST_NAME = 'first_name';
     const LAST_NAME = 'last_name';
+    const FULL_NAME = 'full_name';
     const COMPANY = 'company';
     const ADDRESS1 = 'address1';
     const ADDRESS2 = 'address2';
@@ -21,18 +26,28 @@ interface TokenInterface extends DataInterface
     const ZIP = 'zip';
     const COUNTRY = 'country';
     const PHONE = 'phone';
-    const TOKEN = 'token';
-    const LAST_FOUR_DIGITS = 'last_four_digits';
-    const FIRST_SIX_DIGITS = 'first_six_digits';
-    const CARD_TYPE = 'card_type';
     const ELIGIBLE_FOR_CARD_UPDATER = 'eligible_for_card_updater';
-    const PAYMENT_METHOD_TYPE = 'payment_method_type';
-    const FINGERPRINT = 'fingerprint';
     const STORAGE_STATE = 'storage_state';
     const TEST = 'test';
+    const FINGERPRINT = 'fingerprint';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    
+
+    /**
+     * @return string|null
+     */
+    public function getToken();
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentMethodType();
+
+    /**
+     * @return string|null
+     */
+    public function getCardType();
+
     /**
      * @return string|null
      */
@@ -43,6 +58,16 @@ interface TokenInterface extends DataInterface
      * @return $this
      */
     public function setNumber($number);
+
+    /**
+     * @return string|null
+     */
+    public function getLastFourDigits();
+
+    /**
+     * @return string|null
+     */
+    public function getFirstSixDigits();
 
     /**
      * @return string|null
@@ -98,6 +123,11 @@ interface TokenInterface extends DataInterface
      * @return $this
      */
     public function setLastName($lastName);
+
+    /**
+     * @return string|null
+     */
+    public function getFullName();
 
     /**
      * @return string|null
@@ -190,37 +220,7 @@ interface TokenInterface extends DataInterface
     /**
      * @return string|null
      */
-    public function getToken();
-
-    /**
-     * @return string|null
-     */
-    public function getLastFourDigits();
-
-    /**
-     * @return string|null
-     */
-    public function getFirstSixDigits();
-
-    /**
-     * @return string|null
-     */
-    public function getCardType();
-
-    /**
-     * @return string|null
-     */
     public function getEligibleForCardUpdater();
-
-    /**
-     * @return string|null
-     */
-    public function getPaymentMethodType();
-
-    /**
-     * @return string|null
-     */
-    public function getFingerprint();
 
     /**
      * @return string|null
@@ -231,6 +231,11 @@ interface TokenInterface extends DataInterface
      * @return string|null
      */
     public function getTest();
+
+    /**
+     * @return string|null
+     */
+    public function getFingerprint();
 
     /**
      * @param string|null $format

@@ -40,6 +40,16 @@ class Customer extends DataObject implements CustomerInterface
     ];
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->setData($this->idField, $id);
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
     public function getEmail()

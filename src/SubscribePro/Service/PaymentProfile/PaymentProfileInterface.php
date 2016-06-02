@@ -75,6 +75,12 @@ interface PaymentProfileInterface extends DataInterface
     public function isTokenDataValid();
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * @return string|null
      */
     public function getCustomerId();

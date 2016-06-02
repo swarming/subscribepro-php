@@ -53,6 +53,12 @@ interface ProductInterface extends DataInterface
     /**#@-*/
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * @return string|null
      */
     public function getSku();

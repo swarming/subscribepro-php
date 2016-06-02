@@ -22,6 +22,12 @@ interface CustomerInterface extends DataInterface
     const ACTIVE_SUBSCRIBED_QTY = 'active_subscribed_qty';
     const CREATED = 'created';
     const UPDATED = 'updated';
+
+    /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id);
     
     /**
      * @return string|null

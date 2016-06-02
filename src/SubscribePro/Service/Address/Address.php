@@ -96,6 +96,16 @@ class Address extends DataObject implements AddressInterface
     }
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->setData($this->idField, $id);
+        return $this;
+    }
+    
+    /**
      * @return string|null
      */
     public function getCustomerId()

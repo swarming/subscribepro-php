@@ -93,6 +93,16 @@ class Product extends DataObject implements ProductInterface
     ];
 
     /**
+     * @param int|null $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->setData($this->idField, $id);
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
     public function getSku()
