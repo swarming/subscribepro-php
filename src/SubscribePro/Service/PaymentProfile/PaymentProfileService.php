@@ -111,7 +111,7 @@ class PaymentProfileService extends AbstractService
     public function saveThirdPartyToken(PaymentProfileInterface $paymentProfile)
     {
         $response = $this->httpClient->post(
-            "/v2/paymentprofile/third-party-token.json",
+            '/v2/paymentprofile/third-party-token.json',
             [self::API_NAME_PROFILE => $paymentProfile->getThirdPartyTokenFormData()]
         );
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);

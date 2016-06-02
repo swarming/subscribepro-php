@@ -102,7 +102,7 @@ class DataObject implements DataInterface
     public function getFormData()
     {
         if (!$this->isValid()) {
-            throw new \InvalidArgumentException("Not all required fields are set.");
+            throw new \InvalidArgumentException('Not all required fields are set.');
         }
 
         return array_intersect_key($this->data, $this->getFormFields());
@@ -128,5 +128,21 @@ class DataObject implements DataInterface
             }
         }
         return true;
+    }
+
+    /**
+     * @param string $date
+     * @param string|null $outputFormat
+     * @param string $inputFormat
+     * @return string
+     */
+    protected function processDate($date, $outputFormat = null, $inputFormat = \DateTime::ISO8601)
+    {
+        if (!$outputFormat) {
+            return $date;
+        }
+
+        $dateTime = \DateTime::createFromFormat($inputFormat, $date);
+        return $dateTime ? $dateTime->format($outputFormat) : $date;
     }
 }

@@ -44,7 +44,7 @@ class GeneralService extends AbstractService
      */
     public function webhookTest()
     {
-        $response = $this->httpClient->post("/v2/webhook-test.json");
+        $response = $this->httpClient->post('/v2/webhook-test.json');
         return $response['result'];
     }
     

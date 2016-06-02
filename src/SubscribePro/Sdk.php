@@ -102,7 +102,7 @@ class Sdk
      */
     protected function getNamespaceConfig($namespace)
     {
-        $namespace = underscore($namespace);
+        $namespace = $this->underscore($namespace);
         return (array)(empty($this->config[$namespace]) ? [] : $this->config[$namespace]);
     }
 
@@ -130,7 +130,7 @@ class Sdk
      */
     protected function createService($namespace)
     {
-        $namespace = camelize($namespace);
+        $namespace = $this->camelize($namespace);
         $serviceClient = "SubscribePro\\Service\\{$namespace}\\{$namespace}Service";
 
         if (!class_exists($serviceClient)) {
@@ -149,9 +149,28 @@ class Sdk
     public function __call($method, $args)
     {
         if (substr($method, 0, 3) === 'get' && substr($method, -7) === 'Service') {
-            return $this->getService(underscore(substr($method, 3, -7)));
+            return $this->getService($this->underscore(substr($method, 3, -7)));
         }
 
         throw new \BadMethodCallException("Method {$method} does not exist.");
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function camelize($name)
+    {
+        return implode('', array_map('ucfirst', explode('_', $name)));
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function underscore($name)
+    {
+        $result = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', '_$1', $name), '_'));
+        return $result;
     }
 }

@@ -395,7 +395,7 @@ class Transaction extends DataObject implements TransactionInterface
      */
     public function getCreated($format = null)
     {
-        return \SubscribePro\formatDate($this->getData(self::CREATED), $format);
+        return $this->processDate($this->getData(self::CREATED), $format);
     }
 
     /**
@@ -406,7 +406,7 @@ class Transaction extends DataObject implements TransactionInterface
     {
         foreach ($this->verifyFields as $field => $isRequired) {
             if ($isRequired && null === $this->getData($field)) {
-                throw new \InvalidArgumentException("Not all required fields are set.");
+                throw new \InvalidArgumentException('Not all required fields are set.');
             }
         }
 
@@ -421,7 +421,7 @@ class Transaction extends DataObject implements TransactionInterface
     {
         /* TODO find out about requirement of currency code when amount is specified */
         if ($this->getData(self::AMOUNT) && !$this->getData(self::CURRENCY_CODE)) {
-            throw new \InvalidArgumentException("Currency code not specified for given amount.");
+            throw new \InvalidArgumentException('Currency code not specified for given amount.');
         }
         return array_intersect_key($this->data, $this->transactionServiceFields);
     }
@@ -434,7 +434,7 @@ class Transaction extends DataObject implements TransactionInterface
     {
         foreach ($this->createByTokenFields as $field => $isRequired) {
             if ($isRequired && null === $this->getData($field)) {
-                throw new \InvalidArgumentException("Not all required fields are set.");
+                throw new \InvalidArgumentException('Not all required fields are set.');
             }
         }
         
