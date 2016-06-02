@@ -41,12 +41,17 @@ class GeneralService extends AbstractService
     }
 
     /**
-     * @throws \RuntimeException
+     * @return bool
      */
     public function webhookTest()
     {
-        $response = $this->httpClient->post('/v2/webhook-test.json');
-        return $response['result'];
+        try {
+            $this->httpClient->post('/v2/webhook-test.json');
+        } catch (\RuntimeException $exception) {
+            return false;
+        }
+        
+        return true;
     }
     
     /**
