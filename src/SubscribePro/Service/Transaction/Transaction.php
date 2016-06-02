@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Transaction;
 
 use SubscribePro\Service\DataObject;
+use SubscribePro\Service\Address\AddressInterface;
 
 class Transaction extends DataObject implements TransactionInterface
 {
@@ -19,20 +20,20 @@ class Transaction extends DataObject implements TransactionInterface
         self::CURRENCY_CODE => true,
         self::ORDER_ID => false,
         self::IP => false,
-        self::EMAIL => false,
+        self::EMAIL => false
     ];
 
     /**
      * @var array
      */
-    protected $createByTokenFields = [
+    protected $createTokenFields = [
         self::AMOUNT => true,
         self::CURRENCY_CODE => true,
         self::ORDER_ID => false,
         self::IP => false,
         self::EMAIL => false,
         self::CREDITCARD_MONTH => false,
-        self::CREDITCARD_YEAR => false,
+        self::CREDITCARD_YEAR => false
     ];
 
     /**
@@ -42,30 +43,89 @@ class Transaction extends DataObject implements TransactionInterface
         self::CURRENCY_CODE => true,
         self::ORDER_ID => false,
         self::IP => false,
-        self::EMAIL => false,
+        self::EMAIL => false
     ];
 
     /**
      * @var array
      */
-    protected $transactionServiceFields = [
-        self::AMOUNT => false,
-        self::CURRENCY_CODE => false,
+    protected $serviceFields = [
+        self::AMOUNT => true,
+        self::CURRENCY_CODE => true
     ];
 
     /**
-     * @var array
+     * @return array
+     * @throws \InvalidArgumentException
      */
-    protected $updatingFields = [];
-
-    /**
-     * @param int|null $id
-     * @return $this
-     */
-    public function setId($id)
+    public function getVerifyFormData()
     {
-        $this->setData($this->idField, $id);
-        return $this;
+        if (!$this->isVerifyDataValid()) {
+            throw new \InvalidArgumentException('Not all required fields are set.');
+        }
+        return array_intersect_key($this->data, $this->verifyFields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVerifyDataValid()
+    {
+        return $this->checkRequiredFields($this->verifyFields);
+    }
+
+    /**
+     * @param \SubscribePro\Service\Address\AddressInterface $address
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getTokenFormData(AddressInterface $address = null)
+    {
+        if (!$this->isTokenDataValid()) {
+            throw new \InvalidArgumentException('Not all required fields are set.');
+        }
+
+        $tokenFormData = array_intersect_key($this->data, $this->createTokenFields);
+        if ($address) {
+            $tokenFormData[self::BILLING_ADDRESS] = $address->getAsChildFormData(true);
+        }
+        return $tokenFormData;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTokenDataValid()
+    {
+        return $this->checkRequiredFields($this->createTokenFields);
+    }
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getServiceFormData()
+    {
+        if (!$this->isServiceDataValid()) {
+            throw new \InvalidArgumentException("Currency code not specified for given amount.");
+        }
+        return array_intersect_key($this->data, $this->serviceFields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isServiceDataValid()
+    {
+        return $this->checkRequiredFields($this->serviceFields);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getFormFields()
+    {
+        return $this->creatingFields;
     }
 
     /**
@@ -102,7 +162,7 @@ class Transaction extends DataObject implements TransactionInterface
      */
     public function setCurrencyCode($currencyCode)
     {
-        if (strlen($currencyCode) !== 3) {
+        if (strlen($currencyCode) != 3) {
             throw new \InvalidArgumentException('Currency code should consist of 3 letters.');
         }
         return $this->setData(self::CURRENCY_CODE, $currencyCode);
@@ -396,53 +456,5 @@ class Transaction extends DataObject implements TransactionInterface
     public function getCreated($format = null)
     {
         return $this->processDate($this->getData(self::CREATED), $format);
-    }
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getVerifyData()
-    {
-        foreach ($this->verifyFields as $field => $isRequired) {
-            if ($isRequired && null === $this->getData($field)) {
-                throw new \InvalidArgumentException('Not all required fields are set.');
-            }
-        }
-
-        return array_intersect_key($this->data, $this->verifyFields);
-    }
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getTransactionServiceData()
-    {
-        /* TODO find out about requirement of currency code when amount is specified */
-        if ($this->getData(self::AMOUNT) && !$this->getData(self::CURRENCY_CODE)) {
-            throw new \InvalidArgumentException('Currency code not specified for given amount.');
-        }
-        return array_intersect_key($this->data, $this->transactionServiceFields);
-    }
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getCreateByTokenData()
-    {
-        foreach ($this->createByTokenFields as $field => $isRequired) {
-            if ($isRequired && null === $this->getData($field)) {
-                throw new \InvalidArgumentException('Not all required fields are set.');
-            }
-        }
-        
-        return array_intersect_key($this->data, $this->createByTokenFields);
-    }
-
-    protected function getFormFields()
-    {
-        return $this->creatingFields;
     }
 }

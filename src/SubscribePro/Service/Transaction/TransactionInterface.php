@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Transaction;
 
 use SubscribePro\Service\DataInterface;
+use SubscribePro\Service\Address\AddressInterface;
 
 interface TransactionInterface extends DataInterface
 {
@@ -16,6 +17,7 @@ interface TransactionInterface extends DataInterface
     const CREDITCARD_FIRST_DIGITS = 'creditcard_first_digits';
     const CREDITCARD_MONTH = 'creditcard_month';
     const CREDITCARD_YEAR = 'creditcard_year';
+    const BILLING_ADDRESS = 'billing_address';
     const REF_PAYMENT_PROFILE_ID = 'ref_payment_profile_id';
     const REF_TRANSACTION_ID = 'ref_transaction_id';
     const REF_GATEWAY_ID = 'ref_gateway_id';
@@ -41,10 +43,32 @@ interface TransactionInterface extends DataInterface
     const CREATED = 'created';
 
     /**
-     * @param int|null $id
-     * @return $this
+     * @return array
+     * @throws \InvalidArgumentException
      */
-    public function setId($id);
+    public function getVerifyFormData();
+
+    /**
+     * @return bool
+     */
+    public function isVerifyDataValid();
+
+    /**
+     * @return array
+     */
+    public function getServiceFormData();
+
+    /**
+     * @param \SubscribePro\Service\Address\AddressInterface $address
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getTokenFormData(AddressInterface $address = null);
+
+    /**
+     * @return bool
+     */
+    public function isTokenDataValid();
 
     /**
      * @return int|null
@@ -252,21 +276,4 @@ interface TransactionInterface extends DataInterface
      * @return string|null
      */
     public function getCreated($format = null);
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getVerifyData();
-
-    /**
-     * @return array
-     */
-    public function getTransactionServiceData();
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getCreateByTokenData();
 }
