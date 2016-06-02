@@ -24,26 +24,17 @@ interface AddressInterface extends DataInterface
     const UPDATED = 'updated';
 
     /**
+     * @param bool $isNew
      * @return bool
      */
-    public function isBillingAddressValid();
+    public function isAsChildValid($isNew);
 
     /**
+     * @param bool $isNew
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function getBillingAddressFormData();
-
-    /**
-     * @return bool
-     */
-    public function isUpdateDataValid();
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getUpdateData();
+    public function getAsChildFormData($isNew);
     
     /**
      * @return string|null

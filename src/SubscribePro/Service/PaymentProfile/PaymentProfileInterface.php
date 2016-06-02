@@ -30,6 +30,29 @@ interface PaymentProfileInterface extends DataInterface
     const UPDATED = 'updated';
 
     /**
+     * Payment profile statuses
+     */
+    const STATUS_RETAINED = 'retained';
+    const STATUS_REDACTED = 'redacted';
+
+    /**
+     * Payment method types
+     */
+    const TYPE_CREDIT_CARD = 'credit_card';
+    const TYPE_THIRD_PARTY_TOKEN = 'third_party_token';
+
+    /**
+     * Credit card types
+     */
+    const CC_TYPE_VISA = 'visa';
+    const CC_TYPE_MASTER = 'master';
+    const CC_TYPE_AMERICAN_EXPRESS = 'american_express';
+    const CC_TYPE_DISCOVER = 'discover';
+    const CC_TYPE_JCB = 'jcb';
+    const CC_TYPE_DINERS_CLUB = 'diners_club';
+    const CC_TYPE_DANKORT = 'dankort';
+
+    /**
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -79,6 +102,8 @@ interface PaymentProfileInterface extends DataInterface
     public function getCustomerEmail();
 
     /**
+     * Credit card type: visa, master, american_express, discover, jcb, diners_club or dankort
+     *
      * @return string|null
      */
     public function getCreditcardType();
@@ -166,6 +191,8 @@ interface PaymentProfileInterface extends DataInterface
     public function getGateway();
 
     /**
+     * Payment method type: credit_card or third_party_token
+     *
      * @return string|null
      */
     public function getPaymentMethodType();
@@ -203,6 +230,8 @@ interface PaymentProfileInterface extends DataInterface
     public function getThirdPartyPaymentToken();
 
     /**
+     * Current status of the payment profile: retained or redacted
+     *
      * @return string
      */
     public function getStatus();

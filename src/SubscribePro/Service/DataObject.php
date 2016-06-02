@@ -123,13 +123,20 @@ class DataObject implements DataInterface
      */
     public function isValid()
     {
-        $fields = $this->getFormFields();
+        return $this->checkRequiredFields($this->getFormFields());
+    }
+
+    /**
+     * @param  array $fields
+     * @return bool
+     */
+    protected function checkRequiredFields(array $fields)
+    {
         foreach ($fields as $field => $isRequired) {
             if ($isRequired && null === $this->getData($field)) {
                 return false;
             }
         }
-
-        return true; /* TODO Return missing fields */
+        return true;
     }
 }

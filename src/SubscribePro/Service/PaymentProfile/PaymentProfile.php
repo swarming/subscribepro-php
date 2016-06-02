@@ -3,7 +3,7 @@
 namespace SubscribePro\Service\PaymentProfile;
 
 use SubscribePro\Service\DataObject;
-use \SubscribePro\Service\Address\AddressInterface;
+use SubscribePro\Service\Address\AddressInterface;
 
 class PaymentProfile extends DataObject implements PaymentProfileInterface
 {
@@ -28,10 +28,30 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     /**
      * @var array
      */
-    protected $creatingThirdPartyTokenFields = [
+    protected $updatingFields = [
+        self::CREDITCARD_MONTH => false,
+        self::CREDITCARD_YEAR => false,
+        self::BILLING_ADDRESS => false
+    ];
+
+    /**
+     * @var array
+     */
+    protected $savingTokenFields = [
+        self::CUSTOMER_ID => false,
+        self::MAGENTO_CUSTOMER_ID => false,
+        self::CREDITCARD_MONTH => false,
+        self::CREDITCARD_YEAR => false,
+        self::BILLING_ADDRESS => false
+    ];
+
+    /**
+     * @var array
+     */
+    protected $savingThirdPartyTokenFields = [
         self::CUSTOMER_ID => true,
-        self::THIRD_PARTY_PAYMENT_TOKEN => true,
         self::THIRD_PARTY_VAULT_TYPE => false,
+        self::THIRD_PARTY_PAYMENT_TOKEN => true,
         self::CREDITCARD_TYPE => false,
         self::CREDITCARD_LAST_DIGITS => false,
         self::CREDITCARD_FIRST_DIGITS => false,
@@ -41,23 +61,12 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     ];
 
     /**
-     * @var array
-     */
-    protected $updatingFields = [
-        self::CREDITCARD_MONTH => false,
-        self::CREDITCARD_YEAR => false,
-        self::BILLING_ADDRESS => false
-    ];
-
-    /**
      * @return array
      */
     public function toArray()
     {
         $data = parent::toArray();
-
         $data[self::BILLING_ADDRESS] = $this->getBillingAddress()->toArray();
-
         return $data;
     }
 
@@ -76,50 +85,24 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $isCustomerDataValid = $this->isNew() ? ($this->getCustomerId() || $this->getMagentoCustomerId()) : true;
+        return $isCustomerDataValid
+            && parent::isValid()
+            && $this->getBillingAddress()->isAsChildValid($this->isNew());
+    }
+
+    /**
      * @return array
      * @throws \InvalidArgumentException
      */
     public function getFormData()
     {
         $formData = parent::getFormData();
-        $formData[self::BILLING_ADDRESS] = $this->getBillingAddress()->getBillingAddressFormData();
-        return $formData;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isValid()
-    {
-        return ($this->getCustomerId() || $this->getMagentoCustomerId())
-            && parent::isValid()
-            && $this->getBillingAddress()->isBillingAddressValid();
-    }
-
-    /**
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public function getThirdPartyTokenFormData()
-    {
-        if (!$this->isThirdPartyDataValid()) {
-            throw new \InvalidArgumentException("Not all required fields are set.");
-        }
-
-        return array_intersect_key($this->data, $this->creatingThirdPartyTokenFields);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isThirdPartyDataValid()
-    {
-        foreach ($this->creatingThirdPartyTokenFields as $field => $isRequired) {
-            if ($isRequired && null === $this->getData($field)) {
-                return false;
-            }
-        }
-        return true;
+        return $this->updateBillingFormData($formData);
     }
 
     /**
@@ -129,10 +112,11 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     public function getTokenFormData()
     {
         if (!$this->isTokenDataValid()) {
-            throw new \InvalidArgumentException("Not all required fields are set.");
+            throw new \InvalidArgumentException('Not all required fields are set.');
         }
 
-        return $this->toArray();
+        $tokenFormData = array_intersect_key($this->data, $this->savingTokenFields);
+        return $this->updateBillingFormData($tokenFormData);
     }
 
     /**
@@ -140,13 +124,43 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      */
     public function isTokenDataValid()
     {
-        foreach ($this->updatingFields as $field => $isRequired) {
-            if ($isRequired && null === $this->getData($field)) {
-                return false;
-            }
+        return ($this->getCustomerId() || $this->getMagentoCustomerId())
+            && $this->checkRequiredFields($this->savingTokenFields);
+    }
+
+    /**
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getThirdPartyTokenFormData()
+    {
+        if (!$this->isThirdPartyDataValid()) {
+            throw new \InvalidArgumentException('Not all required fields are set.');
         }
 
-        return $this->getCustomerId() || $this->getMagentoCustomerId();
+        $tokenFormData = array_intersect_key($this->data, $this->savingThirdPartyTokenFields);
+        return $this->updateBillingFormData($tokenFormData);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isThirdPartyDataValid()
+    {
+        return $this->checkRequiredFields($this->savingThirdPartyTokenFields);
+    }
+
+    /**
+     * @param array $tokenFormData
+     * @return array
+     */
+    protected function updateBillingFormData(array $tokenFormData)
+    {
+        $tokenFormData[self::BILLING_ADDRESS] = $this->getBillingAddress()->getAsChildFormData($this->isNew());
+        if (empty($tokenFormData[self::BILLING_ADDRESS])) {
+            unset($tokenFormData[self::BILLING_ADDRESS]);
+        }
+        return $tokenFormData;
     }
 
     /**
@@ -192,6 +206,8 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * Credit card type: visa, master, american_express, discover, jcb, diners_club or dankort
+     *
      * @return string|null
      */
     public function getCreditcardType()
@@ -327,6 +343,8 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * Payment method type: credit_card or third_party_token
+     *
      * @return string|null
      */
     public function getPaymentMethodType()
@@ -385,6 +403,8 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * Current status of the payment profile: retained or redacted
+     *
      * @return string
      */
     public function getStatus()

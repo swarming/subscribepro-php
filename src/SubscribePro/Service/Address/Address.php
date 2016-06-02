@@ -49,7 +49,7 @@ class Address extends DataObject implements AddressInterface
     /**
      * @var array
      */
-    protected $billingAddressFields = [
+    protected $childFields = [
         self::FIRST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
         self::MIDDLE_NAME => false,
         self::LAST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
@@ -64,57 +64,35 @@ class Address extends DataObject implements AddressInterface
     ];
 
     /**
+     * @param bool $isNew
      * @return bool
      */
-    public function isBillingAddressValid()
+    public function isAsChildValid($isNew)
     {
-        foreach ($this->billingAddressFields as $field => $isRequired) {
-            if ($isRequired && null === $this->getData($field)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->checkRequiredFields($this->getAsChildFormFields($isNew));
     }
 
     /**
+     * @param bool $isNew
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function getBillingAddressFormData()
+    public function getAsChildFormData($isNew)
     {
-        if (!$this->isBillingAddressValid()) {
-            throw new \InvalidArgumentException("Not all required fields are set.");
+        if (!$this->isAsChildValid($isNew)) {
+            throw new \InvalidArgumentException('Not all required fields are set.');
         }
 
-        return array_intersect_key($this->data, $this->billingAddressFields);
+        return array_intersect_key($this->data, $this->getAsChildFormFields($isNew));
     }
 
     /**
-     * @return bool
-     */
-    public function isUpdateDataValid()
-    {
-        foreach ($this->updatingFields as $field => $isRequired) {
-            if ($isRequired && null === $this->getData($field)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
+     * @param bool $isNew
      * @return array
-     * @throws \InvalidArgumentException
      */
-    public function getUpdateData()
+    protected function getAsChildFormFields($isNew)
     {
-        if (!$this->isUpdateDataValid()) {
-            throw new \InvalidArgumentException("Not all required fields are set.");
-        }
-
-        return array_intersect_key($this->data, $this->updatingFields);
+        return $isNew ? $this->childFields : $this->updatingFields;
     }
 
     /**

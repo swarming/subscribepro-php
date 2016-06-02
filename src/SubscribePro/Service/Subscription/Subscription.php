@@ -58,13 +58,6 @@ class Subscription extends DataObject implements SubscriptionInterface
     ];
 
     /**
-     * @var array
-     */
-    protected $eitherFieldRequired = [
-        [self::SHIPPING_ADDRESS_ID, self::SHIPPING_ADDRESS]
-    ];
-
-    /**
      * @param array $data
      * @return $this
      */
@@ -74,7 +67,7 @@ class Subscription extends DataObject implements SubscriptionInterface
             $shippingAddressData = isset($data[self::SHIPPING_ADDRESS]) && is_array($data[self::SHIPPING_ADDRESS]) ? $data[self::SHIPPING_ADDRESS] : [];
             $data[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->importData($shippingAddressData);
         }
-        if ($data[self::SHIPPING_ADDRESS]->getId()) {
+        if (empty($data[self::SHIPPING_ADDRESS_ID])) {
             $data[self::SHIPPING_ADDRESS_ID] = $data[self::SHIPPING_ADDRESS]->getId();
         }
 
@@ -82,7 +75,7 @@ class Subscription extends DataObject implements SubscriptionInterface
             $paymentProfileData = isset($data[self::PAYMENT_PROFILE]) && is_array($data[self::PAYMENT_PROFILE]) ? $data[self::PAYMENT_PROFILE] : [];
             $data[self::PAYMENT_PROFILE] = $this->getPaymentProfile()->importData($paymentProfileData);
         }
-        if ($data[self::PAYMENT_PROFILE]->getId()) {
+        if (empty($data[self::PAYMENT_PROFILE_ID])) {
             $data[self::PAYMENT_PROFILE_ID] = $data[self::PAYMENT_PROFILE]->getId();
         }
 
@@ -110,20 +103,12 @@ class Subscription extends DataObject implements SubscriptionInterface
     {
         $formData = parent::getFormData();
 
-        $addressData = $this->getShippingAddress()->toArray();
-        if (!empty($addressData)) {
-            $addressData = $this->isNew()
-                ? $this->getShippingAddress()->getBillingAddressFormData() 
-                : $this->getShippingAddress()->getUpdateData();
-        }
-        $formData[self::SHIPPING_ADDRESS] = $addressData;
+        $formData[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->getAsChildFormData($this->isNew());
 
-        foreach ($this->eitherFieldRequired as $pair) {
-            if (empty($formData[$pair[0]])) {
-                unset($formData[$pair[0]]);
-            } else {
-                unset($formData[$pair[1]]);
-            }
+        if (!empty($formData[self::SHIPPING_ADDRESS_ID])) {
+            unset($formData[self::SHIPPING_ADDRESS_ID]);
+        } else {
+            unset($formData[self::SHIPPING_ADDRESS]);
         }
 
         return $formData;
@@ -134,20 +119,8 @@ class Subscription extends DataObject implements SubscriptionInterface
      */
     public function isValid()
     {
-        $addressData = $this->getShippingAddress()->toArray();
-
-        if ($this->isNew() && $this->getData(self::SHIPPING_ADDRESS_ID) === null && empty($addressData)) {
-            return false;
-        }
-
-        $isValidAddress = true;
-        if (!empty($addressData)) {
-            $isValidAddress = $this->isNew()
-                ? $this->getShippingAddress()->isBillingAddressValid()
-                : $this->getShippingAddress()->isUpdateDataValid();
-        }
-
-        return parent::isValid() && $isValidAddress;
+        return ($this->getData(self::SHIPPING_ADDRESS_ID, false) || $this->getShippingAddress()->isAsChildValid($this->isNew()))
+            && parent::isValid();
     }
 
     /**
