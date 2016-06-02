@@ -49,7 +49,7 @@ class Address extends DataObject implements AddressInterface
     /**
      * @var array
      */
-    protected $childFields = [
+    protected $asChildFields = [
         self::FIRST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
         self::MIDDLE_NAME => false,
         self::LAST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
@@ -92,7 +92,7 @@ class Address extends DataObject implements AddressInterface
      */
     protected function getAsChildFormFields($isNew)
     {
-        return $isNew ? $this->childFields : $this->updatingFields;
+        return $isNew ? $this->asChildFields : $this->updatingFields;
     }
 
     /**
