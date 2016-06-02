@@ -159,15 +159,6 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param string $status
-     * @return $this
-     */
-    public function setStatus($status)
-    {
-        return $this->setData(self::STATUS, $status);
-    }
-
-    /**
      * @return string|null
      */
     public function getProductSku()
@@ -193,7 +184,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getQty()
     {
@@ -201,7 +192,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param float $qty
+     * @param int $qty
      * @return $this
      */
     public function setQty($qty)
@@ -300,15 +291,6 @@ class Subscription extends DataObject implements SubscriptionInterface
     public function getPaymentProfile()
     {
         return $this->getData(self::PAYMENT_PROFILE);
-    }
-
-    /**
-     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
-     * @return $this
-     */
-    public function setPaymentProfile(PaymentProfileInterface $paymentProfile)
-    {
-        return $this->setData(self::PAYMENT_PROFILE, $paymentProfile);
     }
 
     /**

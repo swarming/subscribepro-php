@@ -224,11 +224,29 @@ class Transaction extends DataObject implements TransactionInterface
     }
 
     /**
+     * @param string $creditcardMonth
+     * @return $this
+     */
+    public function setCreditcardMonth($creditcardMonth)
+    {
+        return $this->setData(self::CREDITCARD_MONTH, $creditcardMonth);
+    }
+
+    /**
      * @return string|null
      */
     public function getCreditcardYear()
     {
         return $this->getData(self::CREDITCARD_YEAR);
+    }
+
+    /**
+     * @param string $creditcardYear
+     * @return $this
+     */
+    public function setCreditcardYear($creditcardYear)
+    {
+        return $this->setData(self::CREDITCARD_YEAR, $creditcardYear);
     }
 
     /**

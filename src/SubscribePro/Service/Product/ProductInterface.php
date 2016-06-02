@@ -92,23 +92,23 @@ interface ProductInterface extends DataInterface
     public function setShowOnUi($showOnUi);
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getMinQty();
 
     /**
-     * @param float|null $minQty
+     * @param int|null $minQty
      * @return $this
      */
     public function setMinQty($minQty);
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getMaxQty();
 
     /**
-     * @param float|null $maxQty
+     * @param int|null $maxQty
      * @return $this
      */
     public function setMaxQty($maxQty);
@@ -257,12 +257,12 @@ interface ProductInterface extends DataInterface
     public function setTrialEmailTemplateCode($trialEmailTemplateCode);
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getTrialEmailThresholdDays();
 
     /**
-     * @param float|null $trialEmailThresholdDays
+     * @param int|null $trialEmailThresholdDays
      * @return $this
      */
     public function setTrialEmailThresholdDays($trialEmailThresholdDays);

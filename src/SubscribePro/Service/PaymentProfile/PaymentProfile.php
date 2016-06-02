@@ -61,6 +61,19 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     ];
 
     /**
+     * @var array
+     */
+    protected $creditcardTypes = [
+        self::CC_TYPE_VISA,
+        self::CC_TYPE_MASTER,
+        self::CC_TYPE_AMERICAN_EXPRESS,
+        self::CC_TYPE_DISCOVER,
+        self::CC_TYPE_JCB,
+        self::CC_TYPE_DINERS_CLUB,
+        self::CC_TYPE_DANKORT
+    ];
+
+    /**
      * @return array
      */
     public function toArray()
@@ -223,6 +236,22 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     public function getCreditcardType()
     {
         return $this->getData(self::CREDITCARD_TYPE);
+    }
+
+    /**
+     * Credit card type: visa, master, american_express, discover, jcb, diners_club or dankort
+     *
+     * @param string $creditcardType
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setCreditcardType($creditcardType)
+    {
+        if (!in_array($creditcardType, $this->creditcardTypes)) {
+            throw new \InvalidArgumentException('Invalid credit card type. Allowed types: '.implode(', ', $this->creditcardTypes));
+        }
+
+        return $this->setData(self::CREDITCARD_TYPE, $creditcardType);
     }
 
     /**

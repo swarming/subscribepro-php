@@ -142,9 +142,21 @@ interface TransactionInterface extends DataInterface
     public function getCreditcardMonth();
 
     /**
+     * @param string $creditcardMonth
+     * @return $this
+     */
+    public function setCreditcardMonth($creditcardMonth);
+
+    /**
      * @return string|null
      */
     public function getCreditcardYear();
+
+    /**
+     * @param string $creditcardYear
+     * @return $this
+     */
+    public function setCreditcardYear($creditcardYear);
 
     /**
      * @return int|null

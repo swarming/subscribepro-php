@@ -154,7 +154,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getMinQty()
     {
@@ -162,7 +162,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param float|null $minQty
+     * @param int|null $minQty
      * @return $this
      */
     public function setMinQty($minQty)
@@ -171,7 +171,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getMaxQty()
     {
@@ -179,7 +179,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param float|null $maxQty
+     * @param int|null $maxQty
      * @return $this
      */
     public function setMaxQty($maxQty)
@@ -432,7 +432,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getTrialEmailThresholdDays()
     {
@@ -440,7 +440,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param float|null $trialEmailThresholdDays
+     * @param int|null $trialEmailThresholdDays
      * @return $this
      */
     public function setTrialEmailThresholdDays($trialEmailThresholdDays)

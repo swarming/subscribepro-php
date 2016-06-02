@@ -115,6 +115,14 @@ interface PaymentProfileInterface extends DataInterface
     public function getCreditcardType();
 
     /**
+     * Credit card type: visa, master, american_express, discover, jcb, diners_club or dankort
+     *
+     * @param string $creditcardType
+     * @return $this
+     */
+    public function setCreditcardType($creditcardType);
+
+    /**
      * @return string
      */
     public function getCreditcardNumber();

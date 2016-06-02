@@ -4,7 +4,6 @@ namespace SubscribePro\Service\Subscription;
 
 use SubscribePro\Service\DataInterface;
 use SubscribePro\Service\Address\AddressInterface;
-use SubscribePro\Service\PaymentProfile\PaymentProfileInterface;
 
 interface SubscriptionInterface extends DataInterface
 {
@@ -69,12 +68,6 @@ interface SubscriptionInterface extends DataInterface
     public function getStatus();
 
     /**
-     * @param string $status
-     * @return $this
-     */
-    public function setStatus($status);
-
-    /**
      * @return string|null
      */
     public function getProductSku();
@@ -91,12 +84,12 @@ interface SubscriptionInterface extends DataInterface
     public function getSubscriptionProducts();
 
     /**
-     * @return float|null
+     * @return int|null
      */
     public function getQty();
 
     /**
-     * @param float $qty
+     * @param int $qty
      * @return $this
      */
     public function setQty($qty);
@@ -160,12 +153,6 @@ interface SubscriptionInterface extends DataInterface
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      */
     public function getPaymentProfile();
-
-    /**
-     * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
-     * @return $this
-     */
-    public function setPaymentProfile(PaymentProfileInterface $paymentProfile);
 
     /**
      * @return string|null
