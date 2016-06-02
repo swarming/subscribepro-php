@@ -80,6 +80,10 @@ class GeneralService extends AbstractService
         $this->httpClient->requestFile("/v2/reports/{$code}", $fileToSavePath);
     }
 
+    /**
+     * @param $filePath
+     * @return bool
+     */
     protected function canWriteToFile($filePath)
     {
         return file_exists($filePath) ? is_writable($filePath) : is_writable(dirname($filePath));

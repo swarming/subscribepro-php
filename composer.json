@@ -26,8 +26,7 @@
   "autoload": {
     "psr-4": {
       "SubscribePro\\": "src/SubscribePro/"
-    },
-    "files": ["src/SubscribePro/functions.php"]
+    }
   },
   "autoload-dev": {
     "psr-4": {
