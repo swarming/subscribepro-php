@@ -170,6 +170,19 @@ class Http
     }
 
     /**
+     * @param string $uri
+     * @param string $filePath
+     * @return array|int|null
+     * @throws \RuntimeException
+     */
+    public function requestFile($uri, $filePath)
+    {
+        $response = $this->getClient()->get($this->buildUrl($uri), ['save_to' => $filePath]);
+
+        return $this->processResponse($response);
+    }
+
+    /**
      * @param \Psr\Http\Message\ResponseInterface $response
      * @return array|int|null
      * @throws \RuntimeException
