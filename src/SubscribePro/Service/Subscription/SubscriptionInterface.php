@@ -236,19 +236,19 @@ interface SubscriptionInterface extends DataInterface
     public function setNextOrderDate($nextOrderDate);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getNextOrderDate($format = null);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getLastOrderDate($format = null);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getExpirationDate($format = null);
@@ -282,7 +282,7 @@ interface SubscriptionInterface extends DataInterface
     public function setUserDefinedFields(array $userDefinedFields);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getErrorTime($format = null);
@@ -313,7 +313,7 @@ interface SubscriptionInterface extends DataInterface
     public function getFailedOrderAttemptCount();
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getRetryAfter($format = null);
@@ -324,19 +324,19 @@ interface SubscriptionInterface extends DataInterface
     public function getRecurringOrderCount();
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreated($format = null);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getUpdated($format = null);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCancelled($format = null);

@@ -36,6 +36,11 @@ class Sdk
     const CLIENT_SECRET_ENV_NAME = 'SUBSCRIBEPRO_CLIENT_SECRET';
 
     /**
+     * Config instance name
+     */
+    const CONFIG_INSTANCE_NAME = 'instance_name';
+
+    /**
      * @var \SubscribePro\App
      */
     protected $app;
@@ -68,10 +73,10 @@ class Sdk
         ], $config);
 
         if (!$config['client_id']) {
-            throw new \InvalidArgumentException('Required "client_id" key not supplied in config and could not find fallback environment variable "' . static::CLIENT_ID_ENV_NAME . '"');
+            throw new \InvalidArgumentException('Required "client_id" key is not supplied in config and could not find fallback environment variable "' . static::CLIENT_ID_ENV_NAME . '"');
         }
         if (!$config['client_secret']) {
-            throw new \InvalidArgumentException('Required "client_secret" key not supplied in config and could not find fallback environment variable "' . static::CLIENT_SECRET_ENV_NAME . '"');
+            throw new \InvalidArgumentException('Required "client_secret" key is not supplied in config and could not find fallback environment variable "' . static::CLIENT_SECRET_ENV_NAME . '"');
         }
 
         $this->app = new App($config['client_id'], $config['client_secret']);
@@ -107,7 +112,7 @@ class Sdk
     }
 
     /**
-     * Get a service by name
+     * Get service by name
      *
      * @param string $namespace
      * @return \SubscribePro\Service\AbstractService
@@ -122,7 +127,7 @@ class Sdk
     }
 
     /**
-     * Create a service by name
+     * Create service by name
      *
      * @param string $namespace
      * @return \SubscribePro\Service\AbstractService
@@ -170,7 +175,6 @@ class Sdk
      */
     private function underscore($name)
     {
-        $result = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', '_$1', $name), '_'));
-        return $result;
+        return strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', '_$1', $name), '_'));
     }
 }

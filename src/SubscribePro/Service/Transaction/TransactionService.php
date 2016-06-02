@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\Transaction;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 use SubscribePro\Service\Address\AddressInterface;
 
@@ -18,10 +19,10 @@ class TransactionService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return new TransactionFactory(
-            $this->getConfigValue('instanceName', '\SubscribePro\Service\Transaction\Transaction')
+            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Transaction\Transaction')
         );
     }
 

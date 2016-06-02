@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\Product;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 
 class ProductService extends AbstractService
@@ -18,10 +19,10 @@ class ProductService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return new ProductFactory(
-            $this->getConfigValue('instanceName', '\SubscribePro\Service\Product\Product')
+            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Product\Product')
         );
     }
 

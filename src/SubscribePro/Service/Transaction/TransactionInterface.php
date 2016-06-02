@@ -272,7 +272,7 @@ interface TransactionInterface extends DataInterface
     public function getSubscribeProErrorType();
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreated($format = null);

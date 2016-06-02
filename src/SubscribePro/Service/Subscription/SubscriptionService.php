@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\Subscription;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 
 class SubscriptionService extends AbstractService
@@ -18,12 +19,12 @@ class SubscriptionService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return new SubscriptionFactory(
             $sdk->getAddressService()->getDataFactory(),
             $sdk->getPaymentProfileService()->getDataFactory(),
-            $this->getConfigValue('instanceName', '\SubscribePro\Service\Subscription\Subscription')
+            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Subscription\Subscription')
         );
     }
 

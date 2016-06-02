@@ -358,7 +358,7 @@ class Token extends DataObject implements TokenInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreatedAt($format = null)
@@ -367,7 +367,7 @@ class Token extends DataObject implements TokenInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getUpdatedAt($format = null)

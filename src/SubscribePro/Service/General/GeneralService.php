@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\General;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 
 class GeneralService extends AbstractService
@@ -34,7 +35,7 @@ class GeneralService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return null
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return null;
     }
@@ -71,17 +72,17 @@ class GeneralService extends AbstractService
     public function loadReport($code, $fileToSavePath)
     {
         if (!in_array($code, $this->reportCodes)) {
-            throw new \InvalidArgumentException('Invalid report code! Allowed values: '.implode(', ', $this->reportCodes));
+            throw new \InvalidArgumentException('Invalid report code! Allowed values: ' . implode(', ', $this->reportCodes));
         }
         if (!$this->canWriteToFile($fileToSavePath)) {
-            throw new \InvalidArgumentException("{$fileToSavePath} is not writable!");
+            throw new \InvalidArgumentException("{$fileToSavePath} is not writable.");
         }
         
         $this->httpClient->requestFile("/v2/reports/{$code}", $fileToSavePath);
     }
 
     /**
-     * @param $filePath
+     * @param string $filePath
      * @return bool
      */
     protected function canWriteToFile($filePath)

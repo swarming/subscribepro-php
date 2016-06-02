@@ -2,6 +2,8 @@
 
 namespace SubscribePro\Service;
 
+use SubscribePro\Sdk;
+
 abstract class AbstractService
 {
     /**
@@ -46,7 +48,7 @@ abstract class AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    abstract protected function createDataFactory(\SubscribePro\Sdk $sdk);
+    abstract protected function createDataFactory(Sdk $sdk);
 
     /**
      * @return \SubscribePro\Service\DataFactoryInterface

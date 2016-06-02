@@ -411,7 +411,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getNextOrderDate($format = null)
@@ -429,7 +429,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getLastOrderDate($format = null)
@@ -438,7 +438,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getExpirationDate($format = null)
@@ -490,7 +490,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getErrorTime($format = null)
@@ -539,7 +539,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getRetryAfter($format = null)
@@ -556,7 +556,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreated($format = null)
@@ -565,7 +565,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getUpdated($format = null)
@@ -574,7 +574,7 @@ class Subscription extends DataObject implements SubscriptionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCancelled($format = null)

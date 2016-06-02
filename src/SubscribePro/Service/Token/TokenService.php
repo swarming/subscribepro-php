@@ -2,6 +2,7 @@
 
 namespace SubscribePro\Service\Token;
 
+use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 
 class TokenService extends AbstractService
@@ -17,10 +18,10 @@ class TokenService extends AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
      */
-    protected function createDataFactory(\SubscribePro\Sdk $sdk)
+    protected function createDataFactory(Sdk $sdk)
     {
         return new TokenFactory(
-            $this->getConfigValue('instanceName', '\SubscribePro\Service\Token\Token')
+            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Token\Token')
         );
     }
 

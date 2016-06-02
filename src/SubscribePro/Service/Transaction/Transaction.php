@@ -450,7 +450,7 @@ class Transaction extends DataObject implements TransactionInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreated($format = null)

@@ -83,7 +83,7 @@ class Product extends DataObject implements ProductInterface
     ];
 
     /**
-     * Product options modes
+     * Product Options Modes
      *
      * @var array
      */
@@ -474,7 +474,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreated($format = null)
@@ -483,7 +483,7 @@ class Product extends DataObject implements ProductInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getUpdated($format = null)

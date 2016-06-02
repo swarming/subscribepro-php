@@ -235,7 +235,7 @@ class Customer extends DataObject implements CustomerInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreated($format = null)
@@ -244,7 +244,7 @@ class Customer extends DataObject implements CustomerInterface
     }
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getUpdated($format = null)

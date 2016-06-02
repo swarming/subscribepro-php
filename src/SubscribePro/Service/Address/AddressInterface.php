@@ -180,13 +180,13 @@ interface AddressInterface extends DataInterface
     public function setPhone($phone);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getCreated($format = null);
 
     /**
-     * @param null|string $format
+     * @param string|null $format
      * @return string|null
      */
     public function getUpdated($format = null);
