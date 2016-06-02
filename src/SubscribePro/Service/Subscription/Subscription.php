@@ -106,9 +106,9 @@ class Subscription extends DataObject implements SubscriptionInterface
         $formData[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->getAsChildFormData($this->isNew());
 
         if (!empty($formData[self::SHIPPING_ADDRESS_ID])) {
-            unset($formData[self::SHIPPING_ADDRESS_ID]);
-        } else {
             unset($formData[self::SHIPPING_ADDRESS]);
+        } else {
+            unset($formData[self::SHIPPING_ADDRESS_ID]);
         }
 
         return $formData;
