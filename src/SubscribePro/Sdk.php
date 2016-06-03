@@ -3,6 +3,7 @@
 namespace SubscribePro;
 
 use SubscribePro\Exception\InvalidArgumentException;
+use SubscribePro\Exception\BadMethodCallException;
 
 /**
  * @method \SubscribePro\Service\Product\ProductService getProductService()
@@ -13,6 +14,7 @@ use SubscribePro\Exception\InvalidArgumentException;
  * @method \SubscribePro\Service\Transaction\TransactionService getTransactionService()
  * @method \SubscribePro\Service\Token\TokenService getTokenService()
  * @method \SubscribePro\Service\General\GeneralService getGeneralService()
+ * @method \SubscribePro\Tools\Report getReportTool()
  */
 class Sdk
 {
@@ -63,6 +65,11 @@ class Sdk
     protected $services = [];
 
     /**
+     * @var array
+     */
+    protected $tools = [];
+
+    /**
      * @param array $config
      * @throws \SubscribePro\Exception\InvalidArgumentException
      */
@@ -104,53 +111,87 @@ class Sdk
     }
 
     /**
-     * @param string $namespace
+     * @param string $name
      * @return array
      */
-    protected function getNamespaceConfig($namespace)
+    protected function getServiceConfig($name)
     {
-        $namespace = $this->underscore($namespace);
-        return (array)(empty($this->config[$namespace]) ? [] : $this->config[$namespace]);
+        $name = $this->underscore($name);
+        return (array)(empty($this->config[$name]) ? [] : $this->config[$name]);
     }
 
     /**
      * Get service by name
      *
-     * @param string $namespace
+     * @param string $name
      * @return \SubscribePro\Service\AbstractService
      * @throws \SubscribePro\Exception\InvalidArgumentException
      */
-    public function getService($namespace)
+    public function getService($name)
     {
-        if (!isset($this->services[$namespace])) {
-            $this->services[$namespace] = $this->createService($namespace);
+        if (!isset($this->services[$name])) {
+            $this->services[$name] = $this->createService($name);
         }
-        return $this->services[$namespace];
+        return $this->services[$name];
     }
 
     /**
      * Create service by name
      *
-     * @param string $namespace
+     * @param string $name
      * @return \SubscribePro\Service\AbstractService
      * @throws \SubscribePro\Exception\InvalidArgumentException
      */
-    protected function createService($namespace)
+    protected function createService($name)
     {
-        $namespace = $this->camelize($namespace);
-        $serviceClient = "SubscribePro\\Service\\{$namespace}\\{$namespace}Service";
+        $name = $this->camelize($name);
+        $serviceClient = "SubscribePro\\Service\\{$name}\\{$name}Service";
 
         if (!class_exists($serviceClient)) {
-            throw new InvalidArgumentException("'{$namespace}' namespace does not exist.");
+            throw new InvalidArgumentException("Service with '{$name}' name does not exist.");
         }
 
-        return new $serviceClient($this, $this->getNamespaceConfig($namespace));
+        return new $serviceClient($this, $this->getServiceConfig($name));
+    }
+
+    /**
+     * Create tool by name
+     *
+     * @param string $name
+     * @return mixed
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    protected function createTool($name)
+    {
+        $name = $this->camelize($name);
+        $tool = "SubscribePro\\Tools\\{$name}";
+
+        if (!class_exists($tool)) {
+            throw new InvalidArgumentException("Tool with '{$name}' name does not exist.");
+        }
+
+        return new $tool($this);
+    }
+
+    /**
+     * Get tool by name
+     *
+     * @param string $name
+     * @return mixed
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getTool($name)
+    {
+        if (!isset($this->tools[$name])) {
+            $this->tools[$name] = $this->createTool($name);
+        }
+        return $this->tools[$name];
     }
 
     /**
      * @param string $method
      * @param array $args
-     * @return \SubscribePro\Service\AbstractService
+     * @return mixed
      * @throws \BadMethodCallException
      */
     public function __call($method, $args)
@@ -159,7 +200,11 @@ class Sdk
             return $this->getService($this->underscore(substr($method, 3, -7)));
         }
 
-        throw new \BadMethodCallException("Method {$method} does not exist.");
+        if (substr($method, 0, 3) === 'get' && substr($method, -4) === 'Tool') {
+            return $this->getTool($this->underscore(substr($method, 3, -4)));
+        }
+
+        throw new BadMethodCallException("Method {$method} does not exist.");
     }
 
     /**
