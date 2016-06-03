@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Product;
 
 use SubscribePro\Service\DataFactoryInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class ProductFactory implements DataFactoryInterface
 {
@@ -18,7 +19,7 @@ class ProductFactory implements DataFactoryInterface
         $instanceName = '\SubscribePro\Service\Product\Product'
     ) {
         if (!is_subclass_of($instanceName, '\SubscribePro\Service\Product\ProductInterface')) {
-            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Product\\ProductInterface.");
+            throw new InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Product\\ProductInterface.");
         }
         $this->instanceName = $instanceName;
     }

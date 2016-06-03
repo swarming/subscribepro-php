@@ -4,6 +4,7 @@ namespace SubscribePro\Service\Customer;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class CustomerService extends AbstractService
 {
@@ -48,7 +49,7 @@ class CustomerService extends AbstractService
     /**
      * @param \SubscribePro\Service\Customer\CustomerInterface $item
      * @return \SubscribePro\Service\Customer\CustomerInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function saveCustomer(CustomerInterface $item)
     {
@@ -60,7 +61,7 @@ class CustomerService extends AbstractService
     /**
      * @param int $customerId
      * @return \SubscribePro\Service\Customer\CustomerInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadCustomer($customerId)
     {
@@ -78,13 +79,13 @@ class CustomerService extends AbstractService
      *
      * @param array|null $filters
      * @return \SubscribePro\Service\Customer\CustomerInterface[]
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadCustomers(array $filters = [])
     {
         $invalidFilters = array_diff_key($filters, array_flip($this->allowedFilters));
         if (!empty($invalidFilters)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Only [' . implode(', ', $this->allowedFilters) . '] query filters are allowed.'
             );
         }

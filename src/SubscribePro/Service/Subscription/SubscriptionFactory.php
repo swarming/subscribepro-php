@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Subscription;
 
 use SubscribePro\Service\DataFactoryInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class SubscriptionFactory implements DataFactoryInterface
 {
@@ -32,7 +33,7 @@ class SubscriptionFactory implements DataFactoryInterface
         $instanceName = '\SubscribePro\Service\Subscription\Subscription'
     ) {
         if (!is_subclass_of($instanceName, '\SubscribePro\Service\Subscription\SubscriptionInterface')) {
-            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Subscription\\SubscriptionInterface.");
+            throw new InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Subscription\\SubscriptionInterface.");
         }
         $this->instanceName = $instanceName;
         $this->addressFactory = $addressFactory;

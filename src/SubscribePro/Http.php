@@ -11,6 +11,7 @@ use Monolog\Logger;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Formatter\LineFormatter;
 use Psr\Log\LogLevel;
+use SubscribePro\Exception\HttpException;
 
 class Http
 {
@@ -131,7 +132,7 @@ class Http
      * @param string $uri
      * @param array $params
      * @return array|int|null
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function get($uri, $params = [])
     {
@@ -145,7 +146,7 @@ class Http
      * @param string $uri
      * @param array $postData
      * @return array|int|null
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function post($uri, $postData = [])
     {
@@ -159,7 +160,7 @@ class Http
      * @param string $uri
      * @param array $putData
      * @return array|int|null
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function put($uri, $putData = [])
     {
@@ -173,7 +174,7 @@ class Http
      * @param string $uri
      * @param string $filePath
      * @return array|int|null
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function requestFile($uri, $filePath)
     {
@@ -185,7 +186,7 @@ class Http
     /**
      * @param \Psr\Http\Message\ResponseInterface $response
      * @return array|int|null
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     protected function processResponse($response)
     {
@@ -194,7 +195,7 @@ class Http
             return !empty($body) ? json_decode($body, true) : $response->getStatusCode();
         }
 
-        throw new \RuntimeException($this->getErrorMessage($response), $response->getStatusCode());
+        throw new HttpException($this->getErrorMessage($response), $response->getStatusCode());
     }
 
     /**

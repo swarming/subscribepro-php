@@ -2,6 +2,8 @@
 
 namespace SubscribePro\Service;
 
+use SubscribePro\Exception\InvalidArgumentException;
+
 class DataObject implements DataInterface
 {
     /**
@@ -97,12 +99,12 @@ class DataObject implements DataInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {
         if (!$this->isValid()) {
-            throw new \InvalidArgumentException('Not all required fields are set.');
+            throw new InvalidArgumentException('Not all required fields are set.');
         }
 
         return array_intersect_key($this->data, $this->getFormFields());

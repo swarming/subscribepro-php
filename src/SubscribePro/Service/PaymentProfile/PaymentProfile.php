@@ -4,6 +4,7 @@ namespace SubscribePro\Service\PaymentProfile;
 
 use SubscribePro\Service\DataObject;
 use SubscribePro\Service\Address\AddressInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class PaymentProfile extends DataObject implements PaymentProfileInterface
 {
@@ -110,7 +111,7 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {
@@ -120,12 +121,12 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getTokenFormData()
     {
         if (!$this->isTokenDataValid()) {
-            throw new \InvalidArgumentException('Not all required fields are set.');
+            throw new InvalidArgumentException('Not all required fields are set.');
         }
 
         $tokenFormData = array_intersect_key($this->data, $this->savingTokenFields);
@@ -143,12 +144,12 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getThirdPartyTokenFormData()
     {
         if (!$this->isThirdPartyDataValid()) {
-            throw new \InvalidArgumentException('Not all required fields are set.');
+            throw new InvalidArgumentException('Not all required fields are set.');
         }
 
         $tokenFormData = array_intersect_key($this->data, $this->savingThirdPartyTokenFields);
@@ -243,12 +244,12 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      *
      * @param string $creditcardType
      * @return $this
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setCreditcardType($creditcardType)
     {
         if (!in_array($creditcardType, $this->creditcardTypes)) {
-            throw new \InvalidArgumentException('Invalid credit card type. Allowed types: '.implode(', ', $this->creditcardTypes));
+            throw new InvalidArgumentException('Invalid credit card type. Allowed types: '.implode(', ', $this->creditcardTypes));
         }
 
         return $this->setData(self::CREDITCARD_TYPE, $creditcardType);

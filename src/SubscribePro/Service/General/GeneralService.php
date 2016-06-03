@@ -4,6 +4,8 @@ namespace SubscribePro\Service\General;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
+use SubscribePro\Exception\InvalidArgumentException;
+use SubscribePro\Exception\HttpException;
 
 class GeneralService extends AbstractService
 {
@@ -53,7 +55,7 @@ class GeneralService extends AbstractService
     {
         try {
             $this->httpClient->post('/v2/webhook-test.json');
-        } catch (\RuntimeException $exception) {
+        } catch (HttpException $exception) {
             return false;
         }
         
@@ -77,19 +79,19 @@ class GeneralService extends AbstractService
      * @param string $code
      * @param string $fileToSavePath
      * @return void
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\HttpException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function loadReport($code, $fileToSavePath)
     {
         if (!in_array($code, $this->reportCodes)) {
-            throw new \InvalidArgumentException('Invalid report code! Allowed values: ' . implode(', ', $this->reportCodes));
+            throw new InvalidArgumentException('Invalid report code! Allowed values: ' . implode(', ', $this->reportCodes));
         }
         if ($this->isDirectory($fileToSavePath)) {
             throw new \InvalidArgumentException("{$fileToSavePath} is a directory.");
         }
         if (!$this->canWriteToFile($fileToSavePath)) {
-            throw new \InvalidArgumentException("{$fileToSavePath} is not writable.");
+            throw new InvalidArgumentException("{$fileToSavePath} is not writable.");
         }
         
         $this->httpClient->requestFile("/v2/reports/{$code}", $fileToSavePath);

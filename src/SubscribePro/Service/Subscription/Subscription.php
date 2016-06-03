@@ -97,7 +97,7 @@ class Subscription extends DataObject implements SubscriptionInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {

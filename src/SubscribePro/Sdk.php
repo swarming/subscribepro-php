@@ -2,6 +2,8 @@
 
 namespace SubscribePro;
 
+use SubscribePro\Exception\InvalidArgumentException;
+
 /**
  * @method \SubscribePro\Service\Product\ProductService getProductService()
  * @method \SubscribePro\Service\Customer\CustomerService getCustomerService()
@@ -62,7 +64,7 @@ class Sdk
 
     /**
      * @param array $config
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function __construct(array $config = [])
     {
@@ -73,10 +75,10 @@ class Sdk
         ], $config);
 
         if (!$config['client_id']) {
-            throw new \InvalidArgumentException('Required "client_id" key is not supplied in config and could not find fallback environment variable "' . static::CLIENT_ID_ENV_NAME . '"');
+            throw new InvalidArgumentException('Required "client_id" key is not supplied in config and could not find fallback environment variable "' . static::CLIENT_ID_ENV_NAME . '"');
         }
         if (!$config['client_secret']) {
-            throw new \InvalidArgumentException('Required "client_secret" key is not supplied in config and could not find fallback environment variable "' . static::CLIENT_SECRET_ENV_NAME . '"');
+            throw new InvalidArgumentException('Required "client_secret" key is not supplied in config and could not find fallback environment variable "' . static::CLIENT_SECRET_ENV_NAME . '"');
         }
 
         $this->app = new App($config['client_id'], $config['client_secret']);
@@ -116,7 +118,7 @@ class Sdk
      *
      * @param string $namespace
      * @return \SubscribePro\Service\AbstractService
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getService($namespace)
     {
@@ -131,7 +133,7 @@ class Sdk
      *
      * @param string $namespace
      * @return \SubscribePro\Service\AbstractService
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     protected function createService($namespace)
     {
@@ -139,7 +141,7 @@ class Sdk
         $serviceClient = "SubscribePro\\Service\\{$namespace}\\{$namespace}Service";
 
         if (!class_exists($serviceClient)) {
-            throw new \InvalidArgumentException("'{$namespace}' namespace does not exist.");
+            throw new InvalidArgumentException("'{$namespace}' namespace does not exist.");
         }
 
         return new $serviceClient($this, $this->getNamespaceConfig($namespace));

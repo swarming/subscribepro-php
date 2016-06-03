@@ -41,7 +41,7 @@ interface AddressInterface extends DataInterface
     /**
      * @param bool $isNew
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getAsChildFormData($isNew);
     

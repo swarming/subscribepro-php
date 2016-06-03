@@ -38,7 +38,7 @@ class ProductService extends AbstractService
     /**
      * @param \SubscribePro\Service\Product\ProductInterface $item
      * @return \SubscribePro\Service\Product\ProductInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function saveProduct(ProductInterface $item)
     {
@@ -50,7 +50,7 @@ class ProductService extends AbstractService
     /**
      * @param int $productId
      * @return \SubscribePro\Service\Product\ProductInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadProduct($productId)
     {
@@ -61,7 +61,7 @@ class ProductService extends AbstractService
     /**
      * @param string|null $sku
      * @return \SubscribePro\Service\Product\ProductInterface[]
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadProducts($sku = null)
     {

@@ -4,6 +4,7 @@ namespace SubscribePro\Service\PaymentProfile;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class PaymentProfileService extends AbstractService
 {
@@ -47,7 +48,7 @@ class PaymentProfileService extends AbstractService
     /**
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function saveProfile(PaymentProfileInterface $paymentProfile)
     {
@@ -61,7 +62,7 @@ class PaymentProfileService extends AbstractService
     /**
      * @param int $paymentProfileId
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function redactProfile($paymentProfileId)
     {
@@ -72,7 +73,7 @@ class PaymentProfileService extends AbstractService
     /**
      * @param int $paymentProfileId
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadProfile($paymentProfileId)
     {
@@ -88,13 +89,13 @@ class PaymentProfileService extends AbstractService
      *
      * @param array $filters
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface[]
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadProfiles(array $filters = [])
     {
         $invalidFilters = array_diff_key($filters, array_flip($this->allowedFilters));
         if (!empty($invalidFilters)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Only [' . implode(', ', $this->allowedFilters) . '] query filters are allowed.'
             );
         }
@@ -106,7 +107,7 @@ class PaymentProfileService extends AbstractService
     /**
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function saveThirdPartyToken(PaymentProfileInterface $paymentProfile)
     {
@@ -121,7 +122,7 @@ class PaymentProfileService extends AbstractService
      * @param string $token
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function saveToken($token, PaymentProfileInterface $paymentProfile)
     {
@@ -136,7 +137,7 @@ class PaymentProfileService extends AbstractService
      * @param string $token
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function verifyAndSaveToken($token, PaymentProfileInterface $paymentProfile)
     {
@@ -150,7 +151,7 @@ class PaymentProfileService extends AbstractService
     /**
      * @param string $token
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadProfileByToken($token)
     {

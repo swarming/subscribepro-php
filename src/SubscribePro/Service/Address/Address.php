@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Address;
 
 use SubscribePro\Service\DataObject;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class Address extends DataObject implements AddressInterface
 {
@@ -75,12 +76,12 @@ class Address extends DataObject implements AddressInterface
     /**
      * @param bool $isNew
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getAsChildFormData($isNew)
     {
         if (!$this->isAsChildValid($isNew)) {
-            throw new \InvalidArgumentException('Not all required fields are set.');
+            throw new InvalidArgumentException('Not all required fields are set.');
         }
 
         return array_intersect_key($this->data, $this->getAsChildFormFields($isNew));

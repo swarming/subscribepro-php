@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Address;
 
 use SubscribePro\Service\DataFactoryInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class AddressFactory implements DataFactoryInterface
 {
@@ -18,7 +19,7 @@ class AddressFactory implements DataFactoryInterface
         $instanceName = '\SubscribePro\Service\Address\Address'
     ) {
         if (!is_subclass_of($instanceName, '\SubscribePro\Service\Address\AddressInterface')) {
-            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Address\\AddressInterface.");
+            throw new InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Address\\AddressInterface.");
         }
         $this->instanceName = $instanceName;
     }

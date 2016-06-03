@@ -57,7 +57,7 @@ interface PaymentProfileInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getThirdPartyTokenFormData();
 
@@ -68,7 +68,7 @@ interface PaymentProfileInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getTokenFormData();
 

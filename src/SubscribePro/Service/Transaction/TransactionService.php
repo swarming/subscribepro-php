@@ -38,7 +38,7 @@ class TransactionService extends AbstractService
     /**
      * @param int $transactionId
      * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadTransaction($transactionId)
     {
@@ -50,7 +50,7 @@ class TransactionService extends AbstractService
      * @param int $paymentProfileId
      * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function verifyProfile($paymentProfileId, TransactionInterface $transaction)
     {
@@ -65,7 +65,7 @@ class TransactionService extends AbstractService
      * @param int $paymentProfileId
      * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function authorizeByProfile($paymentProfileId, TransactionInterface $transaction)
     {
@@ -80,7 +80,7 @@ class TransactionService extends AbstractService
      * @param int $paymentProfileId
      * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function purchaseByProfile($paymentProfileId, TransactionInterface $transaction)
     {
@@ -96,7 +96,7 @@ class TransactionService extends AbstractService
      * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @param \SubscribePro\Service\Address\AddressInterface|null $address
      * @return \SubscribePro\Service\Token\TokenInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function authorizeByToken($token, TransactionInterface $transaction, AddressInterface $address = null)
     {
@@ -112,7 +112,7 @@ class TransactionService extends AbstractService
      * @param \SubscribePro\Service\Transaction\TransactionInterface $transaction
      * @param \SubscribePro\Service\Address\AddressInterface|null $address
      * @return \SubscribePro\Service\Token\TokenInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function purchaseByToken($token, TransactionInterface $transaction, AddressInterface $address = null)
     {
@@ -127,7 +127,7 @@ class TransactionService extends AbstractService
      * @param int $transactionId
      * @param \SubscribePro\Service\Transaction\TransactionInterface|null $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function capture($transactionId, TransactionInterface $transaction = null)
     {
@@ -140,7 +140,7 @@ class TransactionService extends AbstractService
      * @param int $transactionId
      * @param \SubscribePro\Service\Transaction\TransactionInterface|null $transaction
      * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function credit($transactionId, TransactionInterface $transaction = null)
     {
@@ -152,7 +152,7 @@ class TransactionService extends AbstractService
     /**
      * @param int $transactionId
      * @return \SubscribePro\Service\Transaction\TransactionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function void($transactionId)
     {

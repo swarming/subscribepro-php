@@ -65,7 +65,7 @@ interface TransactionInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getVerifyFormData();
 
@@ -82,7 +82,7 @@ interface TransactionInterface extends DataInterface
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $address
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getTokenFormData(AddressInterface $address = null);
 

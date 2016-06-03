@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Product;
 
 use SubscribePro\Service\DataObject;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class Product extends DataObject implements ProductInterface
 {
@@ -257,7 +258,7 @@ class Product extends DataObject implements ProductInterface
     public function setSubscriptionOptionMode($subscriptionOptionMode)
     {
         if (!in_array($subscriptionOptionMode, $this->subscriptionOptionModes)) {
-            throw new \InvalidArgumentException('Unsupported subscription option mode.');
+            throw new InvalidArgumentException('Unsupported subscription option mode.');
         }
         return $this->setData(self::SUBSCRIPTION_OPTION_MODE, $subscriptionOptionMode);
     }
@@ -281,7 +282,7 @@ class Product extends DataObject implements ProductInterface
     public function setDefaultSubscriptionOption($defaultSubscriptionOption)
     {
         if (!in_array($defaultSubscriptionOption, $this->subscriptionOptions)) {
-            throw new \InvalidArgumentException('Unsupported subscription option.');
+            throw new InvalidArgumentException('Unsupported subscription option.');
         }
         return $this->setData(self::DEFAULT_SUBSCRIPTION_OPTION, $defaultSubscriptionOption);
     }
@@ -341,7 +342,7 @@ class Product extends DataObject implements ProductInterface
     public function setProductOptionsMode($productOptionsMode)
     {
         if (!in_array($productOptionsMode, $this->productOptionsModes)) {
-            throw new \InvalidArgumentException('Unsupported product options mode.');
+            throw new InvalidArgumentException('Unsupported product options mode.');
         }
         return $this->setData(self::PRODUCT_OPTIONS_MODE, $productOptionsMode);
     }

@@ -38,7 +38,7 @@ class AddressService extends AbstractService
     /**
      * @param int $addressId
      * @return \SubscribePro\Service\Address\AddressInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadAddress($addressId)
     {
@@ -49,7 +49,7 @@ class AddressService extends AbstractService
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $item
      * @return \SubscribePro\Service\Address\AddressInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function saveAddress(AddressInterface $item)
     {
@@ -61,8 +61,8 @@ class AddressService extends AbstractService
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $item
      * @return \SubscribePro\Service\Address\AddressInterface
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function findOrSave($item)
     {
@@ -73,7 +73,7 @@ class AddressService extends AbstractService
     /**
      * @param int|null $customerId
      * @return \SubscribePro\Service\Address\AddressInterface[]
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadAddresses($customerId = null)
     {

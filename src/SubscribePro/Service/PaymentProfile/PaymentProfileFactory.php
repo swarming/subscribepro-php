@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\PaymentProfile;
 
 use SubscribePro\Service\DataFactoryInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class PaymentProfileFactory implements DataFactoryInterface
 {
@@ -25,7 +26,7 @@ class PaymentProfileFactory implements DataFactoryInterface
         $instanceName = '\SubscribePro\Service\PaymentProfile\PaymentProfile'
     ) {
         if (!is_subclass_of($instanceName, '\SubscribePro\Service\PaymentProfile\PaymentProfileInterface')) {
-            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\PaymentProfile\\PaymentProfileInterface.");
+            throw new InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\PaymentProfile\\PaymentProfileInterface.");
         }
         $this->instanceName = $instanceName;
         $this->addressFactory = $addressFactory;

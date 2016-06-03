@@ -37,7 +37,7 @@ class TokenService extends AbstractService
     /**
      * @param string $token
      * @return \SubscribePro\Service\Token\TokenInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadToken($token)
     {
@@ -48,7 +48,7 @@ class TokenService extends AbstractService
     /**
      * @param \SubscribePro\Service\Token\TokenInterface $token
      * @return \SubscribePro\Service\Token\TokenInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      * @throws \BadMethodCallException
      */
     public function saveToken($token)

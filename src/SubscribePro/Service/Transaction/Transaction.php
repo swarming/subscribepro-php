@@ -4,6 +4,7 @@ namespace SubscribePro\Service\Transaction;
 
 use SubscribePro\Service\DataObject;
 use SubscribePro\Service\Address\AddressInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class Transaction extends DataObject implements TransactionInterface
 {
@@ -56,12 +57,12 @@ class Transaction extends DataObject implements TransactionInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getVerifyFormData()
     {
         if (!$this->isVerifyDataValid()) {
-            throw new \InvalidArgumentException('Not all required fields are set.');
+            throw new InvalidArgumentException('Not all required fields are set.');
         }
         return array_intersect_key($this->data, $this->verifyFields);
     }
@@ -77,12 +78,12 @@ class Transaction extends DataObject implements TransactionInterface
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $address
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getTokenFormData(AddressInterface $address = null)
     {
         if (!$this->isTokenDataValid()) {
-            throw new \InvalidArgumentException('Not all required fields are set.');
+            throw new InvalidArgumentException('Not all required fields are set.');
         }
 
         $tokenFormData = array_intersect_key($this->data, $this->createTokenFields);
@@ -102,12 +103,12 @@ class Transaction extends DataObject implements TransactionInterface
 
     /**
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getServiceFormData()
     {
         if (!$this->isServiceDataValid()) {
-            throw new \InvalidArgumentException("Currency code not specified for given amount.");
+            throw new InvalidArgumentException('Currency code not specified for given amount.');
         }
         return array_intersect_key($this->data, $this->serviceFields);
     }
@@ -143,7 +144,7 @@ class Transaction extends DataObject implements TransactionInterface
     public function setAmount($amount)
     {
         if (!is_numeric($amount) || $amount <= 0) {
-            throw new \InvalidArgumentException('The amount should be always given as an integer number of cents. ');
+            throw new InvalidArgumentException('The amount should be always given as an integer number of cents. ');
         }
         return $this->setData(self::AMOUNT, $amount);
     }
@@ -163,7 +164,7 @@ class Transaction extends DataObject implements TransactionInterface
     public function setCurrencyCode($currencyCode)
     {
         if (strlen($currencyCode) != 3) {
-            throw new \InvalidArgumentException('Currency code should consist of 3 letters.');
+            throw new InvalidArgumentException('Currency code should consist of 3 letters.');
         }
         return $this->setData(self::CURRENCY_CODE, $currencyCode);
     }

@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Token;
 
 use SubscribePro\Service\DataFactoryInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class TokenFactory implements DataFactoryInterface
 {
@@ -18,7 +19,7 @@ class TokenFactory implements DataFactoryInterface
         $instanceName = '\SubscribePro\Service\Token\Token'
     ) {
         if (!is_subclass_of($instanceName, '\SubscribePro\Service\Token\TokenInterface')) {
-            throw new \InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Token\\TokenInterface.");
+            throw new InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Token\\TokenInterface.");
         }
         $this->instanceName = $instanceName;
     }

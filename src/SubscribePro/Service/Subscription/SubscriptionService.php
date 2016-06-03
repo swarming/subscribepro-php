@@ -40,7 +40,7 @@ class SubscriptionService extends AbstractService
     /**
      * @param \SubscribePro\Service\Subscription\SubscriptionInterface $item
      * @return \SubscribePro\Service\Subscription\SubscriptionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function saveSubscription(SubscriptionInterface $item)
     {
@@ -52,7 +52,7 @@ class SubscriptionService extends AbstractService
     /**
      * @param int $subscriptionId
      * @return \SubscribePro\Service\Subscription\SubscriptionInterface
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadSubscription($subscriptionId)
     {
@@ -63,7 +63,7 @@ class SubscriptionService extends AbstractService
     /**
      * @param int|null $customerId
      * @return \SubscribePro\Service\Subscription\SubscriptionInterface[]
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function loadSubscriptions($customerId = null)
     {
@@ -74,7 +74,7 @@ class SubscriptionService extends AbstractService
 
     /**
      * @param int $subscriptionId
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function cancelSubscription($subscriptionId)
     {
@@ -83,7 +83,7 @@ class SubscriptionService extends AbstractService
 
     /**
      * @param int $subscriptionId
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function pauseSubscription($subscriptionId)
     {
@@ -92,7 +92,7 @@ class SubscriptionService extends AbstractService
 
     /**
      * @param int $subscriptionId
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function restartSubscription($subscriptionId)
     {
@@ -101,7 +101,7 @@ class SubscriptionService extends AbstractService
 
     /**
      * @param int $subscriptionId
-     * @throws \RuntimeException
+     * @throws \SubscribePro\Exception\HttpException
      */
     public function skipSubscription($subscriptionId)
     {
