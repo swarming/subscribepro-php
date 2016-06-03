@@ -455,6 +455,6 @@ class Transaction extends DataObject implements TransactionInterface
      */
     public function getCreated($format = null)
     {
-        return $this->processDate($this->getData(self::CREATED), $format);
+        return $this->getDataDatetime(self::CREATED, $format);
     }
 }

@@ -7,6 +7,9 @@ use SubscribePro\Service\Address\AddressInterface;
 
 interface TransactionInterface extends DataInterface
 {
+    /**
+     * Data fields
+     */
     const ID = 'id';
     const GATEWAY_SPECIFIC_RESPONSE = 'gateway_specific_response';
     const GATEWAY_TYPE = 'gateway_type';
@@ -41,6 +44,24 @@ interface TransactionInterface extends DataInterface
     const SUBSCRIBE_PRO_ERROR_CLASS = 'subscribe_pro_error_class';
     const SUBSCRIBE_PRO_ERROR_TYPE = 'subscribe_pro_error_type';
     const CREATED = 'created';
+
+    /**
+     * Transaction types
+     */
+    const TYPE_AUTHORIZATION = 'Authorization';
+    const TYPE_PURCHASE = 'Purchase';
+    const TYPE_CAPTURE = 'Capture';
+    const TYPE_VOID = 'Void';
+    const TYPE_CREDIT = 'Credit';
+    const TYPE_VERIFICATION = 'Verification';
+
+    /**
+     * Transaction states
+     */
+    const STATE_SUCCEEDED = 'succeeded';
+    const STATE_FAILED = 'failed';
+    const STATE_GATEWAY_PROCESSING_FAILED = 'gateway_processing_failed';
+    const STATE_GATEWAY_PROCESSING_RESULT_UNKNOWN = 'gateway_processing_result_unknown';
 
     /**
      * @return array

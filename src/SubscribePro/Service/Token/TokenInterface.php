@@ -6,6 +6,9 @@ use SubscribePro\Service\DataInterface;
 
 interface TokenInterface extends DataInterface
 {
+    /**
+     * Data fields
+     */
     const TOKEN = 'token';
     const PAYMENT_METHOD_TYPE = 'payment_method_type';
     const CARD_TYPE = 'card_type';

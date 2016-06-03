@@ -131,17 +131,35 @@ class DataObject implements DataInterface
     }
 
     /**
+     * @param string $field
+     * @param string|null $format
+     * @return string
+     */
+    protected function getDataDate($field, $format = null)
+    {
+        $date = $this->getData($field);
+        return $format && $date ? $this->formatDate($date, $format, 'Y-m-d') : $date;
+    }
+
+    /**
+     * @param string $field
+     * @param string|null $format
+     * @return string
+     */
+    protected function getDataDatetime($field, $format = null)
+    {
+        $date = $this->getData($field);
+        return $format && $date ? $this->formatDate($date, $format, \DateTime::ISO8601) : $date;
+    }
+
+    /**
      * @param string $date
-     * @param string|null $outputFormat
+     * @param string $outputFormat
      * @param string $inputFormat
      * @return string
      */
-    protected function processDate($date, $outputFormat = null, $inputFormat = \DateTime::ISO8601)
+    protected function formatDate($date, $outputFormat, $inputFormat)
     {
-        if (!$outputFormat) {
-            return $date;
-        }
-
         $dateTime = \DateTime::createFromFormat($inputFormat, $date);
         return $dateTime ? $dateTime->format($outputFormat) : $date;
     }

@@ -7,6 +7,9 @@ use SubscribePro\Service\AbstractService;
 
 class GeneralService extends AbstractService
 {
+    /**
+     * Report codes
+     */
     const REPORT_DAILY_SUBSCRIPTIONS = 'daily_subscriptions';
     const REPORT_COMPLETE_SUBSCRIPTIONS = 'complete_subscriptions';
     const REPORT_SUBSCRIPTION_HISTORY = 'subscription_history';
@@ -17,8 +20,11 @@ class GeneralService extends AbstractService
     const REPORT_COMPLETE_SALES_ORDERS = 'complete_sales_orders';
     const REPORT_COMPLETE_TRANSACTION = 'complete_transaction';
     const REPORT_PRODUCTS = 'products';
-    
-    private $reportCodes = [
+
+    /**
+     * @var array
+     */
+    protected $reportCodes = [
         self::REPORT_DAILY_SUBSCRIPTIONS,
         self::REPORT_COMPLETE_SUBSCRIPTIONS,
         self::REPORT_SUBSCRIPTION_HISTORY,

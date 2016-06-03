@@ -363,7 +363,7 @@ class Token extends DataObject implements TokenInterface
      */
     public function getCreatedAt($format = null)
     {
-        return $this->processDate($this->getData(self::CREATED_AT), $format);
+        return $this->getDataDatetime(self::CREATED_AT, $format);
     }
 
     /**
@@ -372,6 +372,6 @@ class Token extends DataObject implements TokenInterface
      */
     public function getUpdatedAt($format = null)
     {
-        return $this->processDate($this->getData(self::UPDATED_AT), $format);
+        return $this->getDataDatetime(self::UPDATED_AT, $format);
     }
 }

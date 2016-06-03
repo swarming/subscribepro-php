@@ -7,6 +7,9 @@ use SubscribePro\Service\Address\AddressInterface;
 
 interface PaymentProfileInterface extends DataInterface
 {
+    /**
+     * Data fields
+     */
     const ID = 'id';
     const CUSTOMER_ID = 'customer_id';
     const MAGENTO_CUSTOMER_ID = 'magento_customer_id';

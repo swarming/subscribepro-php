@@ -6,6 +6,9 @@ use SubscribePro\Service\DataInterface;
 
 interface ProductInterface extends DataInterface
 {
+    /**
+     * Data fields
+     */
     const ID = 'id';
     const SKU = 'sku';
     const NAME = 'name';
@@ -31,26 +34,23 @@ interface ProductInterface extends DataInterface
     const CREATED = 'created';
     const UPDATED = 'updated';
 
-    /**#@+
-     * Subscription Option Mode constants
+    /**
+     * Subscription option modes
      */
     const SOM_SUBSCRIPTION_AND_ONETIME_PURCHASE = 'subscription_and_onetime_purchase';
     const SOM_SUBSCRIPTION_ONLY = 'subscription_only';
-    /**#@-*/
 
-    /**#@+
-     * Subscription Option constants
+    /**
+     * Subscription options
      */
     const SO_ONETIME_PURCHASE = 'onetime_purchase';
     const SO_SUBSCRIPTION = 'subscription';
-    /**#@-*/
 
-    /**#@+
-     * Product Options Mode constants
+    /**
+     * Product options modes
      */
     const POM_PASS_THROUGH = 'pass_through';
     const POM_NO_OPTIONS = 'no_options';
-    /**#@-*/
 
     /**
      * @param int|null $id

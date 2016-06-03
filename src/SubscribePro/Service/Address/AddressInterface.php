@@ -6,6 +6,9 @@ use SubscribePro\Service\DataInterface;
 
 interface AddressInterface extends DataInterface
 {
+    /**
+     * Data fields
+     */
     const ID = 'id';
     const CUSTOMER_ID = 'customer_id';
     const MAGENTO_ADDRESS_ID = 'magento_address_id';

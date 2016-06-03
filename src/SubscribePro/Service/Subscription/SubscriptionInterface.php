@@ -7,6 +7,9 @@ use SubscribePro\Service\Address\AddressInterface;
 
 interface SubscriptionInterface extends DataInterface
 {
+    /**
+     * Data fields
+     */
     const ID = 'id';
     const CUSTOMER_ID = 'customer_id';
     const STATUS = 'status';
@@ -46,6 +49,16 @@ interface SubscriptionInterface extends DataInterface
     const CANCELLED = 'cancelled';
 
     /**
+     * Subscription statuses
+     */
+    const STATUS_ACTIVE = 'Active';
+    const STATUS_CANCELLED = 'Cancelled';
+    const STATUS_EXPIRED = 'Expired';
+    const STATUS_RETRY = 'Retry';
+    const STATUS_FAILED = 'Failed';
+    const STATUS_PAUSED = 'Paused';
+
+    /**
      * @param int|null $id
      * @return $this
      */
@@ -63,6 +76,8 @@ interface SubscriptionInterface extends DataInterface
     public function setCustomerId($customerId);
 
     /**
+     * Subscription status: Active, Cancelled, Expired, Retry, Failed or Paused
+     *
      * @return string|null
      */
     public function getStatus();

@@ -323,7 +323,7 @@ class Address extends DataObject implements AddressInterface
      */
     public function getCreated($format = null)
     {
-        return $this->processDate($this->getData(self::CREATED), $format);
+        return $this->getDataDatetime(self::CREATED, $format);
     }
 
     /**
@@ -332,6 +332,6 @@ class Address extends DataObject implements AddressInterface
      */
     public function getUpdated($format = null)
     {
-        return $this->processDate($this->getData(self::UPDATED), $format);
+        return $this->getDataDatetime(self::UPDATED, $format);
     }
 }
