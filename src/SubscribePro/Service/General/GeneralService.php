@@ -85,6 +85,9 @@ class GeneralService extends AbstractService
         if (!in_array($code, $this->reportCodes)) {
             throw new \InvalidArgumentException('Invalid report code! Allowed values: ' . implode(', ', $this->reportCodes));
         }
+        if ($this->isDirectory($fileToSavePath)) {
+            throw new \InvalidArgumentException("{$fileToSavePath} is a directory.");
+        }
         if (!$this->canWriteToFile($fileToSavePath)) {
             throw new \InvalidArgumentException("{$fileToSavePath} is not writable.");
         }
@@ -99,5 +102,14 @@ class GeneralService extends AbstractService
     protected function canWriteToFile($filePath)
     {
         return file_exists($filePath) ? is_writable($filePath) : is_writable(dirname($filePath));
+    }
+
+    /**
+     * @param string $filePath
+     * @return bool
+     */
+    protected function isDirectory($filePath)
+    {
+        return is_dir($filePath);
     }
 }
