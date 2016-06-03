@@ -13,7 +13,7 @@ use SubscribePro\Exception\BadMethodCallException;
  * @method \SubscribePro\Service\PaymentProfile\PaymentProfileService getPaymentProfileService()
  * @method \SubscribePro\Service\Transaction\TransactionService getTransactionService()
  * @method \SubscribePro\Service\Token\TokenService getTokenService()
- * @method \SubscribePro\Service\General\GeneralService getGeneralService()
+ * @method \SubscribePro\Service\WebhookEvent\WebhookEventService getWebhookEventService()
  * @method \SubscribePro\Tools\Report getReportTool()
  */
 class Sdk
