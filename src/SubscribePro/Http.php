@@ -178,7 +178,7 @@ class Http
      */
     public function getTotFile($uri, $filePath)
     {
-        $response = $this->getClient()->get($this->buildUrl($uri), ['sink' => $filePath]);
+        $response = $this->getClient()->get($this->buildUrl($uri), [RequestOptions::SINK => $filePath]);
 
         return $this->processResponse($response);
     }
