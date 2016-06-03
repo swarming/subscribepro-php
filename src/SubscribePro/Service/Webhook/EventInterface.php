@@ -1,8 +1,8 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent;
+namespace SubscribePro\Service\Webhook;
 
-interface WebhookEventInterface
+interface EventInterface
 {
     /**
      * Data fields
@@ -42,7 +42,7 @@ interface WebhookEventInterface
     public function getType();
 
     /**
-     * @return \SubscribePro\Service\WebhookEvent\Destination\DestinationInterface[]
+     * @return \SubscribePro\Service\Webhook\Event\DestinationInterface[]
      */
     public function getDestinations();
 

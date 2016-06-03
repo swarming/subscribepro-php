@@ -1,6 +1,6 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent\Endpoint;
+namespace SubscribePro\Service\Webhook\Event\Destination;
 
 class Endpoint implements EndpointInterface
 {
@@ -83,6 +83,17 @@ class Endpoint implements EndpointInterface
         return $this->data;
     }
 
+
+    /**
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed|null
+     */
+    protected function getData($key, $default = null)
+    {
+        return isset($this->data[$key]) ? $this->data[$key] : $default;
+    }
+
     /**
      * @param string $field
      * @param string|null $format
@@ -104,15 +115,5 @@ class Endpoint implements EndpointInterface
     {
         $dateTime = \DateTime::createFromFormat($inputFormat, $date);
         return $dateTime ? $dateTime->format($outputFormat) : $date;
-    }
-
-    /**
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed|null
-     */
-    protected function getData($key, $default = null)
-    {
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
     }
 }

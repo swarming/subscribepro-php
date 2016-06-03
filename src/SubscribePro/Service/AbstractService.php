@@ -7,6 +7,11 @@ use SubscribePro\Sdk;
 abstract class AbstractService
 {
     /**
+     * Config instance name
+     */
+    const CONFIG_INSTANCE_NAME = 'instance_name';
+
+    /**
      * @var \SubscribePro\Http
      */
     protected $httpClient;
@@ -67,8 +72,7 @@ abstract class AbstractService
     protected function retrieveItem($response, $entityName, DataInterface $item = null)
     {
         $itemData = !empty($response[$entityName]) ? $response[$entityName] : [];
-        $item = $item ?: $this->dataFactory->create();
-        $item->importData($itemData);
+        $item = $item ? $item->importData($itemData) : $this->dataFactory->create($itemData);
         return $item;
     }
 

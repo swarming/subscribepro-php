@@ -13,7 +13,7 @@ use SubscribePro\Exception\BadMethodCallException;
  * @method \SubscribePro\Service\PaymentProfile\PaymentProfileService getPaymentProfileService()
  * @method \SubscribePro\Service\Transaction\TransactionService getTransactionService()
  * @method \SubscribePro\Service\Token\TokenService getTokenService()
- * @method \SubscribePro\Service\WebhookEvent\WebhookEventService getWebhookEventService()
+ * @method \SubscribePro\Service\Webhook\WebhookService getWebhookService()
  * @method \SubscribePro\Tools\Report getReportTool()
  */
 class Sdk
@@ -38,11 +38,6 @@ class Sdk
      * @const string
      */
     const CLIENT_SECRET_ENV_NAME = 'SUBSCRIBEPRO_CLIENT_SECRET';
-
-    /**
-     * Config instance name
-     */
-    const CONFIG_INSTANCE_NAME = 'instance_name';
 
     /**
      * @var \SubscribePro\App

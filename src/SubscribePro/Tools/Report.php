@@ -2,10 +2,16 @@
 
 namespace SubscribePro\Tools;
 
+use SubscribePro\Sdk;
 use SubscribePro\Exception\InvalidArgumentException;
 
 class Report
 {
+    /**
+     * Tool name
+     */
+    const NAME = 'report';
+
     /**
      * @var \SubscribePro\Http
      */
@@ -44,7 +50,7 @@ class Report
     /**
      * @param \SubscribePro\Sdk $sdk
      */
-    public function __construct(\SubscribePro\Sdk $sdk)
+    public function __construct(Sdk $sdk)
     {
         $this->httpClient = $sdk->getHttp();
     }
@@ -81,7 +87,7 @@ class Report
             throw new InvalidArgumentException("{$filePath} is not writable.");
         }
 
-        $this->httpClient->getTotFile("/v2/reports/{$code}", $filePath);
+        $this->httpClient->getToSink("/v2/reports/{$code}", $filePath);
     }
 
     /**

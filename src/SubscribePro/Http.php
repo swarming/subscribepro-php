@@ -176,7 +176,7 @@ class Http
      * @return array|int|null
      * @throws \SubscribePro\Exception\HttpException
      */
-    public function getTotFile($uri, $filePath)
+    public function getToSink($uri, $filePath)
     {
         $response = $this->getClient()->get($this->buildUrl($uri), [RequestOptions::SINK => $filePath]);
 

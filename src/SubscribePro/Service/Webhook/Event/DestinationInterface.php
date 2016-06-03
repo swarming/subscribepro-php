@@ -1,6 +1,6 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent\Destination;
+namespace SubscribePro\Service\Webhook\Event;
 
 interface DestinationInterface
 {
@@ -40,7 +40,7 @@ interface DestinationInterface
     public function getLastErrorMessage();
 
     /**
-     * @return \SubscribePro\Service\WebhookEvent\Endpoint\EndpointInterface
+     * @return \SubscribePro\Service\Webhook\Event\Destination\EndpointInterface
      */
     public function getEndpoint();
 }

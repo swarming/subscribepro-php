@@ -24,7 +24,7 @@ class SubscriptionService extends AbstractService
         return new SubscriptionFactory(
             $sdk->getAddressService()->getDataFactory(),
             $sdk->getPaymentProfileService()->getDataFactory(),
-            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Subscription\Subscription')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Subscription\Subscription')
         );
     }
 

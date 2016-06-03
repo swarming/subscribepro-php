@@ -22,7 +22,7 @@ class TransactionService extends AbstractService
     protected function createDataFactory(Sdk $sdk)
     {
         return new TransactionFactory(
-            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Transaction\Transaction')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Transaction\Transaction')
         );
     }
 

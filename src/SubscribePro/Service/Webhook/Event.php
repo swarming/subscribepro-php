@@ -1,10 +1,10 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent;
+namespace SubscribePro\Service\Webhook;
 
-use SubscribePro\Service\WebhookEvent\Destination\DestinationInterface;
+use SubscribePro\Service\Webhook\Event\DestinationInterface;
 
-class WebhookEvent implements WebhookEventInterface
+class Event implements EventInterface
 {
     /**
      * @var array
@@ -52,7 +52,7 @@ class WebhookEvent implements WebhookEventInterface
     }
 
     /**
-     * @return \SubscribePro\Service\WebhookEvent\Destination\DestinationInterface[]
+     * @return \SubscribePro\Service\Webhook\Event\DestinationInterface[]
      */
     public function getDestinations()
     {
@@ -92,6 +92,16 @@ class WebhookEvent implements WebhookEventInterface
     }
 
     /**
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed|null
+     */
+    protected function getData($key, $default = null)
+    {
+        return isset($this->data[$key]) ? $this->data[$key] : $default;
+    }
+
+    /**
      * @param string $field
      * @param string|null $format
      * @return string
@@ -112,15 +122,5 @@ class WebhookEvent implements WebhookEventInterface
     {
         $dateTime = \DateTime::createFromFormat($inputFormat, $date);
         return $dateTime ? $dateTime->format($outputFormat) : $date;
-    }
-
-    /**
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed|null
-     */
-    protected function getData($key, $default = null)
-    {
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
     }
 }

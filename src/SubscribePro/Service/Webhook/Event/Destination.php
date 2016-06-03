@@ -1,6 +1,6 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent\Destination;
+namespace SubscribePro\Service\Webhook\Event;
 
 class Destination implements DestinationInterface
 {
@@ -51,7 +51,7 @@ class Destination implements DestinationInterface
     }
 
     /**
-     * @return \SubscribePro\Service\WebhookEvent\Endpoint\EndpointInterface
+     * @return \SubscribePro\Service\Webhook\Event\Destination\EndpointInterface
      */
     public function getEndpoint()
     {

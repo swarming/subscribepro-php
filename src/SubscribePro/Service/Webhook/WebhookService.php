@@ -1,21 +1,24 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent;
+namespace SubscribePro\Service\Webhook;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
 use SubscribePro\Exception\HttpException;
-use SubscribePro\Service\WebhookEvent\Destination\DestinationFactory;
+use SubscribePro\Service\Webhook\Event\DestinationFactory;
 
-class WebhookEventService extends AbstractService
+class WebhookService extends AbstractService
 {
     /**
      * Service name
      */
-    const NAME = 'webhook_event';
+    const NAME = 'webhook';
     
     const API_NAME_WEBHOOK_EVENT = 'webhook_event';
-    
+
+    const CONFIG_INSTANCE_NAME_DESTINATION = 'instance_name_destination';
+    const CONFIG_INSTANCE_NAME_ENDPOINT = 'instance_name_endpoint';
+
     /**
      * @param \SubscribePro\Sdk $sdk
      * @return \SubscribePro\Service\DataFactoryInterface
@@ -23,40 +26,37 @@ class WebhookEventService extends AbstractService
     protected function createDataFactory(Sdk $sdk)
     {
         $destinationFactory = new DestinationFactory(
-            $this->getConfigValue('destination_instance_name', '\SubscribePro\Service\WebhookEvent\Destination\Destination'),
-            $this->getConfigValue('endpoint_instance_name', '\SubscribePro\Service\WebhookEvent\Endpoint\Endpoint')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME_DESTINATION, '\SubscribePro\Service\Webhook\Event\Destination'),
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME_ENDPOINT, '\SubscribePro\Service\Webhook\Event\Destination\Endpoint')
         );
-        return new WebhookEventFactory(
+        return new EventFactory(
             $sdk->getCustomerService()->getDataFactory(),
             $sdk->getSubscriptionService()->getDataFactory(),
             $destinationFactory,
-            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\WebhookEvent\WebhookEvent')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Webhook\Event')
         );
     }
 
     /**
      * @return bool
      */
-    public function webhookTest()
+    public function ping()
     {
         try {
             $this->httpClient->post('/v2/webhook-test.json');
         } catch (HttpException $exception) {
             return false;
         }
-        
         return true;
     }
 
     /**
      * @param int $eventId
-     * @return \SubscribePro\Service\WebhookEvent\WebhookEventInterface
+     * @return \SubscribePro\Service\Webhook\EventInterface
      */
-    public function loadWebhookEvent($eventId)
+    public function loadEvent($eventId)
     {
         $response = $this->httpClient->get("/v2/webhook-events/{$eventId}.json");
-        $itemData = !empty($response[self::API_NAME_WEBHOOK_EVENT]) ? $response[self::API_NAME_WEBHOOK_EVENT] : [];
-        
-        return $this->dataFactory->create($itemData);
+        return $this->retrieveItem($response, self::API_NAME_WEBHOOK_EVENT);
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent;
+namespace SubscribePro\Service\Webhook;
 
 use SubscribePro\Service\DataFactoryInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
-class WebhookEventFactory implements DataFactoryInterface
+class EventFactory implements DataFactoryInterface
 {
     /**
      * @var string
@@ -36,11 +37,10 @@ class WebhookEventFactory implements DataFactoryInterface
         \SubscribePro\Service\DataFactoryInterface $customerFactory,
         \SubscribePro\Service\DataFactoryInterface $subscriptionFactory,
         \SubscribePro\Service\DataFactoryInterface $destinationFactory,
-        $instanceName = '\SubscribePro\Service\WebhookEvent\WebhookEvent'
+        $instanceName = '\SubscribePro\Service\Webhook\Event'
     ) {
-        $webhookInterface = '\SubscribePro\Service\WebhookEvent\WebhookEventInterface';
-        if (!is_subclass_of($instanceName, $webhookInterface)) {
-            throw new \InvalidArgumentException("{$instanceName} must implement {$webhookInterface}.");
+        if (!is_subclass_of($instanceName, '\SubscribePro\Service\Webhook\EventInterface')) {
+            throw new InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Webhook\\EventInterface'.");
         }
         
         $this->instanceName = $instanceName;
@@ -51,21 +51,21 @@ class WebhookEventFactory implements DataFactoryInterface
 
     /**
      * @param array $data
-     * @return \SubscribePro\Service\WebhookEvent\WebhookEventInterface
+     * @return \SubscribePro\Service\Webhook\EventInterface
      */
     public function create(array $data = [])
     {
-        $jsonData = $this->getJsonData($data, WebhookEventInterface::DATA);
-        $customerData = $this->getFieldData($jsonData, WebhookEventInterface::CUSTOMER);
-        $subscriptionData = $this->getFieldData($jsonData, WebhookEventInterface::SUBSCRIPTION);
-        $destinationsData = $this->getFieldData($data, WebhookEventInterface::DESTINATIONS);
+        $jsonData = $this->getJsonData($data, EventInterface::DATA);
+        $customerData = $this->getFieldData($jsonData, EventInterface::CUSTOMER);
+        $subscriptionData = $this->getFieldData($jsonData, EventInterface::SUBSCRIPTION);
+        $destinationsData = $this->getFieldData($data, EventInterface::DESTINATIONS);
             
-        $data[WebhookEventInterface::DESTINATIONS] = $this->createDestinationItems($destinationsData);
-        $data[WebhookEventInterface::CUSTOMER] = $this->customerFactory->create($customerData);
-        $data[WebhookEventInterface::SUBSCRIPTION] = $this->subscriptionFactory->create($subscriptionData);
+        $data[EventInterface::DESTINATIONS] = $this->createDestinationItems($destinationsData);
+        $data[EventInterface::CUSTOMER] = $this->customerFactory->create($customerData);
+        $data[EventInterface::SUBSCRIPTION] = $this->subscriptionFactory->create($subscriptionData);
         
-        if (isset($data[WebhookEventInterface::DATA])) {
-            unset($data[WebhookEventInterface::DATA]);
+        if (isset($data[EventInterface::DATA])) {
+            unset($data[EventInterface::DATA]);
         }
         
         return new $this->instanceName($data);
@@ -93,7 +93,7 @@ class WebhookEventFactory implements DataFactoryInterface
 
     /**
      * @param array $data
-     * @return \SubscribePro\Service\WebhookEvent\Destination\DestinationInterface[]
+     * @return \SubscribePro\Service\Webhook\Event\DestinationInterface[]
      */
     protected function createDestinationItems(array $data = [])
     {

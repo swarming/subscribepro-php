@@ -1,6 +1,6 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent\Endpoint;
+namespace SubscribePro\Service\Webhook\Event\Destination;
 
 interface EndpointInterface
 {

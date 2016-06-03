@@ -33,7 +33,7 @@ class CustomerService extends AbstractService
     protected function createDataFactory(Sdk $sdk)
     {
         return new CustomerFactory(
-            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Customer\Customer')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Customer\Customer')
         );
     }
 

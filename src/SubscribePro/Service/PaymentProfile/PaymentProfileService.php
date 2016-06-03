@@ -32,7 +32,7 @@ class PaymentProfileService extends AbstractService
     {
         return new PaymentProfileFactory(
             $sdk->getAddressService()->getDataFactory(),
-            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\PaymentProfile\PaymentProfile')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\PaymentProfile\PaymentProfile')
         );
     }
 

@@ -22,7 +22,7 @@ class AddressService extends AbstractService
     protected function createDataFactory(Sdk $sdk)
     {
         return new AddressFactory(
-            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Address\Address')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Address\Address')
         );
     }
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace SubscribePro\Service\WebhookEvent\Destination;
+namespace SubscribePro\Service\Webhook\Event;
 
 use SubscribePro\Service\DataFactoryInterface;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class DestinationFactory implements DataFactoryInterface
 {
@@ -21,17 +22,14 @@ class DestinationFactory implements DataFactoryInterface
      * @param string $endpointInstanceName
      */
     public function __construct(
-        $instanceName = '\SubscribePro\Service\WebhookEvent\Destination\Destination',
-        $endpointInstanceName = '\SubscribePro\Service\WebhookEvent\Endpoint\Endpoint'
+        $instanceName = '\SubscribePro\Service\Webhook\Event\Destination',
+        $endpointInstanceName = '\SubscribePro\Service\Webhook\Event\Destination\Endpoint'
     ) {
-        $destinationInterface = '\SubscribePro\Service\WebhookEvent\Destination\DestinationInterface';
-        $endpointInterface = '\SubscribePro\Service\WebhookEvent\Endpoint\EndpointInterface';
-
-        if (!is_subclass_of($instanceName, $destinationInterface)) {
-            throw new \InvalidArgumentException("{$instanceName} must implement {$destinationInterface}.");
+        if (!is_subclass_of($instanceName, '\SubscribePro\Service\Webhook\Event\DestinationInterface')) {
+            throw new InvalidArgumentException("{$instanceName} must implement \\SubscribePro\\Service\\Webhook\\Event\\DestinationInterface.");
         }
-        if (!is_subclass_of($endpointInstanceName, $endpointInterface)) {
-            throw new \InvalidArgumentException("{$endpointInstanceName} must implement {$endpointInterface}.");
+        if (!is_subclass_of($endpointInstanceName, '\SubscribePro\Service\Webhook\Event\Destination\EndpointInterface')) {
+            throw new InvalidArgumentException("{$endpointInstanceName} must implement \\SubscribePro\\Service\\Webhook\\Event\\Destination\\EndpointInterface.");
         }
         $this->instanceName = $instanceName;
         $this->endpointInstanceName = $endpointInstanceName;
@@ -39,7 +37,7 @@ class DestinationFactory implements DataFactoryInterface
 
     /**
      * @param array $data
-     * @return \SubscribePro\Service\WebhookEvent\Destination\DestinationInterface
+     * @return \SubscribePro\Service\Webhook\Event\DestinationInterface
      */
     public function create(array $data = [])
     {

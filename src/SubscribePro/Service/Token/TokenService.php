@@ -21,7 +21,7 @@ class TokenService extends AbstractService
     protected function createDataFactory(Sdk $sdk)
     {
         return new TokenFactory(
-            $this->getConfigValue(Sdk::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Token\Token')
+            $this->getConfigValue(self::CONFIG_INSTANCE_NAME, '\SubscribePro\Service\Token\Token')
         );
     }
 
