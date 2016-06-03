@@ -81,7 +81,7 @@ class Report
             throw new InvalidArgumentException("{$filePath} is not writable.");
         }
 
-        $this->httpClient->requestFile("/v2/reports/{$code}", $filePath);
+        $this->httpClient->getTotFile("/v2/reports/{$code}", $filePath);
     }
 
     /**
