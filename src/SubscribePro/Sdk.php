@@ -98,7 +98,7 @@ class Sdk
                 $config['logging_file_format'],
                 $config['logging_message_format']
         );
-            unset($config['enable_logging']);
+            unset($config['logging_enable']);
         }
 
         $this->config = $config;
