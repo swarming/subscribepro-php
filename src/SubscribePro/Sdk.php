@@ -73,7 +73,10 @@ class Sdk
         $config = array_merge([
             'client_id' => getenv(static::CLIENT_ID_ENV_NAME),
             'client_secret' => getenv(static::CLIENT_SECRET_ENV_NAME),
-            'enable_logging' => false
+            'logging_enable' => false,
+            'logging_file_name' => null,
+            'logging_file_format' => null,
+            'logging_message_format' => null
         ], $config);
 
         if (!$config['client_id']) {
@@ -89,8 +92,12 @@ class Sdk
 
         $this->http = new Http($this->app);
 
-        if ($config['enable_logging']) {
-            $this->http->initDefaultLogger();
+        if ($config['logging_enable']) {
+            $this->http->initDefaultLogger(
+                $config['logging_file_name'],
+                $config['logging_file_format'],
+                $config['logging_message_format']
+        );
             unset($config['enable_logging']);
         }
 
