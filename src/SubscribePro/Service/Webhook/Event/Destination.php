@@ -39,7 +39,7 @@ class Destination implements DestinationInterface
      */
     public function getLastAttempt($format = null)
     {
-        return $this->getDataDatetime(self::LAST_ATTEMPT, $format);
+        return $this->getDatetimeData(self::LAST_ATTEMPT, $format);
     }
 
     /**
@@ -73,7 +73,7 @@ class Destination implements DestinationInterface
      * @param string|null $format
      * @return string
      */
-    protected function getDataDatetime($field, $format = null)
+    protected function getDatetimeData($field, $format = null)
     {
         $date = $this->getData($field);
         return $format && $date ? $this->formatDate($date, $format, \DateTime::ISO8601) : $date;

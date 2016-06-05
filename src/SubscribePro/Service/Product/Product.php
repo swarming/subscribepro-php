@@ -480,7 +480,7 @@ class Product extends DataObject implements ProductInterface
      */
     public function getCreated($format = null)
     {
-        return $this->getDataDatetime(self::CREATED, $format);
+        return $this->getDatetimeData(self::CREATED, $format);
     }
 
     /**
@@ -489,6 +489,6 @@ class Product extends DataObject implements ProductInterface
      */
     public function getUpdated($format = null)
     {
-        return $this->getDataDatetime(self::UPDATED, $format);
+        return $this->getDatetimeData(self::UPDATED, $format);
     }
 }

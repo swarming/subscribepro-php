@@ -65,7 +65,7 @@ class Event implements EventInterface
      */
     public function getCreated($format = null)
     {
-        return $this->getDataDatetime(self::CREATED, $format);
+        return $this->getDatetimeData(self::CREATED, $format);
     }
 
     /**
@@ -74,7 +74,7 @@ class Event implements EventInterface
      */
     public function getUpdated($format = null)
     {
-        return $this->getDataDatetime(self::UPDATED, $format);
+        return $this->getDatetimeData(self::UPDATED, $format);
     }
 
     /**
@@ -106,7 +106,7 @@ class Event implements EventInterface
      * @param string|null $format
      * @return string
      */
-    protected function getDataDatetime($field, $format = null)
+    protected function getDatetimeData($field, $format = null)
     {
         $date = $this->getData($field);
         return $format && $date ? $this->formatDate($date, $format, \DateTime::ISO8601) : $date;

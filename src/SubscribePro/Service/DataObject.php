@@ -137,7 +137,7 @@ class DataObject implements DataInterface
      * @param string|null $format
      * @return string
      */
-    protected function getDataDate($field, $format = null)
+    protected function getDateData($field, $format = null)
     {
         $date = $this->getData($field);
         return $format && $date ? $this->formatDate($date, $format, 'Y-m-d') : $date;
@@ -148,7 +148,7 @@ class DataObject implements DataInterface
      * @param string|null $format
      * @return string
      */
-    protected function getDataDatetime($field, $format = null)
+    protected function getDatetimeData($field, $format = null)
     {
         $date = $this->getData($field);
         return $format && $date ? $this->formatDate($date, $format, \DateTime::ISO8601) : $date;
