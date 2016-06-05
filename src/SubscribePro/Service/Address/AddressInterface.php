@@ -26,6 +26,18 @@ interface AddressInterface extends DataInterface
     const CREATED = 'created';
     const UPDATED = 'updated';
 
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getFormData();
+
+    /**
+     * @return bool
+     */
+    public function isValid();
+
     /**
      * @param int|null $id
      * @return $this

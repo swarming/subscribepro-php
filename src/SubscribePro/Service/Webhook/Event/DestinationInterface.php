@@ -2,7 +2,9 @@
 
 namespace SubscribePro\Service\Webhook\Event;
 
-interface DestinationInterface
+use SubscribePro\Service\DataInterface;
+
+interface DestinationInterface extends DataInterface
 {
     /**
      * Data fields
@@ -12,16 +14,6 @@ interface DestinationInterface
     const LAST_ATTEMPT = 'last_attempt';
     const ENDPOINT = 'endpoint';
     const LAST_ERROR_MESSAGE = 'last_error_message';
-
-    /**
-     * @return array
-     */
-    public function toArray();
-
-    /**
-     * @return int
-     */
-    public function getId();
 
     /**
      * @return string

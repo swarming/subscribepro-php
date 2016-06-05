@@ -59,6 +59,27 @@ class Transaction extends DataObject implements TransactionInterface
      * @return array
      * @throws \SubscribePro\Exception\InvalidArgumentException
      */
+    public function getFormData()
+    {
+        if (!$this->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        return array_intersect_key($this->data, $this->creatingFields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->checkRequiredFields($this->creatingFields);
+    }
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
     public function getVerifyFormData()
     {
         if (!$this->isVerifyDataValid()) {
@@ -119,14 +140,6 @@ class Transaction extends DataObject implements TransactionInterface
     public function isServiceDataValid()
     {
         return $this->checkRequiredFields($this->serviceFields);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getFormFields()
-    {
-        return $this->creatingFields;
     }
 
     /**

@@ -99,13 +99,21 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * @return array
+     */
+    protected function getFormFields()
+    {
+        return $this->isNew() ? $this->creatingFields : $this->updatingFields;
+    }
+
+    /**
      * @return bool
      */
     public function isValid()
     {
         $isCustomerDataValid = $this->isNew() ? ($this->getCustomerId() || $this->getMagentoCustomerId()) : true;
         return $isCustomerDataValid
-            && parent::isValid()
+            && $this->checkRequiredFields($this->getFormFields())
             && $this->getBillingAddress()->isAsChildValid($this->isNew());
     }
 
@@ -115,7 +123,11 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
      */
     public function getFormData()
     {
-        $formData = parent::getFormData();
+        if (!$this->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        $formData = array_intersect_key($this->data, $this->getFormFields());
         return $this->updateBillingFormData($formData);
     }
 

@@ -58,6 +58,18 @@ interface SubscriptionInterface extends DataInterface
     const STATUS_FAILED = 'Failed';
     const STATUS_PAUSED = 'Paused';
 
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getFormData();
+
+    /**
+     * @return bool
+     */
+    public function isValid();
+
     /**
      * @param int|null $id
      * @return $this

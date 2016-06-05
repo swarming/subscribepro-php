@@ -52,6 +52,18 @@ interface ProductInterface extends DataInterface
     const POM_PASS_THROUGH = 'pass_through';
     const POM_NO_OPTIONS = 'no_options';
 
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getFormData();
+
+    /**
+     * @return bool
+     */
+    public function isValid();
+
     /**
      * @param int|null $id
      * @return $this

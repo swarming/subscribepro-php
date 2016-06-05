@@ -3,6 +3,7 @@
 namespace SubscribePro\Service\Token;
 
 use SubscribePro\Service\DataObject;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class Token extends DataObject implements TokenInterface
 {
@@ -33,10 +34,23 @@ class Token extends DataObject implements TokenInterface
 
     /**
      * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
-    protected function getFormFields()
+    public function getFormData()
     {
-        return $this->creatingFields;
+        if (!$this->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        return array_intersect_key($this->data, $this->creatingFields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->checkRequiredFields($this->creatingFields);
     }
 
     /**

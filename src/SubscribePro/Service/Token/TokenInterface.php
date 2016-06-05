@@ -36,6 +36,18 @@ interface TokenInterface extends DataInterface
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getFormData();
+
+    /**
+     * @return bool
+     */
+    public function isValid();
+
     /**
      * @return string|null
      */

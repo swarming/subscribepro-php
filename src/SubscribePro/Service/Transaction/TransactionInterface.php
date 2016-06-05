@@ -63,6 +63,18 @@ interface TransactionInterface extends DataInterface
     const STATE_GATEWAY_PROCESSING_FAILED = 'gateway_processing_failed';
     const STATE_GATEWAY_PROCESSING_RESULT_UNKNOWN = 'gateway_processing_result_unknown';
 
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getFormData();
+
+    /**
+     * @return bool
+     */
+    public function isValid();
+
     /**
      * @return array
      * @throws \SubscribePro\Exception\InvalidArgumentException
@@ -78,6 +90,11 @@ interface TransactionInterface extends DataInterface
      * @return array
      */
     public function getServiceFormData();
+
+    /**
+     * @return bool
+     */
+    public function isServiceDataValid();
 
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $address

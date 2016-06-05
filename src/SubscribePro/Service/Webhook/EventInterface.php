@@ -2,7 +2,9 @@
 
 namespace SubscribePro\Service\Webhook;
 
-interface EventInterface
+use SubscribePro\Service\DataInterface;
+
+interface EventInterface extends DataInterface
 {
     /**
      * Data fields
@@ -15,16 +17,6 @@ interface EventInterface
     const DESTINATIONS = 'destinations';
     const CREATED = 'created';
     const UPDATED = 'updated';
-
-    /**
-     * @return int
-     */
-    public function getId();
-
-    /**
-     * @return array
-     */
-    public function toArray();
 
     /**
      * @return \SubscribePro\Service\Customer\CustomerInterface

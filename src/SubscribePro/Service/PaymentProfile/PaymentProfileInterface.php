@@ -55,6 +55,18 @@ interface PaymentProfileInterface extends DataInterface
     const CC_TYPE_DINERS_CLUB = 'diners_club';
     const CC_TYPE_DANKORT = 'dankort';
 
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getFormData();
+
+    /**
+     * @return bool
+     */
+    public function isValid();
+
     /**
      * @return array
      * @throws \SubscribePro\Exception\InvalidArgumentException

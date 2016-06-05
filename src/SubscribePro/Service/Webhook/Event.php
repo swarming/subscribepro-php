@@ -2,31 +2,11 @@
 
 namespace SubscribePro\Service\Webhook;
 
+use SubscribePro\Service\DataObject;
 use SubscribePro\Service\Webhook\Event\DestinationInterface;
 
-class Event implements EventInterface
+class Event extends DataObject implements EventInterface
 {
-    /**
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        $this->data = $data;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->getData(self::ID);
-    }
-
     /**
      * @return \SubscribePro\Service\Customer\CustomerInterface
      */
@@ -82,45 +62,12 @@ class Event implements EventInterface
      */
     public function toArray()
     {
-        $data = $this->data;
+        $data = parent::toArray();
         $data[self::CUSTOMER] = $this->getCustomer()->toArray();
         $data[self::SUBSCRIPTION] = $this->getSubscription()->toArray();
         $data[self::DESTINATIONS] = array_map(function (DestinationInterface $destination) {
             return $destination->toArray();
         }, $this->getDestinations());
         return $data;
-    }
-
-    /**
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed|null
-     */
-    protected function getData($key, $default = null)
-    {
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
-    }
-
-    /**
-     * @param string $field
-     * @param string|null $format
-     * @return string
-     */
-    protected function getDatetimeData($field, $format = null)
-    {
-        $date = $this->getData($field);
-        return $format && $date ? $this->formatDate($date, $format, \DateTime::ISO8601) : $date;
-    }
-
-    /**
-     * @param string $date
-     * @param string $outputFormat
-     * @param string $inputFormat
-     * @return string
-     */
-    protected function formatDate($date, $outputFormat, $inputFormat)
-    {
-        $dateTime = \DateTime::createFromFormat($inputFormat, $date);
-        return $dateTime ? $dateTime->format($outputFormat) : $date;
     }
 }

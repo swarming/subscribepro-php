@@ -2,29 +2,10 @@
 
 namespace SubscribePro\Service\Webhook\Event;
 
-class Destination implements DestinationInterface
+use SubscribePro\Service\DataObject;
+
+class Destination extends DataObject implements DestinationInterface
 {
-    /**
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        $this->data = $data;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->getData(self::ID);
-    }
-
     /**
      * @return string
      */
@@ -63,41 +44,8 @@ class Destination implements DestinationInterface
      */
     public function toArray()
     {
-        $data = $this->data;
+        $data = parent::toArray();
         $data[self::ENDPOINT] = $this->getEndpoint()->toArray();
         return $data;
-    }
-
-    /**
-     * @param string $field
-     * @param string|null $format
-     * @return string
-     */
-    protected function getDatetimeData($field, $format = null)
-    {
-        $date = $this->getData($field);
-        return $format && $date ? $this->formatDate($date, $format, \DateTime::ISO8601) : $date;
-    }
-
-    /**
-     * @param string $date
-     * @param string $outputFormat
-     * @param string $inputFormat
-     * @return string
-     */
-    protected function formatDate($date, $outputFormat, $inputFormat)
-    {
-        $dateTime = \DateTime::createFromFormat($inputFormat, $date);
-        return $dateTime ? $dateTime->format($outputFormat) : $date;
-    }
-
-    /**
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed|null
-     */
-    protected function getData($key, $default = null)
-    {
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
     }
 }

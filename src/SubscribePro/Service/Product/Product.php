@@ -94,6 +94,35 @@ class Product extends DataObject implements ProductInterface
     ];
 
     /**
+     * @return array
+     */
+    protected function getFormFields()
+    {
+        return $this->isNew() ? $this->creatingFields : $this->updatingFields;
+    }
+
+    /**
+     * @return array
+     * @throws \SubscribePro\Exception\InvalidArgumentException
+     */
+    public function getFormData()
+    {
+        if (!$this->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        return array_intersect_key($this->data, $this->getFormFields());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->checkRequiredFields($this->getFormFields());
+    }
+
+    /**
      * @param int|null $id
      * @return $this
      */
