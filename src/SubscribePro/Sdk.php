@@ -97,7 +97,7 @@ class Sdk
                 $config['logging_file_name'],
                 $config['logging_file_format'],
                 $config['logging_message_format']
-        );
+            );
             unset($config['logging_enable']);
         }
 
