@@ -42,7 +42,7 @@ class ProductService extends AbstractService
      */
     public function saveProduct(ProductInterface $item)
     {
-        $url = $item->isNew() ? '/v2/product.json' : "/v2/products/{$item->getId()}.json";
+        $url = $item->isNew() ? '/services/v2/product.json' : "/services/v2/products/{$item->getId()}.json";
         $response = $this->httpClient->post($url, [self::API_NAME_PRODUCT => $item->getFormData()]);
         return $this->retrieveItem($response, self::API_NAME_PRODUCT, $item);
     }
@@ -54,7 +54,7 @@ class ProductService extends AbstractService
      */
     public function loadProduct($productId)
     {
-        $response = $this->httpClient->get("/v2/products/{$productId}.json");
+        $response = $this->httpClient->get("/services/v2/products/{$productId}.json");
         return $this->retrieveItem($response, self::API_NAME_PRODUCT);
     }
 
@@ -66,7 +66,7 @@ class ProductService extends AbstractService
     public function loadProducts($sku = null)
     {
         $filters = !empty($sku) ? [ProductInterface::SKU => $sku] : [];
-        $response = $this->httpClient->get('/v2/products.json', $filters);
+        $response = $this->httpClient->get('/services/v2/products.json', $filters);
         return $this->retrieveItems($response, self::API_NAME_PRODUCTS);
     }
 }

@@ -41,7 +41,7 @@ class TokenService extends AbstractService
      */
     public function loadToken($token)
     {
-        $response = $this->httpClient->get("/v1/vault/tokens/{$token}.json");
+        $response = $this->httpClient->get("/services/v1/vault/tokens/{$token}.json");
         return $this->retrieveItem($response, self::API_NAME_TOKEN);
     }
 
@@ -53,7 +53,7 @@ class TokenService extends AbstractService
      */
     public function saveToken($token)
     {
-        $response = $this->httpClient->post('/v1/vault/token.json', [self::API_NAME_TOKEN => $token->getFormData()]);
+        $response = $this->httpClient->post('/services/v1/vault/token.json', [self::API_NAME_TOKEN => $token->getFormData()]);
         return $this->retrieveItem($response, self::API_NAME_TOKEN, $token);
     }
 }

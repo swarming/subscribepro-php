@@ -44,7 +44,7 @@ class SubscriptionService extends AbstractService
      */
     public function saveSubscription(SubscriptionInterface $item)
     {
-        $url = $item->isNew() ? '/v2/subscription.json' : "/v2/subscriptions/{$item->getId()}.json";
+        $url = $item->isNew() ? '/services/v2/subscription.json' : "/services/v2/subscriptions/{$item->getId()}.json";
         $response = $this->httpClient->post($url, [self::API_NAME_SUBSCRIPTION => $item->getFormData()]);
         return $this->retrieveItem($response, self::API_NAME_SUBSCRIPTION, $item);
     }
@@ -56,7 +56,7 @@ class SubscriptionService extends AbstractService
      */
     public function loadSubscription($subscriptionId)
     {
-        $response = $this->httpClient->get("/v2/subscriptions/{$subscriptionId}.json");
+        $response = $this->httpClient->get("/services/v2/subscriptions/{$subscriptionId}.json");
         return $this->retrieveItem($response, self::API_NAME_SUBSCRIPTION);
     }
 
@@ -68,7 +68,7 @@ class SubscriptionService extends AbstractService
     public function loadSubscriptions($customerId = null)
     {
         $filters = $customerId ? [SubscriptionInterface::CUSTOMER_ID => $customerId] : [];
-        $response = $this->httpClient->get('/v2/subscriptions.json', $filters);
+        $response = $this->httpClient->get('/services/v2/subscriptions.json', $filters);
         return $this->retrieveItems($response, self::API_NAME_SUBSCRIPTIONS);
     }
 
@@ -78,7 +78,7 @@ class SubscriptionService extends AbstractService
      */
     public function cancelSubscription($subscriptionId)
     {
-        $this->httpClient->post("v2/subscriptions/{$subscriptionId}/cancel.json");
+        $this->httpClient->post("/services/v2/subscriptions/{$subscriptionId}/cancel.json");
     }
 
     /**
@@ -87,7 +87,7 @@ class SubscriptionService extends AbstractService
      */
     public function pauseSubscription($subscriptionId)
     {
-        $this->httpClient->post("v2/subscriptions/{$subscriptionId}/pause.json");
+        $this->httpClient->post("/services/v2/subscriptions/{$subscriptionId}/pause.json");
     }
 
     /**
@@ -96,7 +96,7 @@ class SubscriptionService extends AbstractService
      */
     public function restartSubscription($subscriptionId)
     {
-        $this->httpClient->post("v2/subscriptions/{$subscriptionId}/restart.json");
+        $this->httpClient->post("/services/v2/subscriptions/{$subscriptionId}/restart.json");
     }
 
     /**
@@ -105,6 +105,6 @@ class SubscriptionService extends AbstractService
      */
     public function skipSubscription($subscriptionId)
     {
-        $this->httpClient->post("v2/subscriptions/{$subscriptionId}/skip.json");
+        $this->httpClient->post("/services/v2/subscriptions/{$subscriptionId}/skip.json");
     }
 }

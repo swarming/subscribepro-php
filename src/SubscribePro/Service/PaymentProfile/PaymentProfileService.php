@@ -54,8 +54,8 @@ class PaymentProfileService extends AbstractService
     {
         $postData = [self::API_NAME_PROFILE => $paymentProfile->getFormData()];
         $response = $paymentProfile->isNew()
-            ? $this->httpClient->post('/v1/vault/paymentprofile.json', $postData)
-            : $this->httpClient->put("/v1/vault/paymentprofiles/{$paymentProfile->getId()}.json", $postData);
+            ? $this->httpClient->post('/services/v1/vault/paymentprofile.json', $postData)
+            : $this->httpClient->put("/services/v1/vault/paymentprofiles/{$paymentProfile->getId()}.json", $postData);
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
     }
 
@@ -66,7 +66,7 @@ class PaymentProfileService extends AbstractService
      */
     public function redactProfile($paymentProfileId)
     {
-        $response = $this->httpClient->put("v1/vault/paymentprofiles/{$paymentProfileId}/redact.json");
+        $response = $this->httpClient->put("/services/v1/vault/paymentprofiles/{$paymentProfileId}/redact.json");
         return $this->retrieveItem($response, self::API_NAME_PROFILE);
     }
 
@@ -77,7 +77,7 @@ class PaymentProfileService extends AbstractService
      */
     public function loadProfile($paymentProfileId)
     {
-        $response = $this->httpClient->get("/v1/vault/paymentprofiles/{$paymentProfileId}.json");
+        $response = $this->httpClient->get("/services/v1/vault/paymentprofiles/{$paymentProfileId}.json");
         return $this->retrieveItem($response, self::API_NAME_PROFILE);
     }
 
@@ -100,7 +100,7 @@ class PaymentProfileService extends AbstractService
             );
         }
 
-        $response = $this->httpClient->get('/v1/vault/paymentprofiles.json', $filters);
+        $response = $this->httpClient->get('/services/v1/vault/paymentprofiles.json', $filters);
         return $this->retrieveItems($response, self::API_NAME_PROFILES);
     }
 
@@ -112,7 +112,7 @@ class PaymentProfileService extends AbstractService
     public function saveThirdPartyToken(PaymentProfileInterface $paymentProfile)
     {
         $response = $this->httpClient->post(
-            '/v2/paymentprofile/third-party-token.json',
+            '/services/v2/paymentprofile/third-party-token.json',
             [self::API_NAME_PROFILE => $paymentProfile->getThirdPartyTokenFormData()]
         );
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
@@ -127,7 +127,7 @@ class PaymentProfileService extends AbstractService
     public function saveToken($token, PaymentProfileInterface $paymentProfile)
     {
         $response = $this->httpClient->post(
-            "v1/vault/tokens/{$token}/store.json",
+            "/services/v1/vault/tokens/{$token}/store.json",
             ['payment_profile' => $paymentProfile->getTokenFormData()]
         );
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
@@ -142,7 +142,7 @@ class PaymentProfileService extends AbstractService
     public function verifyAndSaveToken($token, PaymentProfileInterface $paymentProfile)
     {
         $response = $this->httpClient->post(
-            "v1/vault/tokens/{$token}/verifyandstore.json",
+            "/services/v1/vault/tokens/{$token}/verifyandstore.json",
             ['payment_profile' => $paymentProfile->getTokenFormData()]
         );
         return $this->retrieveItem($response, self::API_NAME_PROFILE, $paymentProfile);
@@ -155,7 +155,7 @@ class PaymentProfileService extends AbstractService
      */
     public function loadProfileByToken($token)
     {
-        $response = $this->httpClient->get("v1/vault/tokens/{$token}/paymentprofile.json");
+        $response = $this->httpClient->get("/services/v1/vault/tokens/{$token}/paymentprofile.json");
         return $this->retrieveItem($response, self::API_NAME_PROFILE);
     }
 }

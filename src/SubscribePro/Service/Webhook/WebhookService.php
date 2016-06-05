@@ -43,7 +43,7 @@ class WebhookService extends AbstractService
     public function ping()
     {
         try {
-            $this->httpClient->post('/v2/webhook-test.json');
+            $this->httpClient->post('/services/v2/webhook-test.json');
         } catch (HttpException $exception) {
             return false;
         }
@@ -56,7 +56,7 @@ class WebhookService extends AbstractService
      */
     public function loadEvent($eventId)
     {
-        $response = $this->httpClient->get("/v2/webhook-events/{$eventId}.json");
+        $response = $this->httpClient->get("/services/v2/webhook-events/{$eventId}.json");
         return $this->retrieveItem($response, self::API_NAME_WEBHOOK_EVENT);
     }
 }

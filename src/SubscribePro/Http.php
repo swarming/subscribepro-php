@@ -120,15 +120,6 @@ class Http
     }
 
     /**
-     * @param string $url
-     * @return string
-     */
-    protected function buildUrl($url)
-    {
-        return '/services/' . ltrim($url, '/');
-    }
-
-    /**
      * @param string $uri
      * @param array $params
      * @return array|int|null
@@ -137,7 +128,7 @@ class Http
     public function get($uri, $params = [])
     {
         $options = empty($params) ? [] : ['query' => $params];
-        $response = $this->getClient()->get($this->buildUrl($uri), $options);
+        $response = $this->getClient()->get($uri, $options);
 
         return $this->processResponse($response);
     }
@@ -151,7 +142,7 @@ class Http
     public function post($uri, $postData = [])
     {
         $options = empty($postData) ? [] : ['json' => $postData];
-        $response = $this->getClient()->post($this->buildUrl($uri), $options);
+        $response = $this->getClient()->post($uri, $options);
 
         return $this->processResponse($response);
     }
@@ -165,7 +156,7 @@ class Http
     public function put($uri, $putData = [])
     {
         $options = empty($putData) ? [] : ['json' => $putData];
-        $response = $this->getClient()->put($this->buildUrl($uri), $options);
+        $response = $this->getClient()->put($uri, $options);
 
         return $this->processResponse($response);
     }
@@ -178,7 +169,7 @@ class Http
      */
     public function getToSink($uri, $filePath)
     {
-        $response = $this->getClient()->get($this->buildUrl($uri), [RequestOptions::SINK => $filePath]);
+        $response = $this->getClient()->get($uri, [RequestOptions::SINK => $filePath]);
 
         return $this->processResponse($response);
     }

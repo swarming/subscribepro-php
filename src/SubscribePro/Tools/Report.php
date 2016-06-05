@@ -87,7 +87,7 @@ class Report
             throw new InvalidArgumentException("{$filePath} is not writable.");
         }
 
-        $this->httpClient->getToSink("/v2/reports/{$code}", $filePath);
+        $this->httpClient->getToSink("/services/v2/reports/{$code}", $filePath);
     }
 
     /**

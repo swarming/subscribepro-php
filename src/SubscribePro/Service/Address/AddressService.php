@@ -42,7 +42,7 @@ class AddressService extends AbstractService
      */
     public function loadAddress($addressId)
     {
-        $response = $this->httpClient->get("/v2/addresses/{$addressId}.json");
+        $response = $this->httpClient->get("/services/v2/addresses/{$addressId}.json");
         return $this->retrieveItem($response, self::API_NAME_ADDRESS);
     }
 
@@ -53,7 +53,7 @@ class AddressService extends AbstractService
      */
     public function saveAddress(AddressInterface $item)
     {
-        $url = $item->isNew() ? '/v2/address.json' : "/v2/addresses/{$item->getId()}.json";
+        $url = $item->isNew() ? '/services/v2/address.json' : "/services/v2/addresses/{$item->getId()}.json";
         $response = $this->httpClient->post($url, [self::API_NAME_ADDRESS => $item->getFormData()]);
         return $this->retrieveItem($response, self::API_NAME_ADDRESS, $item);
     }
@@ -66,7 +66,7 @@ class AddressService extends AbstractService
      */
     public function findOrSave($item)
     {
-        $response = $this->httpClient->post('/v2/address/find-or-create.json', [self::API_NAME_ADDRESS => $item->getFormData()]);
+        $response = $this->httpClient->post('/services/v2/address/find-or-create.json', [self::API_NAME_ADDRESS => $item->getFormData()]);
         return $this->retrieveItem($response, self::API_NAME_ADDRESS, $item);
     }
 
@@ -78,7 +78,7 @@ class AddressService extends AbstractService
     public function loadAddresses($customerId = null)
     {
         $params = $customerId ? [AddressInterface::CUSTOMER_ID => $customerId] : [];
-        $response = $this->httpClient->get('/v2/addresses.json', $params);
+        $response = $this->httpClient->get('/services/v2/addresses.json', $params);
         return $this->retrieveItems($response, self::API_NAME_ADDRESSES);
     }
 }

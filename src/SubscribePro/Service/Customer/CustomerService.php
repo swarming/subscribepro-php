@@ -53,7 +53,7 @@ class CustomerService extends AbstractService
      */
     public function saveCustomer(CustomerInterface $item)
     {
-        $url = $item->isNew() ? '/v2/customer.json' : "/v2/customers/{$item->getId()}.json";
+        $url = $item->isNew() ? '/services/v2/customer.json' : "/services/v2/customers/{$item->getId()}.json";
         $response = $this->httpClient->post($url, [self::API_NAME_CUSTOMER => $item->getFormData()]);
         return $this->retrieveItem($response, self::API_NAME_CUSTOMER, $item);
     }
@@ -65,7 +65,7 @@ class CustomerService extends AbstractService
      */
     public function loadCustomer($customerId)
     {
-        $response = $this->httpClient->get("/v2/customers/{$customerId}.json");
+        $response = $this->httpClient->get("/services/v2/customers/{$customerId}.json");
         return $this->retrieveItem($response, self::API_NAME_CUSTOMER);
     }
 
@@ -90,7 +90,7 @@ class CustomerService extends AbstractService
             );
         }
 
-        $response = $this->httpClient->get('/v2/customers.json', $filters);
+        $response = $this->httpClient->get('/services/v2/customers.json', $filters);
         return $this->retrieveItems($response, self::API_NAME_CUSTOMERS);
     }
 }

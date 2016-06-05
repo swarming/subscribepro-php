@@ -42,7 +42,7 @@ class TransactionService extends AbstractService
      */
     public function loadTransaction($transactionId)
     {
-        $response = $this->httpClient->get("/v1/vault/transactions/{$transactionId}.json");
+        $response = $this->httpClient->get("/services/v1/vault/transactions/{$transactionId}.json");
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION);
     }
 
@@ -55,7 +55,7 @@ class TransactionService extends AbstractService
     public function verifyProfile($paymentProfileId, TransactionInterface $transaction)
     {
         $response = $this->httpClient->post(
-            "v1/vault/paymentprofiles/{$paymentProfileId}/verify.json",
+            "/services/v1/vault/paymentprofiles/{$paymentProfileId}/verify.json",
             [self::API_NAME_TRANSACTION => $transaction->getVerifyFormData()]
         );
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
@@ -70,7 +70,7 @@ class TransactionService extends AbstractService
     public function authorizeByProfile($paymentProfileId, TransactionInterface $transaction)
     {
         $response = $this->httpClient->post(
-            "v1/vault/paymentprofiles/{$paymentProfileId}/authorize.json",
+            "/services/v1/vault/paymentprofiles/{$paymentProfileId}/authorize.json",
             [self::API_NAME_TRANSACTION => $transaction->getFormData()]
         );
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
@@ -85,7 +85,7 @@ class TransactionService extends AbstractService
     public function purchaseByProfile($paymentProfileId, TransactionInterface $transaction)
     {
         $response = $this->httpClient->post(
-            "v1/vault/paymentprofiles/{$paymentProfileId}/purchase.json",
+            "/services/v1/vault/paymentprofiles/{$paymentProfileId}/purchase.json",
             [self::API_NAME_TRANSACTION => $transaction->getFormData()]
         );
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
@@ -101,7 +101,7 @@ class TransactionService extends AbstractService
     public function authorizeByToken($token, TransactionInterface $transaction, AddressInterface $address = null)
     {
         $response = $this->httpClient->post(
-            "v1/vault/tokens/{$token}/authorize.json",
+            "/services/v1/vault/tokens/{$token}/authorize.json",
             [self::API_NAME_TRANSACTION => $transaction->getTokenFormData($address)]
         );
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
@@ -117,7 +117,7 @@ class TransactionService extends AbstractService
     public function purchaseByToken($token, TransactionInterface $transaction, AddressInterface $address = null)
     {
         $response = $this->httpClient->post(
-            "v1/vault/tokens/{$token}/purchase.json",
+            "/services/v1/vault/tokens/{$token}/purchase.json",
             [self::API_NAME_TRANSACTION => $transaction->getTokenFormData($address)]
         );
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
@@ -132,7 +132,7 @@ class TransactionService extends AbstractService
     public function capture($transactionId, TransactionInterface $transaction = null)
     {
         $postData = $transaction ? [self::API_NAME_TRANSACTION => $transaction->getServiceFormData()] : [];
-        $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/capture.json", $postData);
+        $response = $this->httpClient->post("/services/v1/vault/transactions/{$transactionId}/capture.json", $postData);
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
     }
 
@@ -145,7 +145,7 @@ class TransactionService extends AbstractService
     public function credit($transactionId, TransactionInterface $transaction = null)
     {
         $postData = $transaction ? [self::API_NAME_TRANSACTION => $transaction->getServiceFormData()] : [];
-        $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/credit.json", $postData);
+        $response = $this->httpClient->post("/services/v1/vault/transactions/{$transactionId}/credit.json", $postData);
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION, $transaction);
     }
 
@@ -156,7 +156,7 @@ class TransactionService extends AbstractService
      */
     public function void($transactionId)
     {
-        $response = $this->httpClient->post("v1/vault/transactions/{$transactionId}/void.json");
+        $response = $this->httpClient->post("/services/v1/vault/transactions/{$transactionId}/void.json");
         return $this->retrieveItem($response, self::API_NAME_TRANSACTION);
     }
 }
