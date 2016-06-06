@@ -70,7 +70,7 @@ class Report
      * - products
      *
      * @param string $code
-     * @param string $filePath
+     * @param string|resource $filePath
      * @return void
      * @throws \SubscribePro\Exception\HttpException
      * @throws \SubscribePro\Exception\InvalidArgumentException
@@ -80,11 +80,9 @@ class Report
         if (!in_array($code, $this->reportCodes)) {
             throw new InvalidArgumentException('Invalid report code. Allowed values: ' . implode(', ', $this->reportCodes));
         }
-        if ($this->isDirectory($filePath)) {
-            throw new InvalidArgumentException("{$filePath} is a directory.");
-        }
-        if (!$this->canWriteToFile($filePath)) {
-            throw new InvalidArgumentException("{$filePath} is not writable.");
+
+        if (!is_resource($filePath) && !$this->isWritable($filePath)) {
+            throw new InvalidArgumentException("{$filePath} is not writable or a directory.");
         }
 
         $this->httpClient->getToSink("/services/v2/reports/{$code}", $filePath);
@@ -94,17 +92,10 @@ class Report
      * @param string $filePath
      * @return bool
      */
-    protected function canWriteToFile($filePath)
+    protected function isWritable($filePath)
     {
-        return file_exists($filePath) ? is_writable($filePath) : is_writable(dirname($filePath));
-    }
-
-    /**
-     * @param string $filePath
-     * @return bool
-     */
-    protected function isDirectory($filePath)
-    {
-        return is_dir($filePath);
+        return !is_dir($filePath)
+            &&
+            (file_exists($filePath) ? is_writable($filePath) : is_writable(dirname($filePath)));
     }
 }
