@@ -81,9 +81,10 @@ class Http
      * @param string|null $fileName
      * @param string|null $lineFormat
      * @param string|null $messageFormat
-     * @return \SubscribePro\Http
+     * @param string $logLevel
+     * @return Http
      */
-    public function initDefaultLogger($fileName = null, $lineFormat = null, $messageFormat = null)
+    public function initDefaultLogger($fileName = null, $lineFormat = null, $messageFormat = null, $logLevel = LogLevel::INFO)
     {
         $fileName = $fileName ?: static::DEFAULT_LOG_FILE_NAME;
         $lineFormat = $lineFormat ?: static::DEFAULT_LOG_LINE_FORMAT;
@@ -92,7 +93,7 @@ class Http
         $logHandler = new RotatingFileHandler($fileName);
         $logHandler->setFormatter(new LineFormatter($lineFormat, null, true));
 
-        return $this->addLogger(new Logger('Logger', [$logHandler]), new MessageFormatter($messageFormat));
+        return $this->addLogger(new Logger('Logger', [$logHandler]), new MessageFormatter($messageFormat), $logLevel);
     }
 
     /**

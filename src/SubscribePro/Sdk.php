@@ -4,6 +4,7 @@ namespace SubscribePro;
 
 use SubscribePro\Exception\InvalidArgumentException;
 use SubscribePro\Exception\BadMethodCallException;
+use Psr\Log\LogLevel;
 
 /**
  * @method \SubscribePro\Service\Product\ProductService getProductService()
@@ -74,6 +75,7 @@ class Sdk
             'client_id' => getenv(static::CLIENT_ID_ENV_NAME),
             'client_secret' => getenv(static::CLIENT_SECRET_ENV_NAME),
             'logging_enable' => false,
+            'logging_level' => LogLevel::INFO,
             'logging_file_name' => null,
             'logging_file_format' => null,
             'logging_message_format' => null
@@ -96,9 +98,14 @@ class Sdk
             $this->http->initDefaultLogger(
                 $config['logging_file_name'],
                 $config['logging_file_format'],
-                $config['logging_message_format']
+                $config['logging_message_format'],
+                $config['logging_level']
             );
             unset($config['logging_enable']);
+            unset($config['logging_level']);
+            unset($config['logging_file_name']);
+            unset($config['logging_file_format']);
+            unset($config['logging_message_format']);
         }
 
         $this->config = $config;
