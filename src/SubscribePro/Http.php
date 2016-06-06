@@ -127,7 +127,7 @@ class Http
      */
     public function get($uri, $params = [])
     {
-        $options = empty($params) ? [] : ['query' => $params];
+        $options = empty($params) ? [] : [RequestOptions::QUERY => $params];
         $response = $this->getClient()->get($uri, $options);
 
         return $this->processResponse($response);
@@ -141,7 +141,7 @@ class Http
      */
     public function post($uri, $postData = [])
     {
-        $options = empty($postData) ? [] : ['json' => $postData];
+        $options = empty($postData) ? [] : [RequestOptions::JSON => $postData];
         $response = $this->getClient()->post($uri, $options);
 
         return $this->processResponse($response);
@@ -155,7 +155,7 @@ class Http
      */
     public function put($uri, $putData = [])
     {
-        $options = empty($putData) ? [] : ['json' => $putData];
+        $options = empty($putData) ? [] : [RequestOptions::JSON => $putData];
         $response = $this->getClient()->put($uri, $options);
 
         return $this->processResponse($response);
