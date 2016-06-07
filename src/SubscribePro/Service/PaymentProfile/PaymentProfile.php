@@ -465,18 +465,20 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     }
 
     /**
+     * @param null $format
      * @return string
      */
-    public function getCreated()
+    public function getCreated($format = null)
     {
-        return $this->getData(self::CREATED);
+        return $this->getDatetimeData(self::CREATED, $format);
     }
 
     /**
+     * @param null $format
      * @return string
      */
-    public function getUpdated()
+    public function getUpdated($format = null)
     {
-        return $this->getData(self::UPDATED);
+        return $this->getDatetimeData(self::UPDATED, $format);
     }
 }

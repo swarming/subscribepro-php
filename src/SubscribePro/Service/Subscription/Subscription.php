@@ -297,7 +297,11 @@ class Subscription extends DataObject implements SubscriptionInterface
      */
     public function setPaymentProfileId($paymentProfileId)
     {
-        return $this->setData(self::PAYMENT_PROFILE_ID, $paymentProfileId);
+        $this->setData(self::PAYMENT_PROFILE_ID, $paymentProfileId);
+        if ($this->getPaymentProfile()->getId() != $paymentProfileId) {
+            $this->getPaymentProfile()->importData([PaymentProfileInterface::ID => $paymentProfileId]);
+        }
+        return $this;
     }
 
     /**

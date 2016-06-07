@@ -266,12 +266,14 @@ interface PaymentProfileInterface extends DataInterface
     public function getStatus();
 
     /**
+     * @param null $format
      * @return string
      */
-    public function getCreated();
+    public function getCreated($format = null);
 
     /**
+     * @param null $format
      * @return string
      */
-    public function getUpdated();
+    public function getUpdated($format = null);
 }

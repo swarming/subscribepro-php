@@ -104,7 +104,7 @@ class Http
      */
     public function addLogger($logger, $messageFormatter, $logLevel = LogLevel::INFO)
     {
-        $this->handlerStack->push(Middleware::log($logger, $messageFormatter, $logLevel));
+        $this->handlerStack->push(Middleware::log($logger, $messageFormatter, $logLevel), 'logger');
         return $this;
     }
 
