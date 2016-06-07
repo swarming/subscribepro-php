@@ -350,7 +350,11 @@ class Subscription extends DataObject implements SubscriptionInterface
      */
     public function setShippingAddressId($shippingAddressId)
     {
-        return $this->setData(self::SHIPPING_ADDRESS_ID, $shippingAddressId);
+        $this->setData(self::SHIPPING_ADDRESS_ID, $shippingAddressId);
+        if ($this->getShippingAddress()->getId() != $shippingAddressId) {
+            $this->getShippingAddress()->importData([AddressInterface::ID => $shippingAddressId]);
+        }
+        return $this;
     }
 
     /**
