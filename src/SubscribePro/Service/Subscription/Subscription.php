@@ -5,7 +5,6 @@ namespace SubscribePro\Service\Subscription;
 use SubscribePro\Service\DataObject;
 use SubscribePro\Service\Address\AddressInterface;
 use SubscribePro\Service\PaymentProfile\PaymentProfileInterface;
-use SubscribePro\Exception\InvalidArgumentException;
 
 class Subscription extends DataObject implements SubscriptionInterface
 {
@@ -26,7 +25,7 @@ class Subscription extends DataObject implements SubscriptionInterface
         self::QTY => true,
         self::USE_FIXED_PRICE => true,
         self::FIXED_PRICE => false,
-        self::INTERVAL => true, /* TODO In documentation this field is not required in create method */
+        self::INTERVAL => true,
         self::NEXT_ORDER_DATE => true,
         self::FIRST_ORDER_ALREADY_CREATED => false,
         self::SEND_CUSTOMER_NOTIFICATION_EMAIL => false,
@@ -106,14 +105,9 @@ class Subscription extends DataObject implements SubscriptionInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {
-        if (!$this->isValid()) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         $formData = array_intersect_key($this->data, $this->getFormFields());
 
         $formData[self::SHIPPING_ADDRESS] = $this->getShippingAddress()->getAsChildFormData($this->isNew());

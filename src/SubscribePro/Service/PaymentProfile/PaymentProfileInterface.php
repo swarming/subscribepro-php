@@ -57,7 +57,6 @@ interface PaymentProfileInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData();
 
@@ -68,7 +67,6 @@ interface PaymentProfileInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getThirdPartyTokenFormData();
 
@@ -79,7 +77,6 @@ interface PaymentProfileInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getTokenFormData();
 
@@ -133,6 +130,7 @@ interface PaymentProfileInterface extends DataInterface
      *
      * @param string $creditcardType
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setCreditcardType($creditcardType);
 

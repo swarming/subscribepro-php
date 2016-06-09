@@ -3,7 +3,6 @@
 namespace SubscribePro\Service\Address;
 
 use SubscribePro\Service\DataObject;
-use SubscribePro\Exception\InvalidArgumentException;
 
 class Address extends DataObject implements AddressInterface
 {
@@ -50,10 +49,10 @@ class Address extends DataObject implements AddressInterface
     /**
      * @var array
      */
-    protected $asChildFields = [
-        self::FIRST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
+    protected $creatingAsChildFields = [
+        self::FIRST_NAME => true,
         self::MIDDLE_NAME => false,
-        self::LAST_NAME => true, /* TODO for update fields are not required (in docs they are required) */
+        self::LAST_NAME => true,
         self::COMPANY => false,
         self::STREET1 => false,
         self::STREET2 => false,
@@ -74,14 +73,9 @@ class Address extends DataObject implements AddressInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {
-        if (!$this->isValid()) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         return array_intersect_key($this->data, $this->getFormFields());
     }
 
@@ -105,14 +99,9 @@ class Address extends DataObject implements AddressInterface
     /**
      * @param bool $isNew
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getAsChildFormData($isNew)
     {
-        if (!$this->isAsChildValid($isNew)) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         return array_intersect_key($this->data, $this->getAsChildFormFields($isNew));
     }
 
@@ -122,7 +111,7 @@ class Address extends DataObject implements AddressInterface
      */
     protected function getAsChildFormFields($isNew)
     {
-        return $isNew ? $this->asChildFields : $this->updatingFields;
+        return $isNew ? $this->creatingAsChildFields : $this->updatingFields;
     }
 
     /**

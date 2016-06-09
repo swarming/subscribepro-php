@@ -29,7 +29,6 @@ interface AddressInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData();
 
@@ -53,7 +52,6 @@ interface AddressInterface extends DataInterface
     /**
      * @param bool $isNew
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getAsChildFormData($isNew);
     

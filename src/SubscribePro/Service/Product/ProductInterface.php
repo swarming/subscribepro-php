@@ -55,7 +55,6 @@ interface ProductInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData();
 
@@ -164,8 +163,9 @@ interface ProductInterface extends DataInterface
     public function getSubscriptionOptionMode();
 
     /**
-     * @param string|null $subscriptionOptionMode
+     * @param string $subscriptionOptionMode
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setSubscriptionOptionMode($subscriptionOptionMode);
 
@@ -175,8 +175,9 @@ interface ProductInterface extends DataInterface
     public function getDefaultSubscriptionOption();
 
     /**
-     * @param string|null $defaultSubscriptionOption
+     * @param string $defaultSubscriptionOption
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setDefaultSubscriptionOption($defaultSubscriptionOption);
 
@@ -208,8 +209,9 @@ interface ProductInterface extends DataInterface
     public function getProductOptionsMode();
 
     /**
-     * @param string|null $productOptionsMode
+     * @param string $productOptionsMode
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setProductOptionsMode($productOptionsMode);
 

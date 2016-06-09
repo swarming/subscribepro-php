@@ -38,24 +38,29 @@ class CustomerService extends AbstractService
     }
 
     /**
-     * @param array $data
+     * @param array $customerData
      * @return \SubscribePro\Service\Customer\CustomerInterface
      */
-    public function createCustomer(array $data = [])
+    public function createCustomer(array $customerData = [])
     {
-        return $this->dataFactory->create($data);
+        return $this->dataFactory->create($customerData);
     }
 
     /**
-     * @param \SubscribePro\Service\Customer\CustomerInterface $item
+     * @param \SubscribePro\Service\Customer\CustomerInterface $customer
      * @return \SubscribePro\Service\Customer\CustomerInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
-    public function saveCustomer(CustomerInterface $item)
+    public function saveCustomer(CustomerInterface $customer)
     {
-        $url = $item->isNew() ? '/services/v2/customer.json' : "/services/v2/customers/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::API_NAME_CUSTOMER => $item->getFormData()]);
-        return $this->retrieveItem($response, self::API_NAME_CUSTOMER, $item);
+        if (!$customer->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        $url = $customer->isNew() ? '/services/v2/customer.json' : "/services/v2/customers/{$customer->getId()}.json";
+        $response = $this->httpClient->post($url, [self::API_NAME_CUSTOMER => $customer->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_CUSTOMER, $customer);
     }
 
     /**
@@ -79,6 +84,7 @@ class CustomerService extends AbstractService
      *
      * @param array|null $filters
      * @return \SubscribePro\Service\Customer\CustomerInterface[]
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
     public function loadCustomers(array $filters = [])

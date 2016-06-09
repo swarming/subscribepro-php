@@ -4,6 +4,7 @@ namespace SubscribePro\Service\Product;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class ProductService extends AbstractService
 {
@@ -27,24 +28,29 @@ class ProductService extends AbstractService
     }
 
     /**
-     * @param array $data
+     * @param array $productData
      * @return \SubscribePro\Service\Product\ProductInterface
      */
-    public function createProduct(array $data = [])
+    public function createProduct(array $productData = [])
     {
-        return $this->dataFactory->create($data);
+        return $this->dataFactory->create($productData);
     }
 
     /**
-     * @param \SubscribePro\Service\Product\ProductInterface $item
+     * @param \SubscribePro\Service\Product\ProductInterface $product
      * @return \SubscribePro\Service\Product\ProductInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
-    public function saveProduct(ProductInterface $item)
+    public function saveProduct(ProductInterface $product)
     {
-        $url = $item->isNew() ? '/services/v2/product.json' : "/services/v2/products/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::API_NAME_PRODUCT => $item->getFormData()]);
-        return $this->retrieveItem($response, self::API_NAME_PRODUCT, $item);
+        if (!$product->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        $url = $product->isNew() ? '/services/v2/product.json' : "/services/v2/products/{$product->getId()}.json";
+        $response = $this->httpClient->post($url, [self::API_NAME_PRODUCT => $product->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_PRODUCT, $product);
     }
 
     /**

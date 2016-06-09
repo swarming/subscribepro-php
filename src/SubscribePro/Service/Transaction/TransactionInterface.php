@@ -66,7 +66,6 @@ interface TransactionInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData();
 
@@ -77,7 +76,6 @@ interface TransactionInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getVerifyFormData();
 
@@ -99,7 +97,6 @@ interface TransactionInterface extends DataInterface
     /**
      * @param \SubscribePro\Service\Address\AddressInterface $address
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getTokenFormData(AddressInterface $address = null);
 
@@ -116,6 +113,7 @@ interface TransactionInterface extends DataInterface
     /**
      * @param int $amount
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setAmount($amount);
 
@@ -127,6 +125,7 @@ interface TransactionInterface extends DataInterface
     /**
      * @param string $currencyCode
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setCurrencyCode($currencyCode);
 

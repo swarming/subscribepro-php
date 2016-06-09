@@ -4,6 +4,7 @@ namespace SubscribePro\Service\Subscription;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class SubscriptionService extends AbstractService
 {
@@ -29,24 +30,29 @@ class SubscriptionService extends AbstractService
     }
 
     /**
-     * @param array $data
+     * @param array $subscriptionData
      * @return \SubscribePro\Service\Subscription\SubscriptionInterface
      */
-    public function createSubscription(array $data = [])
+    public function createSubscription(array $subscriptionData = [])
     {
-        return $this->dataFactory->create($data);
+        return $this->dataFactory->create($subscriptionData);
     }
 
     /**
-     * @param \SubscribePro\Service\Subscription\SubscriptionInterface $item
+     * @param \SubscribePro\Service\Subscription\SubscriptionInterface $subscription
      * @return \SubscribePro\Service\Subscription\SubscriptionInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
-    public function saveSubscription(SubscriptionInterface $item)
+    public function saveSubscription(SubscriptionInterface $subscription)
     {
-        $url = $item->isNew() ? '/services/v2/subscription.json' : "/services/v2/subscriptions/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::API_NAME_SUBSCRIPTION => $item->getFormData()]);
-        return $this->retrieveItem($response, self::API_NAME_SUBSCRIPTION, $item);
+        if (!$subscription->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        $url = $subscription->isNew() ? '/services/v2/subscription.json' : "/services/v2/subscriptions/{$subscription->getId()}.json";
+        $response = $this->httpClient->post($url, [self::API_NAME_SUBSCRIPTION => $subscription->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_SUBSCRIPTION, $subscription);
     }
 
     /**

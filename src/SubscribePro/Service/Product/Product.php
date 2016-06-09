@@ -103,14 +103,9 @@ class Product extends DataObject implements ProductInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {
-        if (!$this->isValid()) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         return array_intersect_key($this->data, $this->getFormFields());
     }
 
@@ -283,6 +278,7 @@ class Product extends DataObject implements ProductInterface
      *
      * @param string $subscriptionOptionMode
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setSubscriptionOptionMode($subscriptionOptionMode)
     {
@@ -307,6 +303,7 @@ class Product extends DataObject implements ProductInterface
      *
      * @param string $defaultSubscriptionOption
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setDefaultSubscriptionOption($defaultSubscriptionOption)
     {
@@ -367,6 +364,7 @@ class Product extends DataObject implements ProductInterface
      *
      * @param string $productOptionsMode
      * @return $this
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function setProductOptionsMode($productOptionsMode)
     {

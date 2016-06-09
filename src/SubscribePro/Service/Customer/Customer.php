@@ -3,7 +3,6 @@
 namespace SubscribePro\Service\Customer;
 
 use SubscribePro\Service\DataObject;
-use SubscribePro\Exception\InvalidArgumentException;
 
 class Customer extends DataObject implements CustomerInterface
 {
@@ -50,14 +49,9 @@ class Customer extends DataObject implements CustomerInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {
-        if (!$this->isValid()) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         return array_intersect_key($this->data, $this->getFormFields());
     }
 

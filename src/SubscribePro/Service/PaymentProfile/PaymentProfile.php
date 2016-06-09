@@ -119,28 +119,18 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData()
     {
-        if (!$this->isValid()) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         $formData = array_intersect_key($this->data, $this->getFormFields());
         return $this->updateBillingFormData($formData);
     }
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getTokenFormData()
     {
-        if (!$this->isTokenDataValid()) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         $tokenFormData = array_intersect_key($this->data, $this->savingTokenFields);
         return $this->updateBillingFormData($tokenFormData);
     }
@@ -156,14 +146,9 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getThirdPartyTokenFormData()
     {
-        if (!$this->isThirdPartyDataValid()) {
-            throw new InvalidArgumentException('Not all required fields are set.');
-        }
-
         $tokenFormData = array_intersect_key($this->data, $this->savingThirdPartyTokenFields);
         return $this->updateBillingFormData($tokenFormData);
     }
@@ -261,7 +246,7 @@ class PaymentProfile extends DataObject implements PaymentProfileInterface
     public function setCreditcardType($creditcardType)
     {
         if (!in_array($creditcardType, $this->creditcardTypes)) {
-            throw new InvalidArgumentException('Invalid credit card type. Allowed types: '.implode(', ', $this->creditcardTypes));
+            throw new InvalidArgumentException('Invalid credit card type. Allowed types: ' . implode(', ', $this->creditcardTypes));
         }
 
         return $this->setData(self::CREDITCARD_TYPE, $creditcardType);

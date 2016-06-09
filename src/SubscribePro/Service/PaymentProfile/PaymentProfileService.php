@@ -37,21 +37,26 @@ class PaymentProfileService extends AbstractService
     }
 
     /**
-     * @param array $data
+     * @param array $paymentProfileData
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
      */
-    public function createProfile(array $data = [])
+    public function createProfile(array $paymentProfileData = [])
     {
-        return $this->dataFactory->create($data);
+        return $this->dataFactory->create($paymentProfileData);
     }
 
     /**
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
     public function saveProfile(PaymentProfileInterface $paymentProfile)
     {
+        if (!$paymentProfile->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
         $postData = [self::API_NAME_PROFILE => $paymentProfile->getFormData()];
         $response = $paymentProfile->isNew()
             ? $this->httpClient->post('/services/v1/vault/paymentprofile.json', $postData)
@@ -107,10 +112,15 @@ class PaymentProfileService extends AbstractService
     /**
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
     public function saveThirdPartyToken(PaymentProfileInterface $paymentProfile)
     {
+        if (!$paymentProfile->isThirdPartyDataValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
         $response = $this->httpClient->post(
             '/services/v2/paymentprofile/third-party-token.json',
             [self::API_NAME_PROFILE => $paymentProfile->getThirdPartyTokenFormData()]
@@ -122,10 +132,15 @@ class PaymentProfileService extends AbstractService
      * @param string $token
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
     public function saveToken($token, PaymentProfileInterface $paymentProfile)
     {
+        if (!$paymentProfile->isTokenDataValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
         $response = $this->httpClient->post(
             "/services/v1/vault/tokens/{$token}/store.json",
             ['payment_profile' => $paymentProfile->getTokenFormData()]
@@ -137,10 +152,15 @@ class PaymentProfileService extends AbstractService
      * @param string $token
      * @param \SubscribePro\Service\PaymentProfile\PaymentProfileInterface $paymentProfile
      * @return \SubscribePro\Service\PaymentProfile\PaymentProfileInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
     public function verifyAndSaveToken($token, PaymentProfileInterface $paymentProfile)
     {
+        if (!$paymentProfile->isTokenDataValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
         $response = $this->httpClient->post(
             "/services/v1/vault/tokens/{$token}/verifyandstore.json",
             ['payment_profile' => $paymentProfile->getTokenFormData()]

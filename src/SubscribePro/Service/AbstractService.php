@@ -30,10 +30,8 @@ abstract class AbstractService
      * @param \SubscribePro\Sdk $sdk
      * @param array $config
      */
-    public function __construct(
-        \SubscribePro\Sdk $sdk,
-        array $config = []
-    ) {
+    public function __construct(Sdk $sdk, array $config = [])
+    {
         $this->httpClient = $sdk->getHttp();
         $this->config = $config;
         $this->dataFactory = $this->createDataFactory($sdk);

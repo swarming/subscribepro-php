@@ -4,6 +4,7 @@ namespace SubscribePro\Service\Address;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class AddressService extends AbstractService
 {
@@ -27,12 +28,12 @@ class AddressService extends AbstractService
     }
 
     /**
-     * @param array $data
+     * @param array $addressData
      * @return \SubscribePro\Service\Address\AddressInterface
      */
-    public function createAddress(array $data = [])
+    public function createAddress(array $addressData = [])
     {
-        return $this->dataFactory->create($data);
+        return $this->dataFactory->create($addressData);
     }
 
     /**
@@ -47,27 +48,35 @@ class AddressService extends AbstractService
     }
 
     /**
-     * @param \SubscribePro\Service\Address\AddressInterface $item
+     * @param \SubscribePro\Service\Address\AddressInterface $address
      * @return \SubscribePro\Service\Address\AddressInterface
      * @throws \SubscribePro\Exception\HttpException
      */
-    public function saveAddress(AddressInterface $item)
+    public function saveAddress(AddressInterface $address)
     {
-        $url = $item->isNew() ? '/services/v2/address.json' : "/services/v2/addresses/{$item->getId()}.json";
-        $response = $this->httpClient->post($url, [self::API_NAME_ADDRESS => $item->getFormData()]);
-        return $this->retrieveItem($response, self::API_NAME_ADDRESS, $item);
+        if (!$address->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        $url = $address->isNew() ? '/services/v2/address.json' : "/services/v2/addresses/{$address->getId()}.json";
+        $response = $this->httpClient->post($url, [self::API_NAME_ADDRESS => $address->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_ADDRESS, $address);
     }
 
     /**
-     * @param \SubscribePro\Service\Address\AddressInterface $item
+     * @param \SubscribePro\Service\Address\AddressInterface $address
      * @return \SubscribePro\Service\Address\AddressInterface
      * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
      */
-    public function findOrSave($item)
+    public function findOrSave($address)
     {
-        $response = $this->httpClient->post('/services/v2/address/find-or-create.json', [self::API_NAME_ADDRESS => $item->getFormData()]);
-        return $this->retrieveItem($response, self::API_NAME_ADDRESS, $item);
+        if (!$address->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
+        $response = $this->httpClient->post('/services/v2/address/find-or-create.json', [self::API_NAME_ADDRESS => $address->getFormData()]);
+        return $this->retrieveItem($response, self::API_NAME_ADDRESS, $address);
     }
 
     /**

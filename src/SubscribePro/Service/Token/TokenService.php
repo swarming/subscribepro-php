@@ -4,6 +4,7 @@ namespace SubscribePro\Service\Token;
 
 use SubscribePro\Sdk;
 use SubscribePro\Service\AbstractService;
+use SubscribePro\Exception\InvalidArgumentException;
 
 class TokenService extends AbstractService
 {
@@ -26,12 +27,12 @@ class TokenService extends AbstractService
     }
 
     /**
-     * @param array $data
+     * @param array $tokenData
      * @return \SubscribePro\Service\Token\TokenInterface
      */
-    public function createToken(array $data = [])
+    public function createToken(array $tokenData = [])
     {
-        return $this->dataFactory->create($data);
+        return $this->dataFactory->create($tokenData);
     }
 
     /**
@@ -48,11 +49,15 @@ class TokenService extends AbstractService
     /**
      * @param \SubscribePro\Service\Token\TokenInterface $token
      * @return \SubscribePro\Service\Token\TokenInterface
+     * @throws \SubscribePro\Exception\InvalidArgumentException
      * @throws \SubscribePro\Exception\HttpException
-     * @throws \BadMethodCallException
      */
-    public function saveToken($token)
+    public function saveToken(TokenInterface $token)
     {
+        if (!$token->isValid()) {
+            throw new InvalidArgumentException('Not all required fields are set.');
+        }
+
         $response = $this->httpClient->post('/services/v1/vault/token.json', [self::API_NAME_TOKEN => $token->getFormData()]);
         return $this->retrieveItem($response, self::API_NAME_TOKEN, $token);
     }

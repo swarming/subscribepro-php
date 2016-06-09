@@ -61,7 +61,6 @@ interface SubscriptionInterface extends DataInterface
 
     /**
      * @return array
-     * @throws \SubscribePro\Exception\InvalidArgumentException
      */
     public function getFormData();
 
