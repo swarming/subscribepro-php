@@ -288,18 +288,18 @@ class Address extends DataObject implements AddressInterface
     /**
      * @return string|null
      */
-    public function getPostCode()
+    public function getPostcode()
     {
         return $this->getData(self::POSTCODE);
     }
 
     /**
-     * @param string $postCode
+     * @param string $postcode
      * @return $this
      */
-    public function setPostCode($postCode)
+    public function setPostcode($postcode)
     {
-        return $this->setData(self::POSTCODE, $postCode);
+        return $this->setData(self::POSTCODE, $postcode);
     }
 
     /**

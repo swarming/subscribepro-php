@@ -162,13 +162,13 @@ interface AddressInterface extends DataInterface
     /**
      * @return string|null
      */
-    public function getPostCode();
+    public function getPostcode();
 
     /**
-     * @param string $postCode
+     * @param string $postcode
      * @return $this
      */
-    public function setPostCode($postCode);
+    public function setPostcode($postcode);
 
     /**
      * @return string|null
